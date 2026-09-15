@@ -13,7 +13,7 @@ function character(id: number, rank: HierarchyRank, order: number): Character {
     division: 4,
     tierLabel: 'Gold IV',
     mainPosition: 'TOP',
-    subPosition: null,
+    subPositions: [],
     hierarchyRank: rank,
     hierarchyOrder: order,
     createdAt: '',

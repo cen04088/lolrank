@@ -14,7 +14,7 @@ const character: Character = {
   division: 4,
   tierLabel: 'Gold IV',
   mainPosition: 'TOP',
-  subPosition: 'MID',
+  subPositions: ['MID'],
   hierarchyRank: 'C',
   hierarchyOrder: 0,
   createdAt: '',

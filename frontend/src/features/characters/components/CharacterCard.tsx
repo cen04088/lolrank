@@ -28,7 +28,9 @@ export function CharacterCard({ character, onEdit, onDelete }: CharacterCardProp
         </div>
         <div className="ccard__positions">
           <PositionBadge position={character.mainPosition} />
-          {character.subPosition && <PositionBadge position={character.subPosition} ghost />}
+          {character.subPositions.map((position) => (
+            <PositionBadge key={position} position={position} ghost />
+          ))}
         </div>
         <p className="ccard__desc bubble bubble--left">
           {character.description ? character.description : '한 줄 소개가 없습니다.'}

@@ -110,7 +110,7 @@ cd backend
 | POST | `/api/rooms` | 방 생성 `{name}` |
 | GET | `/api/rooms/{inviteCode}` | 방 조회 |
 | DELETE | `/api/rooms/{inviteCode}` | 방과 그 안의 캐릭터·보드·기록 삭제 (기본 방은 불가) |
-| GET / POST | `/api/rooms/{inviteCode}/characters` | 캐릭터 목록 / 생성 |
+| GET / POST | `/api/rooms/{inviteCode}/characters` | 캐릭터 목록 / 생성 (`subPositions` 는 부 포지션 배열, 여러 개 가능) |
 | PATCH / DELETE | `/api/characters/{id}` | 캐릭터 수정 / 삭제 |
 | GET / PUT | `/api/rooms/{inviteCode}/team-board` | 팀 보드 조회 / 전체 교체 |
 | PUT | `/api/rooms/{inviteCode}/participants` | 오늘의 참가자 (최대 10명) |

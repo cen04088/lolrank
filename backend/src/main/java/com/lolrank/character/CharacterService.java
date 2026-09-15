@@ -10,6 +10,7 @@ import com.lolrank.common.exception.NotFoundException;
 import com.lolrank.room.Room;
 import com.lolrank.room.RoomService;
 import com.lolrank.team.TeamBoardService;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class CharacterService {
     public CharacterResponse create(String inviteCode, CreateCharacterRequest request, String nickname) {
         Room room = roomService.getByInviteCode(inviteCode);
         Integer division = normalizeDivision(request.tier(), request.division());
-        Position subPosition = normalizeSubPosition(request.mainPosition(), request.subPosition());
+        List<Position> subPositions = normalizeSubPositions(request.mainPosition(), request.subPositions());
 
         int order = characterRepository.findMaxHierarchyOrder(room.getId(), DEFAULT_HIERARCHY_RANK)
                 .map(max -> max + 1)
@@ -67,7 +68,7 @@ public class CharacterService {
                 request.tier(),
                 division,
                 request.mainPosition(),
-                subPosition,
+                subPositions,
                 DEFAULT_HIERARCHY_RANK,
                 order
         ));
@@ -88,10 +89,8 @@ public class CharacterService {
         Integer division = normalizeDivision(tier, requestedDivision);
 
         Position mainPosition = Objects.requireNonNullElse(request.mainPosition(), character.getMainPosition());
-        Position subPosition = Boolean.TRUE.equals(request.clearSubPosition())
-                ? null
-                : (request.subPosition() != null ? request.subPosition() : character.getSubPosition());
-        subPosition = normalizeSubPosition(mainPosition, subPosition);
+        List<Position> subPositions = normalizeSubPositions(mainPosition,
+                request.subPositions() != null ? request.subPositions() : character.getSubPositions());
 
         character.updateProfile(
                 request.name() != null ? request.name().strip() : character.getName(),
@@ -100,7 +99,7 @@ public class CharacterService {
                 tier,
                 division,
                 mainPosition,
-                subPosition
+                subPositions
         );
 
         CharacterResponse after = CharacterResponse.from(character);
@@ -132,11 +131,22 @@ public class CharacterService {
         return null;
     }
 
-    private static Position normalizeSubPosition(Position main, Position sub) {
-        if (sub != null && sub == main) {
-            throw new BadRequestException("부 포지션은 주 포지션과 달라야 합니다.");
+    /** 중복 제거, 주 포지션과 겹치면 거절. null 은 빈 목록. */
+    private static List<Position> normalizeSubPositions(Position main, List<Position> subs) {
+        if (subs == null) {
+            return List.of();
         }
-        return sub;
+        LinkedHashSet<Position> unique = new LinkedHashSet<>();
+        for (Position sub : subs) {
+            if (sub == null) {
+                continue;
+            }
+            if (sub == main) {
+                throw new BadRequestException("부 포지션은 주 포지션과 달라야 합니다.");
+            }
+            unique.add(sub);
+        }
+        return List.copyOf(unique);
     }
 
     private static String blankToNull(String value) {
@@ -152,7 +162,7 @@ public class CharacterService {
             return nickname + "님이 " + after.name() + "의 티어를 " + before.tierLabel() + " → " + after.tierLabel()
                     + "로 변경했습니다.";
         }
-        if (before.mainPosition() != after.mainPosition() || before.subPosition() != after.subPosition()) {
+        if (before.mainPosition() != after.mainPosition() || !before.subPositions().equals(after.subPositions())) {
             return nickname + "님이 " + after.name() + "의 포지션을 변경했습니다.";
         }
         if (!before.name().equals(after.name())) {

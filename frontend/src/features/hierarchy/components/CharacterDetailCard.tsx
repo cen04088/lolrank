@@ -49,7 +49,11 @@ export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete 
         </div>
         <div>
           <dt>부 포지션</dt>
-          <dd>{character.subPosition ? <PositionBadge position={character.subPosition} ghost /> : '—'}</dd>
+          <dd className="detail__subs">
+            {character.subPositions.length === 0
+              ? '—'
+              : character.subPositions.map((position) => <PositionBadge key={position} position={position} ghost />)}
+          </dd>
         </div>
         <div>
           <dt>등록일</dt>

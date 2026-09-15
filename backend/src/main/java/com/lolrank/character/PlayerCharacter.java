@@ -2,6 +2,7 @@ package com.lolrank.character;
 
 import com.lolrank.room.Room;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,6 +14,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -52,9 +55,10 @@ public class PlayerCharacter {
     @Column(name = "main_position", nullable = false, length = 10)
     private Position mainPosition;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sub_position", length = 10)
-    private Position subPosition;
+    /** 부 포지션 여러 개. 콤마 구분 문자열로 저장한다. */
+    @Convert(converter = PositionListConverter.class)
+    @Column(name = "sub_positions", length = 60)
+    private List<Position> subPositions = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "hierarchy_rank", nullable = false, length = 10)
@@ -75,7 +79,7 @@ public class PlayerCharacter {
     }
 
     public PlayerCharacter(Room room, String name, String description, String assetKey,
-                           Tier tier, Integer division, Position mainPosition, Position subPosition,
+                           Tier tier, Integer division, Position mainPosition, List<Position> subPositions,
                            HierarchyRank hierarchyRank, int hierarchyOrder) {
         this.room = room;
         this.name = name;
@@ -84,20 +88,20 @@ public class PlayerCharacter {
         this.tier = tier;
         this.division = division;
         this.mainPosition = mainPosition;
-        this.subPosition = subPosition;
+        this.subPositions = new ArrayList<>(subPositions);
         this.hierarchyRank = hierarchyRank;
         this.hierarchyOrder = hierarchyOrder;
     }
 
     public void updateProfile(String name, String description, String assetKey,
-                              Tier tier, Integer division, Position mainPosition, Position subPosition) {
+                              Tier tier, Integer division, Position mainPosition, List<Position> subPositions) {
         this.name = name;
         this.description = description;
         this.assetKey = assetKey;
         this.tier = tier;
         this.division = division;
         this.mainPosition = mainPosition;
-        this.subPosition = subPosition;
+        this.subPositions = new ArrayList<>(subPositions);
     }
 
     public void moveHierarchy(HierarchyRank rank, int order) {
@@ -141,8 +145,8 @@ public class PlayerCharacter {
         return mainPosition;
     }
 
-    public Position getSubPosition() {
-        return subPosition;
+    public List<Position> getSubPositions() {
+        return List.copyOf(subPositions);
     }
 
     public HierarchyRank getHierarchyRank() {

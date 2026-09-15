@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 public record CreateCharacterRequest(
         @NotBlank(message = "캐릭터 이름을 입력해주세요.")
@@ -30,6 +31,8 @@ public record CreateCharacterRequest(
         @NotNull(message = "주 포지션을 선택해주세요.")
         Position mainPosition,
 
-        Position subPosition
+        /** 부 포지션 (여러 개, 없으면 빈 목록/null) */
+        @Size(max = 4, message = "부 포지션은 최대 4개입니다.")
+        List<Position> subPositions
 ) {
 }

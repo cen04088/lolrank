@@ -170,7 +170,7 @@ public class TeamBoardService {
         List<AutoFillSolver.Candidate> candidates = participants.stream()
                 .filter(c -> !placedIds.contains(c.getId()))
                 .map(c -> new AutoFillSolver.Candidate(c.getId(), SkillScoreCalculator.score(c),
-                        c.getMainPosition(), c.getSubPosition()))
+                        c.getMainPosition(), c.getSubPositions()))
                 .toList();
 
         AutoFillSolver.Solution solution = autoFillSolver.solve(emptySlots, candidates, fixedBlue, fixedRed, mode);

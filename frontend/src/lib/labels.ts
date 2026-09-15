@@ -83,11 +83,11 @@ export const GRADE_STARS: Record<BalanceGrade, number> = {
 export type PositionFit = 'MAIN' | 'SUB' | 'OFF'
 
 export function positionFit(
-  character: Pick<Character, 'mainPosition' | 'subPosition'>,
+  character: Pick<Character, 'mainPosition' | 'subPositions'>,
   position: Position,
 ): PositionFit {
   if (character.mainPosition === position) return 'MAIN'
-  if (character.subPosition === position) return 'SUB'
+  if (character.subPositions.includes(position)) return 'SUB'
   return 'OFF'
 }
 
@@ -97,10 +97,8 @@ export const FIT_LABELS: Record<PositionFit, string> = {
   OFF: '! OFF POSITION',
 }
 
-export function positionSummary(character: Pick<Character, 'mainPosition' | 'subPosition'>): string {
-  return character.subPosition
-    ? `${POSITION_LABELS[character.mainPosition]} · ${POSITION_LABELS[character.subPosition]}`
-    : POSITION_LABELS[character.mainPosition]
+export function positionSummary(character: Pick<Character, 'mainPosition' | 'subPositions'>): string {
+  return [character.mainPosition, ...character.subPositions].map((p) => POSITION_LABELS[p]).join(' · ')
 }
 
 export const AUTO_FILL_MODE_LABELS: Record<AutoFillMode, { icon: string; label: string; hint: string }> = {

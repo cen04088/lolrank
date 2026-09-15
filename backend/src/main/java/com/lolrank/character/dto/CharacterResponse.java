@@ -6,6 +6,7 @@ import com.lolrank.character.Position;
 import com.lolrank.character.Tier;
 import com.lolrank.character.TierLabel;
 import java.time.Instant;
+import java.util.List;
 
 public record CharacterResponse(
         Long id,
@@ -17,7 +18,7 @@ public record CharacterResponse(
         Integer division,
         String tierLabel,
         Position mainPosition,
-        Position subPosition,
+        List<Position> subPositions,
         HierarchyRank hierarchyRank,
         int hierarchyOrder,
         Instant createdAt,
@@ -35,7 +36,7 @@ public record CharacterResponse(
                 c.getDivision(),
                 TierLabel.of(c.getTier(), c.getDivision()),
                 c.getMainPosition(),
-                c.getSubPosition(),
+                c.getSubPositions(),
                 c.getHierarchyRank(),
                 c.getHierarchyOrder(),
                 c.getCreatedAt(),

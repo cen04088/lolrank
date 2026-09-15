@@ -48,7 +48,8 @@ export interface Character {
   division: number | null
   tierLabel: string
   mainPosition: Position
-  subPosition: Position | null
+  /** 부 포지션 (여러 개, 없으면 빈 배열) */
+  subPositions: Position[]
   hierarchyRank: HierarchyRank
   hierarchyOrder: number
   createdAt: string
@@ -62,7 +63,7 @@ export interface CreateCharacterRequest {
   tier: Tier
   division: number | null
   mainPosition: Position
-  subPosition: Position | null
+  subPositions: Position[]
 }
 
 export interface UpdateCharacterRequest {
@@ -72,8 +73,8 @@ export interface UpdateCharacterRequest {
   tier?: Tier
   division?: number
   mainPosition?: Position
-  subPosition?: Position
-  clearSubPosition?: boolean
+  /** 빈 배열을 보내면 부 포지션을 모두 지운다 */
+  subPositions?: Position[]
 }
 
 export interface Slot {

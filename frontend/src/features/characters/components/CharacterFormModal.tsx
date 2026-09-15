@@ -40,7 +40,7 @@ interface FormValues {
   tier: Tier
   division: number
   mainPosition: Position
-  subPosition: Position | null
+  subPositions: Position[]
 }
 
 const DEFAULT_VALUES: FormValues = {
@@ -50,7 +50,7 @@ const DEFAULT_VALUES: FormValues = {
   tier: 'GOLD',
   division: 4,
   mainPosition: 'MID',
-  subPosition: null,
+  subPositions: [],
 }
 
 function fromCharacter(character: Character): FormValues {
@@ -61,7 +61,7 @@ function fromCharacter(character: Character): FormValues {
     tier: character.tier,
     division: character.division ?? 4,
     mainPosition: character.mainPosition,
-    subPosition: character.subPosition,
+    subPositions: character.subPositions,
   }
 }
 
@@ -105,7 +105,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
           tier: form.tier,
           mainPosition: form.mainPosition,
           ...(hasDivision ? { division: form.division } : {}),
-          ...(form.subPosition ? { subPosition: form.subPosition } : { clearSubPosition: true }),
+          subPositions: form.subPositions,
         }
         return charactersApi.update(character.id, body)
       }
@@ -116,7 +116,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
         tier: form.tier,
         division: hasDivision ? form.division : null,
         mainPosition: form.mainPosition,
-        subPosition: form.subPosition,
+        subPositions: form.subPositions,
       }
       return charactersApi.create(code, body)
     },
@@ -143,11 +143,6 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
     if (!values.name.trim()) {
       setTab('basic')
       setError('캐릭터 이름을 입력해주세요.')
-      return
-    }
-    if (values.subPosition === values.mainPosition) {
-      setTab('basic')
-      setError('부 포지션은 주 포지션과 달라야 합니다.')
       return
     }
     save.mutate(values)
@@ -256,17 +251,25 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
                 <span className="px-label">주 포지션</span>
                 <PositionPicker
                   value={values.mainPosition}
-                  onChange={(position) => position && set('mainPosition', position)}
+                  onChange={(position) =>
+                    setValues((prev) => ({
+                      ...prev,
+                      mainPosition: position,
+                      // 주 포지션으로 고른 자리는 부 포지션에서 자동으로 뺀다
+                      subPositions: prev.subPositions.filter((p) => p !== position),
+                    }))
+                  }
                 />
               </div>
 
               <div className="px-field">
-                <span className="px-label">부 포지션</span>
-                <PositionPicker
-                  value={values.subPosition}
-                  allowNone
+                <span className="px-label">
+                  부 포지션 <span className="cform__max">(여러 개 선택 가능)</span>
+                </span>
+                <MultiPositionPicker
+                  value={values.subPositions}
                   disabledPosition={values.mainPosition}
-                  onChange={(position) => set('subPosition', position)}
+                  onChange={(positions) => set('subPositions', positions)}
                 />
               </div>
             </div>
@@ -344,7 +347,9 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
             <span className="cform__plate-tier font-pixel">{previewLabel}</span>
             <span className="cform__plate-pos">
               <PositionBadge position={values.mainPosition} />
-              {values.subPosition && <PositionBadge position={values.subPosition} ghost />}
+              {values.subPositions.map((position) => (
+                <PositionBadge key={position} position={position} ghost />
+              ))}
             </span>
           </div>
           <PixelButton variant="ghost" size="sm" onClick={() => cycleSkin(1)}>
@@ -357,37 +362,68 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
 }
 
 interface PositionPickerProps {
-  value: Position | null
-  onChange: (position: Position | null) => void
-  allowNone?: boolean
+  value: Position
+  onChange: (position: Position) => void
+}
+
+/** 주 포지션: 하나만 선택 */
+function PositionPicker({ value, onChange }: PositionPickerProps) {
+  return (
+    <div className="cform__positions" role="radiogroup">
+      {POSITIONS.map((position) => (
+        <button
+          key={position}
+          type="button"
+          role="radio"
+          aria-checked={value === position}
+          className={value === position ? 'cform__pos cform__pos--on' : 'cform__pos'}
+          onClick={() => onChange(position)}
+        >
+          <span aria-hidden>{POSITION_ICONS[position]}</span> {POSITION_LABELS[position]}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+interface MultiPositionPickerProps {
+  value: Position[]
+  onChange: (positions: Position[]) => void
   disabledPosition?: Position
 }
 
-function PositionPicker({ value, onChange, allowNone = false, disabledPosition }: PositionPickerProps) {
+/** 부 포지션: 여러 개 토글. 주 포지션은 비활성. */
+function MultiPositionPicker({ value, onChange, disabledPosition }: MultiPositionPickerProps) {
+  const toggle = (position: Position) => {
+    if (value.includes(position)) {
+      onChange(value.filter((p) => p !== position))
+    } else {
+      // 포지션 순서(TOP→SUPPORT)대로 정렬해 저장
+      onChange(POSITIONS.filter((p) => p === position || value.includes(p)))
+    }
+  }
   return (
-    <div className="cform__positions" role="radiogroup">
-      {allowNone && (
-        <button
-          type="button"
-          role="radio"
-          aria-checked={value === null}
-          className={value === null ? 'cform__pos cform__pos--on' : 'cform__pos'}
-          onClick={() => onChange(null)}
-        >
-          없음
-        </button>
-      )}
+    <div className="cform__positions" role="group">
+      <button
+        type="button"
+        aria-pressed={value.length === 0}
+        className={value.length === 0 ? 'cform__pos cform__pos--on' : 'cform__pos'}
+        onClick={() => onChange([])}
+      >
+        없음
+      </button>
       {POSITIONS.map((position) => {
         const disabled = position === disabledPosition
+        const on = value.includes(position)
         return (
           <button
             key={position}
             type="button"
-            role="radio"
-            aria-checked={value === position}
+            aria-pressed={on}
             disabled={disabled}
-            className={value === position ? 'cform__pos cform__pos--on' : 'cform__pos'}
-            onClick={() => onChange(position)}
+            className={on ? 'cform__pos cform__pos--on' : 'cform__pos'}
+            onClick={() => toggle(position)}
+            title={disabled ? '주 포지션은 부 포지션으로 고를 수 없습니다.' : undefined}
           >
             <span aria-hidden>{POSITION_ICONS[position]}</span> {POSITION_LABELS[position]}
           </button>

@@ -5,8 +5,9 @@ import com.lolrank.character.Tier;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
-/** PATCH 용. null 인 필드는 변경하지 않는다. subPosition 은 clearSubPosition=true 로 명시적으로 지운다. */
+/** PATCH 용. null 인 필드는 변경하지 않는다. subPositions 는 빈 목록([])을 보내면 모두 지운다. */
 public record UpdateCharacterRequest(
         @Size(min = 1, max = 20, message = "캐릭터 이름은 1~20자여야 합니다.")
         String name,
@@ -25,8 +26,7 @@ public record UpdateCharacterRequest(
 
         Position mainPosition,
 
-        Position subPosition,
-
-        Boolean clearSubPosition
+        @Size(max = 4, message = "부 포지션은 최대 4개입니다.")
+        List<Position> subPositions
 ) {
 }

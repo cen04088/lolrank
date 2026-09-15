@@ -1,6 +1,7 @@
 package com.lolrank.team.balance;
 
 import com.lolrank.character.Position;
+import java.util.List;
 
 /** 캐릭터가 특정 포지션에 얼마나 맞는지. */
 public enum PositionFit {
@@ -18,17 +19,17 @@ public enum PositionFit {
         return penalty;
     }
 
-    public static PositionFit of(Position mainPosition, Position subPosition, Position target) {
+    public static PositionFit of(Position mainPosition, List<Position> subPositions, Position target) {
         if (target == mainPosition) {
             return MAIN;
         }
-        if (subPosition != null && target == subPosition) {
+        if (subPositions != null && subPositions.contains(target)) {
             return SUB;
         }
         return OFF;
     }
 
-    public static int penalty(Position mainPosition, Position subPosition, Position target) {
-        return of(mainPosition, subPosition, target).getPenalty();
+    public static int penalty(Position mainPosition, List<Position> subPositions, Position target) {
+        return of(mainPosition, subPositions, target).getPenalty();
     }
 }

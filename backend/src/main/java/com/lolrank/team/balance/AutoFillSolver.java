@@ -23,7 +23,7 @@ public final class AutoFillSolver {
     public record SlotKey(Team team, Position position) {
     }
 
-    public record Candidate(long characterId, int skillScore, Position mainPosition, Position subPosition) {
+    public record Candidate(long characterId, int skillScore, Position mainPosition, List<Position> subPositions) {
     }
 
     public record Assignment(SlotKey slot, long characterId, PositionFit fit) {
@@ -87,7 +87,7 @@ public final class AutoFillSolver {
         for (int i = 0; i < count; i++) {
             SlotKey slot = slots.get(i);
             Candidate candidate = pool.get(i);
-            PositionFit fit = PositionFit.of(candidate.mainPosition(), candidate.subPosition(), slot.position());
+            PositionFit fit = PositionFit.of(candidate.mainPosition(), candidate.subPositions(), slot.position());
             assignments.add(new Assignment(slot, candidate.characterId(), fit));
             if (slot.team() == Team.BLUE) {
                 blue += candidate.skillScore();
@@ -136,7 +136,7 @@ public final class AutoFillSolver {
             for (int s = 0; s < slots.size(); s++) {
                 for (int c = 0; c < candidates.size(); c++) {
                     Candidate candidate = candidates.get(c);
-                    PositionFit fit = PositionFit.of(candidate.mainPosition(), candidate.subPosition(),
+                    PositionFit fit = PositionFit.of(candidate.mainPosition(), candidate.subPositions(),
                             slots.get(s).position());
                     fits[s][c] = fit;
                     penalty[s][c] = mode.penaltyOf(fit);

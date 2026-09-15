@@ -39,7 +39,7 @@ class AutoFillSolverTest {
     }
 
     private static Candidate candidate(long id, Tier tier, Integer division, Position main, Position sub) {
-        return new Candidate(id, SkillScoreCalculator.score(tier, division), main, sub);
+        return new Candidate(id, SkillScoreCalculator.score(tier, division), main, sub == null ? List.of() : List.of(sub));
     }
 
     /** 포지션마다 같은 티어 2명씩 → 모두 주 포지션 + 차이 0 이 가능한 이상적인 10명. */
@@ -96,7 +96,7 @@ class AutoFillSolverTest {
             }
             used[c] = true;
             Candidate cand = candidates.get(c);
-            int p = PositionFit.penalty(cand.mainPosition(), cand.subPosition(), slot.position());
+            int p = PositionFit.penalty(cand.mainPosition(), cand.subPositions(), slot.position());
             bruteForce(slots, candidates, index + 1, used,
                     slot.team() == Team.BLUE ? blue + cand.skillScore() : blue,
                     slot.team() == Team.RED ? red + cand.skillScore() : red,

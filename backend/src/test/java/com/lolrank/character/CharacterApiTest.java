@@ -113,10 +113,12 @@ class CharacterApiTest {
                         .content("""
                                 {"name":"태현","description":"라인전은 강하지만 한타에서 사라짐",
                                  "assetKey":"player_03","tier":"GOLD","division":4,
-                                 "mainPosition":"TOP","subPosition":"MID"}
+                                 "mainPosition":"TOP","subPositions":["MID","ADC"]}
                                 """))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.tierLabel", is("Gold IV")))
+                .andExpect(jsonPath("$.subPositions", hasSize(2)))
+                .andExpect(jsonPath("$.subPositions[1]", is("ADC")))
                 .andExpect(jsonPath("$.hierarchyRank", is("C")))
                 .andReturn().getResponse().getContentAsString();
         long id = objectMapper.readTree(created).get("id").asLong();
@@ -165,7 +167,7 @@ class CharacterApiTest {
         mockMvc.perform(post("/api/rooms/" + code + "/characters")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"a\",\"assetKey\":\"player_01\",\"tier\":\"GOLD\",\"division\":1,"
-                                + "\"mainPosition\":\"TOP\",\"subPosition\":\"TOP\"}"))
+                                + "\"mainPosition\":\"TOP\",\"subPositions\":[\"MID\",\"TOP\"]}"))
                 .andExpect(status().isBadRequest());
 
         mockMvc.perform(post("/api/rooms/" + code + "/characters")
