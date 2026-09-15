@@ -13,17 +13,19 @@ const balance: Balance = {
   redCount: 5,
   blueAverageTier: 'Gold II',
   redAverageTier: 'Gold II',
-  bluePower: 45,
-  redPower: 45,
+  blueAverageRank: 'A',
+  redAverageRank: 'A',
+  bluePower: 57,
+  redPower: 57,
 }
 
 describe('PowerBar', () => {
   it('양팀 TEAM POWER 와 등급 문구, 별을 보여준다', () => {
     render(<PowerBar balance={balance} boardEmpty={false} syncing={false} />)
-    expect(screen.getAllByText('45')).toHaveLength(2)
+    expect(screen.getAllByText('57')).toHaveLength(2)
     expect(screen.getByText('완벽에 가까운 밸런스!')).toBeInTheDocument()
     expect(screen.getByLabelText('5 / 5')).toBeInTheDocument()
-    expect(screen.getAllByText(/평균 Gold II/)).toHaveLength(2)
+    expect(screen.getAllByText(/평균 A등급 · Gold II/)).toHaveLength(2)
   })
 
   it('보드가 비어 있으면 안내 문구만 보여준다', () => {

@@ -122,11 +122,15 @@ cd backend
 
 ### 밸런싱 규칙 (모두 `team/balance/BalanceConfig.java` 에서 조정)
 
-- 티어 점수: IRON IV 10 … DIAMOND I 79, MASTER 85, GRANDMASTER 92, CHALLENGER 100 (DB 에 저장하지 않고 런타임 계산)
-- 포지션 페널티: 주 0 / 부 8 / 그 외 25 (포지션 균형 모드는 가중치 1, 페널티 0 / 20 / 80)
-- `totalCost = |blue - red| × 가중치 + Σ 포지션 페널티` 가 최소인 조합을 완전 탐색(`AutoFillSolver`). 완전 랜덤 모드는 탐색 없이 무작위 배치
-- 동점: 비선호 포지션 적음 → 주 포지션 많음 → 실력 차이 작음 → 랜덤
-- Balance Grade: 차이 ≤2 PERFECT, ≤5 VERY_GOOD, ≤10 GOOD, ≤15 WARNING, 그 이상 UNBALANCED
+- **전투력 = 계급도 등급 80% + 롤 티어 20%** (`StrengthCalculator`, DB 에 저장하지 않고 런타임 계산)
+  - 등급 점수: LEGEND 100 / S 80 / A 60 / B 40 / C 20
+  - 티어 점수: IRON IV 10 … DIAMOND I 79, MASTER 85, GRANDMASTER 92, CHALLENGER 100
+  - 예) LEGEND + Iron IV = 82, C + Challenger = 36 → 계급도가 티어보다 우선한다
+- 포지션 페널티: 주 0 / 부 8 / 그 외 25 (포지션 균형 모드는 가중치 1, 페널티 0 / 20 / 80). 페널티도 티어와 같은 20% 몫으로 깎인다
+- `totalCost = |blue 전투력 - red 전투력| × 가중치 + Σ 포지션 페널티 × 20%` 가 최소인 조합을 완전 탐색(`AutoFillSolver`). 완전 랜덤 모드는 탐색 없이 무작위 배치
+- 동점: 비선호 포지션 적음 → 주 포지션 많음 → 전투력 차이 작음 → 랜덤
+- TEAM POWER = 팀 평균 전투력, 함께 평균 등급·평균 티어 표시
+- Balance Grade (두 팀 전투력 합계 차이): ≤4 PERFECT, ≤10 VERY_GOOD, ≤20 GOOD, ≤35 WARNING, 그 이상 UNBALANCED (한 명의 등급 한 단계 차이 = 16점)
 
 ## 5. Railway 환경 변수
 

@@ -9,17 +9,17 @@ class BalanceGradeTest {
     @Test
     void 차이에_따라_등급이_결정된다() {
         assertThat(BalanceGrade.of(0)).isEqualTo(BalanceGrade.PERFECT);
-        assertThat(BalanceGrade.of(2)).isEqualTo(BalanceGrade.PERFECT);
-        assertThat(BalanceGrade.of(3)).isEqualTo(BalanceGrade.VERY_GOOD);
+        assertThat(BalanceGrade.of(4)).isEqualTo(BalanceGrade.PERFECT);
         assertThat(BalanceGrade.of(5)).isEqualTo(BalanceGrade.VERY_GOOD);
-        assertThat(BalanceGrade.of(10)).isEqualTo(BalanceGrade.GOOD);
-        assertThat(BalanceGrade.of(15)).isEqualTo(BalanceGrade.WARNING);
-        assertThat(BalanceGrade.of(16)).isEqualTo(BalanceGrade.UNBALANCED);
+        assertThat(BalanceGrade.of(10)).isEqualTo(BalanceGrade.VERY_GOOD);
+        assertThat(BalanceGrade.of(20)).isEqualTo(BalanceGrade.GOOD);
+        assertThat(BalanceGrade.of(35)).isEqualTo(BalanceGrade.WARNING);
+        assertThat(BalanceGrade.of(36)).isEqualTo(BalanceGrade.UNBALANCED);
     }
 
     @Test
     void 음수_차이도_절댓값으로_처리한다() {
-        assertThat(BalanceGrade.of(-4)).isEqualTo(BalanceGrade.VERY_GOOD);
+        assertThat(BalanceGrade.of(-8)).isEqualTo(BalanceGrade.VERY_GOOD);
     }
 
     @Test

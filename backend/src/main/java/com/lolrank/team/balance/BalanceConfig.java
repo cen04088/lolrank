@@ -1,5 +1,6 @@
 package com.lolrank.team.balance;
 
+import com.lolrank.character.HierarchyRank;
 import com.lolrank.character.Tier;
 import java.util.Map;
 
@@ -12,19 +13,35 @@ public final class BalanceConfig {
     private BalanceConfig() {
     }
 
-    // ---------------------------------------------------------------- 실력 균형 모드 (기본)
+    // ---------------------------------------------------------------- 전투력 구성 비율 (합 100)
 
-    /** 두 팀 실력 합계 차이 1점당 비용 가중치. */
+    /** 계급도 등급(LEGEND~C) 비중 %. */
+    public static final int HIERARCHY_WEIGHT = 80;
+    /** 롤 티어 점수 + 포지션 적합도 비중 %. */
+    public static final int SKILL_WEIGHT = 20;
+
+    /** 계급도 등급 점수 (0~100). */
+    public static final Map<HierarchyRank, Integer> RANK_SCORES = Map.of(
+            HierarchyRank.LEGEND, 100,
+            HierarchyRank.S, 80,
+            HierarchyRank.A, 60,
+            HierarchyRank.B, 40,
+            HierarchyRank.C, 20
+    );
+
+    // ---------------------------------------------------------------- 균형 모드 (기본)
+
+    /** 두 팀 전투력 합계 차이 1단위당 비용 가중치. */
     public static final int RANK_BALANCE_WEIGHT = 3;
 
-    /** 포지션 적합도 페널티. */
+    /** 포지션 적합도 페널티 (티어 점수와 같은 0~100 척도). */
     public static final int MAIN_POSITION_PENALTY = 0;
     public static final int SUB_POSITION_PENALTY = 8;
     public static final int OFF_POSITION_PENALTY = 25;
 
     // ---------------------------------------------------------------- 포지션 균형 모드
 
-    /** 포지션을 우선하되 실력 차이도 약하게 반영한다. */
+    /** 포지션을 우선하되 전투력 차이도 약하게 반영한다. */
     public static final int POSITION_MODE_RANK_BALANCE_WEIGHT = 1;
     public static final int POSITION_MODE_SUB_POSITION_PENALTY = 20;
     public static final int POSITION_MODE_OFF_POSITION_PENALTY = 80;
@@ -52,10 +69,12 @@ public final class BalanceConfig {
             Tier.CHALLENGER, 100
     );
 
-    // ---------------------------------------------------------------- Balance Grade (두 팀 실력 합계 차이)
+    // ---------------------------------------------------------------- Balance Grade
+    // 기준: 두 팀 전투력 합계 차이 (화면 단위, 0~100 척도).
+    // 한 명의 등급 한 단계(예 B→A) = 16점, 티어 한 디비전 = 0.4점.
 
-    public static final int PERFECT_MAX_DIFFERENCE = 2;
-    public static final int VERY_GOOD_MAX_DIFFERENCE = 5;
-    public static final int GOOD_MAX_DIFFERENCE = 10;
-    public static final int WARNING_MAX_DIFFERENCE = 15;
+    public static final int PERFECT_MAX_DIFFERENCE = 4;
+    public static final int VERY_GOOD_MAX_DIFFERENCE = 10;
+    public static final int GOOD_MAX_DIFFERENCE = 20;
+    public static final int WARNING_MAX_DIFFERENCE = 35;
 }

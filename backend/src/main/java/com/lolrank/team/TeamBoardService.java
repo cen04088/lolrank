@@ -10,7 +10,7 @@ import com.lolrank.room.Room;
 import com.lolrank.room.RoomService;
 import com.lolrank.team.balance.AutoFillMode;
 import com.lolrank.team.balance.AutoFillSolver;
-import com.lolrank.team.balance.SkillScoreCalculator;
+import com.lolrank.team.balance.StrengthCalculator;
 import com.lolrank.team.balance.TeamBalance;
 import com.lolrank.team.dto.BalanceResponse;
 import com.lolrank.team.dto.SlotRequest;
@@ -155,7 +155,7 @@ public class TeamBoardService {
                 continue;
             }
             placedIds.add(slot.getCharacterId());
-            int score = SkillScoreCalculator.score(slot.getCharacter());
+            int score = StrengthCalculator.strength(slot.getCharacter());
             if (slot.getTeam() == Team.BLUE) {
                 fixedBlue += score;
             } else {
@@ -169,7 +169,7 @@ public class TeamBoardService {
                 .toList();
         List<AutoFillSolver.Candidate> candidates = participants.stream()
                 .filter(c -> !placedIds.contains(c.getId()))
-                .map(c -> new AutoFillSolver.Candidate(c.getId(), SkillScoreCalculator.score(c),
+                .map(c -> new AutoFillSolver.Candidate(c.getId(), StrengthCalculator.strength(c),
                         c.getMainPosition(), c.getSubPositions()))
                 .toList();
 

@@ -1,4 +1,4 @@
-import type { Balance } from '@/api/types'
+import type { Balance, HierarchyRank } from '@/api/types'
 import { Stars } from '@/components/Stars'
 import { PixelIcon } from '@/components/PixelIcon'
 import { GRADE_EMOTES, GRADE_STARS } from '@/lib/labels'
@@ -9,7 +9,7 @@ interface PowerBarProps {
   syncing: boolean
 }
 
-/** 초안의 TEAM POWER 78 ——— 80 바. power = 팀 평균 실력(0~100). */
+/** 초안의 TEAM POWER 78 ——— 80 바. power = 팀 평균 전투력(0~100) = 계급도 등급 80% + 티어 20%. */
 export function PowerBar({ balance, boardEmpty, syncing }: PowerBarProps) {
   const total = balance.bluePower + balance.redPower
   const bluePercent = total === 0 ? 50 : Math.round((balance.bluePower / total) * 100)
@@ -17,7 +17,13 @@ export function PowerBar({ balance, boardEmpty, syncing }: PowerBarProps) {
 
   return (
     <section className="power" aria-label="팀 밸런스">
-      <PowerSide team="BLUE" power={balance.bluePower} tier={balance.blueAverageTier} count={balance.blueCount} />
+      <PowerSide
+        team="BLUE"
+        power={balance.bluePower}
+        rank={balance.blueAverageRank}
+        tier={balance.blueAverageTier}
+        count={balance.blueCount}
+      />
 
       <div className="power__center">
         <div className="power__bar" role="img" aria-label={`BLUE ${bluePercent}% / RED ${100 - bluePercent}%`}>
@@ -38,7 +44,13 @@ export function PowerBar({ balance, boardEmpty, syncing }: PowerBarProps) {
         {syncing && <span className="power__sync font-pixel">SYNC</span>}
       </div>
 
-      <PowerSide team="RED" power={balance.redPower} tier={balance.redAverageTier} count={balance.redCount} />
+      <PowerSide
+        team="RED"
+        power={balance.redPower}
+        rank={balance.redAverageRank}
+        tier={balance.redAverageTier}
+        count={balance.redCount}
+      />
     </section>
   )
 }
@@ -46,16 +58,19 @@ export function PowerBar({ balance, boardEmpty, syncing }: PowerBarProps) {
 interface PowerSideProps {
   team: 'BLUE' | 'RED'
   power: number
+  rank: HierarchyRank | null
   tier: string | null
   count: number
 }
 
-function PowerSide({ team, power, tier, count }: PowerSideProps) {
+function PowerSide({ team, power, rank, tier, count }: PowerSideProps) {
   return (
     <div className={`power__side power__side--${team.toLowerCase()}`}>
       <span className="power__label font-pixel">TEAM POWER</span>
       <span className="power__value font-pixel">{count === 0 ? '--' : power}</span>
-      <span className="power__tier">{tier ? `평균 ${tier}` : '배치 없음'} · {count}/5</span>
+      <span className="power__tier">
+        {rank && tier ? `평균 ${rank}등급 · ${tier}` : '배치 없음'} · {count}/5
+      </span>
     </div>
   )
 }

@@ -11,7 +11,8 @@ import java.util.Random;
  * 남은 슬롯에 남은 캐릭터를 배치하는 최적 조합을 완전 탐색(백트래킹)으로 찾는다.
  *
  * <pre>
- * totalCost = |blueScore - redScore| * rankBalanceWeight + Σ positionPenalty
+ * totalCost = |blueStrength - redStrength| * rankBalanceWeight + Σ positionCost
+ *   (strength = 등급 80% + 티어 20%, positionCost = 페널티 × 티어 비중 20%; 모두 ×100 단위)
  * </pre>
  *
  * 동점 우선순위: 비선호(OFF) 포지션 수 적음 → 주(MAIN) 포지션 수 많음 → 실력 차이 작음 → 랜덤.
@@ -23,7 +24,8 @@ public final class AutoFillSolver {
     public record SlotKey(Team team, Position position) {
     }
 
-    public record Candidate(long characterId, int skillScore, Position mainPosition, List<Position> subPositions) {
+    /** strength 는 {@link StrengthCalculator#strength} 의 ×100 단위 값이다. */
+    public record Candidate(long characterId, int strength, Position mainPosition, List<Position> subPositions) {
     }
 
     public record Assignment(SlotKey slot, long characterId, PositionFit fit) {
@@ -90,11 +92,11 @@ public final class AutoFillSolver {
             PositionFit fit = PositionFit.of(candidate.mainPosition(), candidate.subPositions(), slot.position());
             assignments.add(new Assignment(slot, candidate.characterId(), fit));
             if (slot.team() == Team.BLUE) {
-                blue += candidate.skillScore();
+                blue += candidate.strength();
             } else {
-                red += candidate.skillScore();
+                red += candidate.strength();
             }
-            penalty += fit.getPenalty();
+            penalty += StrengthCalculator.positionCost(fit.getPenalty());
         }
         return new Solution(List.copyOf(assignments), blue, red, penalty, 0);
     }
@@ -139,7 +141,7 @@ public final class AutoFillSolver {
                     PositionFit fit = PositionFit.of(candidate.mainPosition(), candidate.subPositions(),
                             slots.get(s).position());
                     fits[s][c] = fit;
-                    penalty[s][c] = mode.penaltyOf(fit);
+                    penalty[s][c] = StrengthCalculator.positionCost(mode.penaltyOf(fit));
                 }
             }
             this.chosen = new int[slots.size()];
@@ -175,7 +177,7 @@ public final class AutoFillSolver {
                 }
                 used[c] = true;
                 chosen[slotIndex] = c;
-                int score = candidates.get(c).skillScore();
+                int score = candidates.get(c).strength();
                 PositionFit fit = fits[slotIndex][c];
                 dfs(slotIndex + 1,
                         slot.team() == Team.BLUE ? blueScore + score : blueScore,

@@ -94,7 +94,10 @@ export interface Balance {
   redCount: number
   blueAverageTier: string | null
   redAverageTier: string | null
-  /** 팀 평균 실력 (0~100), UI 의 TEAM POWER */
+  /** 팀 평균 계급도 등급 (LEGEND~C) */
+  blueAverageRank: HierarchyRank | null
+  redAverageRank: HierarchyRank | null
+  /** 팀 평균 전투력 (0~100) = 계급도 등급 80% + 티어 20%. UI 의 TEAM POWER */
   bluePower: number
   redPower: number
 }

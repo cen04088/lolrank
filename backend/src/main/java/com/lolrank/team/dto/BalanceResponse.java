@@ -13,6 +13,8 @@ public record BalanceResponse(
         int redCount,
         String blueAverageTier,
         String redAverageTier,
+        String blueAverageRank,
+        String redAverageRank,
         int bluePower,
         int redPower
 ) {
@@ -28,6 +30,8 @@ public record BalanceResponse(
                 balance.redCount(),
                 balance.blueAverageTier(),
                 balance.redAverageTier(),
+                balance.blueAverageRank(),
+                balance.redAverageRank(),
                 balance.bluePower(),
                 balance.redPower()
         );

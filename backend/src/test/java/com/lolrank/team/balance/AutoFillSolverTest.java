@@ -2,6 +2,7 @@ package com.lolrank.team.balance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.lolrank.character.HierarchyRank;
 import com.lolrank.character.Position;
 import com.lolrank.character.Tier;
 import com.lolrank.team.Team;
@@ -38,8 +39,13 @@ class AutoFillSolverTest {
         return allSlots().stream().filter(s -> !manual.contains(s)).toList();
     }
 
+    /** 등급은 모두 C 로 두고 티어만 다르게 (기존 시나리오 유지). */
     private static Candidate candidate(long id, Tier tier, Integer division, Position main, Position sub) {
-        return new Candidate(id, SkillScoreCalculator.score(tier, division), main, sub == null ? List.of() : List.of(sub));
+        return candidate(id, HierarchyRank.C, tier, division, main, sub);
+    }
+
+    private static Candidate candidate(long id, HierarchyRank rank, Tier tier, Integer division, Position main, Position sub) {
+        return new Candidate(id, StrengthCalculator.strength(rank, tier, division), main, sub == null ? List.of() : List.of(sub));
     }
 
     /** 포지션마다 같은 티어 2명씩 → 모두 주 포지션 + 차이 0 이 가능한 이상적인 10명. */
@@ -96,10 +102,10 @@ class AutoFillSolverTest {
             }
             used[c] = true;
             Candidate cand = candidates.get(c);
-            int p = PositionFit.penalty(cand.mainPosition(), cand.subPositions(), slot.position());
+            int p = StrengthCalculator.positionCost(PositionFit.penalty(cand.mainPosition(), cand.subPositions(), slot.position()));
             bruteForce(slots, candidates, index + 1, used,
-                    slot.team() == Team.BLUE ? blue + cand.skillScore() : blue,
-                    slot.team() == Team.RED ? red + cand.skillScore() : red,
+                    slot.team() == Team.BLUE ? blue + cand.strength() : blue,
+                    slot.team() == Team.RED ? red + cand.strength() : red,
                     penalty + p, skipsLeft, best);
             used[c] = false;
         }
@@ -139,8 +145,8 @@ class AutoFillSolverTest {
                 candidate(17, Tier.EMERALD, 3, Position.SUPPORT, Position.ADC),
                 candidate(18, Tier.IRON, 2, Position.SUPPORT, Position.TOP)
         );
-        int fixedBlue = SkillScoreCalculator.score(Tier.MASTER, null);
-        int fixedRed = SkillScoreCalculator.score(Tier.SILVER, 4);
+        int fixedBlue = StrengthCalculator.strength(HierarchyRank.C, Tier.MASTER, null);
+        int fixedRed = StrengthCalculator.strength(HierarchyRank.C, Tier.SILVER, 4);
 
         Solution solution = solver.solve(slots, candidates, fixedBlue, fixedRed);
 
@@ -164,8 +170,8 @@ class AutoFillSolverTest {
                 candidate(23, Tier.PLATINUM, 1, Position.MID, Position.ADC),
                 candidate(24, Tier.SILVER, 4, Position.ADC, Position.MID)
         );
-        int fixedBlue = 120;
-        int fixedRed = 150;
+        int fixedBlue = 12000;
+        int fixedRed = 15000;
 
         Solution solution = solver.solve(slots, candidates, fixedBlue, fixedRed);
 
@@ -188,7 +194,8 @@ class AutoFillSolverTest {
         long offCount = solution.assignments().stream().filter(a -> a.fit() == PositionFit.OFF).count();
         assertThat(mainCount).isEqualTo(2);
         assertThat(offCount).isEqualTo(8);
-        assertThat(solution.totalPositionPenalty()).isEqualTo(8 * BalanceConfig.OFF_POSITION_PENALTY);
+        assertThat(solution.totalPositionPenalty())
+                .isEqualTo(8 * StrengthCalculator.positionCost(BalanceConfig.OFF_POSITION_PENALTY));
         assertThat(solution.difference()).isZero();
     }
 
@@ -211,6 +218,27 @@ class AutoFillSolverTest {
         Team teamOfSecondMaster = teamOf(solution, 2);
         assertThat(teamOfFirstMaster).isNotEqualTo(teamOfSecondMaster);
         assertThat(solution.difference()).isZero();
+    }
+
+    @Test
+    void 계급도_등급이_티어보다_우선한다_LEGEND_두명은_반드시_갈라진다() {
+        // LEGEND 인데 티어는 낮은 두 명 + C 등급인데 티어가 높은 여덟 명
+        List<SlotKey> slots = allSlots();
+        List<Candidate> candidates = new ArrayList<>();
+        candidates.add(candidate(1, HierarchyRank.LEGEND, Tier.IRON, 4, Position.MID, null));
+        candidates.add(candidate(2, HierarchyRank.LEGEND, Tier.BRONZE, 2, Position.TOP, null));
+        Position[] positions = Position.values();
+        for (long id = 3; id <= 10; id++) {
+            candidates.add(candidate(id, HierarchyRank.C, Tier.CHALLENGER, null, positions[(int) (id % positions.length)], null));
+        }
+
+        Solution solution = solver.solve(slots, candidates, 0, 0);
+
+        assertValidAssignment(solution, slots, candidates);
+        assertThat(teamOf(solution, 1)).isNotEqualTo(teamOf(solution, 2));
+        // LEGEND+Iron IV(8200) 가 C+Challenger(3600) 보다 강하게 평가된다
+        assertThat(StrengthCalculator.strength(HierarchyRank.LEGEND, Tier.IRON, 4))
+                .isGreaterThan(StrengthCalculator.strength(HierarchyRank.C, Tier.CHALLENGER, null));
     }
 
     @Test
@@ -283,7 +311,7 @@ class AutoFillSolverTest {
         int expectedBlue = 5;
         int expectedRed = 7;
         for (Assignment a : solution.assignments()) {
-            int score = candidates.stream().filter(c -> c.characterId() == a.characterId()).findFirst().orElseThrow().skillScore();
+            int score = candidates.stream().filter(c -> c.characterId() == a.characterId()).findFirst().orElseThrow().strength();
             if (a.slot().team() == Team.BLUE) {
                 expectedBlue += score;
             } else {
