@@ -1,6 +1,7 @@
 .pbadge {
-  position: fixed;
-  top: 12px;
+  /* 상단바(.gnav) 바로 아래 왼쪽. 상단바와 같은 줄에 두면 좁은 화면에서 겹친다. */
+  position: absolute;
+  top: calc(var(--nav-h, 62px) + 34px);
   left: 16px;
   z-index: 200;
   display: flex;
@@ -79,5 +80,12 @@
 @media (max-width: 720px) {
   .pbadge__bubble {
     display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  /* 모바일은 상단바가 하단 탭바로 내려가므로 배지는 맨 위에 */
+  .pbadge {
+    top: 12px;
   }
 }

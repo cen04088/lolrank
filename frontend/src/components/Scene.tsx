@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
+import { useBgmTrack } from '@/components/Bgm'
 import { tinyPropUrl } from '@/lib/assets'
 import './scene.css'
 
@@ -17,6 +18,7 @@ interface SceneProps {
  * 외부 배경 이미지 없이 포함된 타일과 CSS 레이어만으로 그린다.
  */
 export function Scene({ kind, children, className = '' }: SceneProps) {
+  useBgmTrack(kind)
   return (
     <div className={`scene scene--${kind} ${className}`.trim()}>
       <div className="scene__bg" aria-hidden>

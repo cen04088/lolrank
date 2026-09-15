@@ -3,6 +3,7 @@
 친구들과 League of Legends 5:5 내전을 할 때 쓰는 **16-bit 픽셀 게임 스타일 팀 메이커 + 계급도** 웹앱.
 
 - 방에 들어오면 **마을 로비**(하늘·성·잔디)에서 "5 vs 5 팀 배정" / "롤 랭크 계급도" 건물로 입장
+- **배경음악**: 화면(마을/던전/성)마다 다른 CC0 칩튠이 흐르고, 상단바 BGM 버튼과 설정의 볼륨 슬라이더로 조절 (브라우저 정책상 첫 클릭 뒤 재생, 설정은 localStorage)
 - **팀 배정**: 도트 캐릭터를 직접 드래그해서 BLUE / RED 팀의 TOP · JUNGLE · MID · ADC · SUPPORT 슬롯에 배치. 사람이 배치한 자리(MANUAL)는 고정하고 **남은 자리만** 자동 채우기(AUTO)
   - 배정 방식 3종: 실력 균형 / 포지션 균형 / 완전 랜덤 (`?mode=`)
   - 하단 TEAM POWER 바(팀 평균 실력)와 밸런스 등급
@@ -28,6 +29,7 @@
 | [Tiny Swords Free Pack](https://pixelfrog-assets.itch.io/tiny-swords) by Pixel Frog | 개인·상업 사용/수정 가능, **재배포·재판매 금지** | 캐릭터 기사단 5종(Warrior·Archer·Lancer·Monk·Pawn) × 5색 = 25 | `frontend/public/assets/tiny/chars/` | `frontend/scripts/extract-tiny-swords.py` |
 | Tiny Swords 구버전 (Update 010) | CC0 | 고블린 2종(Torch·TNT) × 4색 = 8, 로비 성·집·탑·나무·장식, 잔디/모래 타일, 리본 UI | `frontend/public/assets/tiny/` | 같은 스크립트 |
 | [Ninja Adventure](https://pixel-boy.itch.io/ninja-adventure-asset-pack) by Pixel-boy & AAA | CC0 | 던전 석벽 타일·등잔, 말풍선·이모트·아이콘 | `frontend/public/assets/ninja/` | `frontend/scripts/extract-ninja-assets.py` |
+| [Ninja Adventure Asset Pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack) — Musics | CC0 | 배경음악 3곡 (Calm Village · Dungeon · Dark Castle → 마을/던전/성 화면) | `frontend/public/assets/audio/` | 수동 복사 (`README.txt` 참고) |
 
 - 캐릭터는 총 **33종**, 키는 `ts_{병종}_{색}` (예 `ts_lancer_black`). 목록과 순서는 `frontend/src/lib/assets.ts` 의 `ASSET_GROUPS`, 예전 `player_01~12` 키는 alias 로, 알 수 없는 키는 해시로 고정된 캐릭터에 매핑됩니다.
 - 각 캐릭터는 `{key}.png`(정면 96×96), `{key}_face.png`(초상화 60×60), `{key}_walk.png`(달리기 시트 4방향×4프레임) 세 파일입니다.

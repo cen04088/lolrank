@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { DonateBanner } from '@/components/DonateBanner'
 import { useCharacters } from '@/api/queries'
+import { isSpecialAsset } from '@/lib/assets'
 import { WalkingSprite } from '@/components/WalkingSprite'
 import { PlayerBadge } from '@/components/PlayerBadge'
 import { Scene } from '@/components/Scene'
@@ -18,7 +19,8 @@ export function LobbyPage() {
   const { room, nickname, openSettings } = useRoomContext()
   const characters = useCharacters(code)
 
-  const parade = (characters.data ?? []).slice(0, PARADE_MAX)
+  // 특수 인물 초상화는 걷는 모션이 없으므로 행진에서 뺀다.
+  const parade = (characters.data ?? []).filter((c) => !isSpecialAsset(c.assetKey)).slice(0, PARADE_MAX)
   const greeting = GREETINGS[nickname.length % GREETINGS.length]
 
   return (

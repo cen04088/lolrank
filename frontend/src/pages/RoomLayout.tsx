@@ -9,6 +9,7 @@ import { PixelLoader } from '@/components/PixelLoader'
 import { PixelModal } from '@/components/PixelModal'
 import { Scene } from '@/components/Scene'
 import { useToast } from '@/components/Toast'
+import { useBgm } from '@/components/Bgm'
 import { NICKNAME_MAX_LENGTH, useNickname } from '@/lib/nickname'
 
 interface RoomContextValue {
@@ -202,9 +203,11 @@ function SettingsModal({ room, nickname, open, onClose, onEditNickname }: Settin
           </PixelButton>
         </div>
 
+        <BgmRow />
+
         <p className="settings__credit">
           Characters &amp; village: <a href="https://pixelfrog-assets.itch.io/tiny-swords" target="_blank" rel="noreferrer">Tiny Swords</a> by Pixel Frog
-          {' · '}UI: <a href="https://pixel-boy.itch.io/ninja-adventure-asset-pack" target="_blank" rel="noreferrer">Ninja Adventure</a> (CC0)
+          {' · '}Music &amp; UI: <a href="https://pixel-boy.itch.io/ninja-adventure-asset-pack" target="_blank" rel="noreferrer">Ninja Adventure</a> (CC0)
           {' · '}Font: Galmuri (OFL)
         </p>
 
@@ -237,4 +240,41 @@ function formatTime(iso: string): string {
   const date = new Date(iso)
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${pad(date.getMonth() + 1)}.${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
+/** 설정 모달의 배경음악 줄: 켜기/끄기 + 볼륨 */
+function BgmRow() {
+  const bgm = useBgm()
+  if (!bgm) return null
+  return (
+    <div className="settings__row">
+      <div className="settings__bgm">
+        <span className="px-label">배경음악</span>
+        {bgm.unsupported ? (
+          <strong>이 브라우저는 재생을 지원하지 않아요</strong>
+        ) : (
+          <label className="settings__volume">
+            <span className="visually-hidden">볼륨</span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={5}
+              value={Math.round(bgm.volume * 100)}
+              onChange={(event) => bgm.setVolume(Number(event.target.value) / 100)}
+              disabled={!bgm.enabled}
+              aria-valuetext={`${Math.round(bgm.volume * 100)}%`}
+            />
+            <span className="settings__volume-value font-pixel">{Math.round(bgm.volume * 100)}</span>
+          </label>
+        )}
+        {bgm.nowPlaying && <small className="settings__now">♪ {bgm.nowPlaying}</small>}
+      </div>
+      {!bgm.unsupported && (
+        <PixelButton variant={bgm.enabled ? 'blue' : 'ghost'} size="sm" onClick={bgm.toggle} aria-pressed={bgm.enabled}>
+          {bgm.enabled ? '켜짐' : '꺼짐'}
+        </PixelButton>
+      )}
+    </div>
+  )
 }

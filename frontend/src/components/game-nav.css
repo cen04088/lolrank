@@ -1,5 +1,6 @@
 .gnav {
-  position: fixed;
+  /* 페이지 흐름 맨 위에 붙어 있다가 스크롤하면 함께 올라간다 (고정 아님) */
+  position: absolute;
   top: 12px;
   left: 50%;
   z-index: 200;
@@ -75,6 +76,7 @@
 
 @media (max-width: 720px) {
   .gnav {
+    position: fixed;
     top: auto;
     bottom: 10px;
     left: 10px;
@@ -92,4 +94,14 @@
     flex: 1;
     min-width: 0;
   }
+}
+
+.gnav__item--on .gnav__icon {
+  filter: drop-shadow(1px 2px 0 rgba(0,0,0,.55));
+  animation: gnav-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes gnav-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
 }
