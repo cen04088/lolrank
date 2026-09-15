@@ -17,20 +17,29 @@ const ITEMS = [
 export function GameNav({ code, onOpenSettings }: GameNavProps) {
   return (
     <nav className="gnav" aria-label="메인 메뉴">
-      {ITEMS.map((item) => (
-        <NavLink key={item.to} to={`/room/${code}${item.to}`} end={item.end} className="gnav__item">
-          <span className="gnav__icon" aria-hidden>
-            {item.icon}
-          </span>
-          <span className="gnav__label">{item.label}</span>
-        </NavLink>
-      ))}
-      <button type="button" className="gnav__item" onClick={onOpenSettings}>
-        <span className="gnav__icon" aria-hidden>
-          ⚙️
+      <NavLink to={`/room/${code}`} end className="gnav__brand" aria-label="LOL RANK 홈">
+        <span className="gnav__brand-crown" aria-hidden>♛</span>
+        <span>
+          <strong>LOL RANK</strong>
+          <small>PRIVATE LEAGUE</small>
         </span>
-        <span className="gnav__label">설정</span>
-      </button>
+      </NavLink>
+      <div className="gnav__links">
+        {ITEMS.map((item) => (
+          <NavLink key={item.to} to={`/room/${code}${item.to}`} end={item.end} className="gnav__item">
+            <span className="gnav__icon" aria-hidden>
+              {item.icon}
+            </span>
+            <span className="gnav__label">{item.label}</span>
+          </NavLink>
+        ))}
+        <button type="button" className="gnav__item" onClick={onOpenSettings}>
+          <span className="gnav__icon" aria-hidden>
+            ⚙️
+          </span>
+          <span className="gnav__label">설정</span>
+        </button>
+      </div>
     </nav>
   )
 }

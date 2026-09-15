@@ -1,10 +1,10 @@
 /* LOL RANK Design Tokens — 16-bit pixel sports village */
 :root {
   /* ---------- dark surfaces (dungeon / castle screens) ---------- */
-  --bg: #0d1526;
-  --panel: #172238;
-  --panel-2: #202e48;
-  --panel-3: #2a3a5a;
+  --bg: #0a1120;
+  --panel: #142038;
+  --panel-2: #1c2b47;
+  --panel-3: #2a3d5d;
 
   /* stone (dungeon walls, tower) */
   --stone: #3b4152;
@@ -41,9 +41,9 @@
   --red-deep: #6b1c26;
 
   /* ---------- accents ---------- */
-  --gold: #f5c451;
-  --gold-hi: #ffe08a;
-  --gold-dark: #b8862b;
+  --gold: #e5b94f;
+  --gold-hi: #ffe29a;
+  --gold-dark: #8f6723;
   --grass: #3e7548;
   --grass-dark: #285536;
   --wood: #8a5a2b;
@@ -66,7 +66,9 @@
 
   /* ---------- pixel chrome ---------- */
   --ink: #060a14;
-  --shadow: rgba(0, 0, 0, 0.55);
+  --shadow: rgba(2, 7, 18, 0.68);
+  --line: rgba(183, 205, 236, 0.16);
+  --line-hi: rgba(255, 226, 154, 0.36);
   --border-w: 3px;
   --radius: 2px;
   --px-shadow: 4px 4px 0 var(--shadow);
@@ -90,6 +92,6 @@
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 
   /* ---------- layout ---------- */
-  --nav-h: 56px;
-  --content-max: 1440px;
+  --nav-h: 72px;
+  --content-max: 1320px;
 }

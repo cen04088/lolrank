@@ -12,9 +12,9 @@
   min-height: 40px;
   background: var(--btn-bg);
   color: var(--btn-fg);
-  border: var(--border-w) solid var(--btn-edge);
+  border: 2px solid var(--btn-edge);
   border-radius: var(--radius);
-  box-shadow: var(--px-shadow), inset 0 3px 0 rgba(255, 255, 255, 0.18), inset 0 -3px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 0 var(--shadow), inset 0 2px 0 rgba(255,255,255,.2), inset 0 -3px 0 rgba(0,0,0,.25);
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.02em;
@@ -28,7 +28,7 @@
 
 .pxbtn:hover:not(:disabled) {
   transform: translate(-1px, -2px);
-  box-shadow: 6px 6px 0 var(--shadow), inset 0 3px 0 rgba(255, 255, 255, 0.22), inset 0 -3px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 7px 0 var(--shadow), 0 10px 18px rgba(2,7,18,.2), inset 0 2px 0 rgba(255,255,255,.24), inset 0 -3px 0 rgba(0,0,0,.25);
   filter: brightness(1.08);
 }
 
@@ -49,18 +49,18 @@
 }
 
 .pxbtn--gold {
-  --btn-bg: var(--gold);
+  --btn-bg: linear-gradient(180deg, var(--gold-hi), var(--gold));
   --btn-fg: var(--ink);
 }
 
 .pxbtn--blue {
-  --btn-bg: var(--blue);
-  --btn-fg: #071426;
+  --btn-bg: linear-gradient(180deg, #579ef4, #2469bd);
+  --btn-fg: #f7fbff;
 }
 
 .pxbtn--red {
-  --btn-bg: var(--red);
-  --btn-fg: #2a0a0f;
+  --btn-bg: linear-gradient(180deg, #dd5a65, #aa2c3a);
+  --btn-fg: #fff7f7;
 }
 
 .pxbtn--grass {
@@ -120,9 +120,9 @@
   --panel-title-bg: var(--panel-2);
   position: relative;
   background: var(--panel);
-  border: var(--border-w) solid var(--panel-edge);
+  border: 2px solid var(--panel-edge);
   border-radius: var(--radius);
-  box-shadow: var(--px-shadow), var(--px-inset);
+  box-shadow: 0 10px 24px rgba(2,7,18,.34), inset 0 0 0 1px rgba(255,255,255,.06);
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -211,9 +211,9 @@
   display: flex;
   flex-direction: column;
   background: var(--panel);
-  border: var(--border-w) solid var(--wood);
+  border: 2px solid var(--gold-dark);
   border-radius: var(--radius);
-  box-shadow: 8px 8px 0 var(--shadow), inset 0 0 0 2px var(--ink), inset 0 0 0 4px var(--wood-dark);
+  box-shadow: 0 24px 70px rgba(2,7,18,.72), inset 0 0 0 1px rgba(255,226,154,.16);
   animation: px-pop-in var(--dur-slow) var(--ease) both;
 }
 
@@ -223,7 +223,7 @@
   justify-content: space-between;
   padding: 14px 18px;
   border-bottom: var(--border-w) solid var(--wood-dark);
-  background: var(--wood-dark);
+  background: linear-gradient(90deg, #433019, #1b2941 70%);
 }
 
 .pxmodal__title {

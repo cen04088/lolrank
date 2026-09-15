@@ -26,8 +26,9 @@ export function LobbyPage() {
 
       <main className="lobby">
         <header className="lobby__logo logo">
+          <span className="lobby__eyebrow font-pixel">PRIVATE LEAGUE · SEASON 01</span>
           <span className="logo__crown" aria-hidden>
-            👑
+            ♛
           </span>
           <h1 className="logo__text">LOL RANK</h1>
           <p className="logo__sub">우리들의 내전, 더 특별하게</p>
@@ -111,6 +112,7 @@ interface GateProps {
 function Gate({ tone, icon, title, description, to }: GateProps) {
   return (
     <div className={`gate gate--${tone}`}>
+      <span className="gate__flag font-pixel" aria-hidden>{tone === 'blue' ? 'BLUE GATE' : 'ROYAL HALL'}</span>
       <div className="gate__dome">
         <span className="gate__icon" aria-hidden>
           {icon}
