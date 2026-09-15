@@ -1,2 +1,4 @@
-Tiny Swords (old version) by Pixel Frog — CC0 1.0 Universal
-https://pixelfrog-assets.itch.io/tiny-swords
+Tiny Swords by Pixel Frog — https://pixelfrog-assets.itch.io/tiny-swords
+- Free Pack (Knights units): free for personal and commercial projects, modification allowed;
+  redistribution, resale or repackaging of the assets is not permitted.
+- Old version (goblins, buildings, terrain, UI): CC0 1.0 Universal

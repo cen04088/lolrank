@@ -1,71 +1,45 @@
 /**
  * 캐릭터/배경/소품 스프라이트 경로.
  *
- * 두 개의 CC0 팩을 함께 쓴다.
- * - Tiny Swords (구버전, Pixel Frog): `ts_` 접두어. 192px 프레임을 96px 로 잘라 1x 로 쓴다 → scripts/extract-tiny-swords.py
- * - Ninja Adventure (Pixel-boy & AAA): 16px 스프라이트 → scripts/extract-ninja-assets.py
+ * - 캐릭터: Tiny Swords (Pixel Frog). 기사단 5종 × 5색 (Free Pack) + 고블린 3종 × 4색 (구버전 CC0).
+ *   192/320px 프레임을 96px 로 잘라 1x 로 쓴다 → scripts/extract-tiny-swords.py
+ * - 마을 배경/건물/리본: Tiny Swords 구버전 (CC0)
+ * - 던전 석벽·말풍선·이모트·아이콘: Ninja Adventure (Pixel-boy & AAA, CC0) → scripts/extract-ninja-assets.py
  */
 const TINY_BASE = '/assets/tiny'
 const NINJA_BASE = '/assets/ninja'
 
 export interface AssetGroup {
-  id: 'tiny' | 'ninja'
+  id: 'knights' | 'goblins'
   label: string
   keys: readonly string[]
 }
 
-const TINY_UNITS = ['warrior', 'archer', 'pawn', 'torch', 'tnt', 'barrel'] as const
-const TINY_COLORS = ['blue', 'red', 'yellow', 'purple'] as const
+const KNIGHT_UNITS = ['warrior', 'archer', 'lancer', 'monk', 'pawn'] as const
+const KNIGHT_COLORS = ['blue', 'red', 'yellow', 'purple', 'black'] as const
+const GOBLIN_UNITS = ['torch', 'tnt', 'barrel'] as const
+const GOBLIN_COLORS = ['blue', 'red', 'yellow', 'purple'] as const
 
-/** Tiny Swords 24종: 병종 × 색상 */
-export const TINY_CHARACTER_KEYS: readonly string[] = TINY_UNITS.flatMap((unit) =>
-  TINY_COLORS.map((color) => `ts_${unit}_${color}`),
+export const KNIGHT_KEYS: readonly string[] = KNIGHT_UNITS.flatMap((unit) =>
+  KNIGHT_COLORS.map((color) => `ts_${unit}_${color}`),
 )
 
-export const NINJA_CHARACTER_KEYS: readonly string[] = [
-  'ninja_blue',
-  'ninja_red',
-  'ninja_green',
-  'ninja_yellow',
-  'ninja_gray',
-  'ninja_dark',
-  'ninja_fire',
-  'ninja_water',
-  'ninja_thunder',
-  'ninja_leaf',
-  'ninja_masked',
-  'ninja_mage_orange',
-  'samurai',
-  'samurai_blue',
-  'samurai_red',
-  'knight',
-  'knight_gold',
-  'gladiator_blue',
-  'gladiator_red',
-  'fighter_red',
-  'monk',
-  'hunter',
-  'master',
-  'princess',
-  'noble',
-  'boy',
-  'woman',
-  'villager',
-  'sultan',
-  'vampire',
-  'skeleton',
-  'tengu',
-]
+export const GOBLIN_KEYS: readonly string[] = GOBLIN_UNITS.flatMap((unit) =>
+  GOBLIN_COLORS.map((color) => `ts_${unit}_${color}`),
+)
 
 export const ASSET_GROUPS: readonly AssetGroup[] = [
-  { id: 'tiny', label: 'Tiny Swords', keys: TINY_CHARACTER_KEYS },
-  { id: 'ninja', label: 'Ninja Adventure', keys: NINJA_CHARACTER_KEYS },
+  { id: 'knights', label: '기사단', keys: KNIGHT_KEYS },
+  { id: 'goblins', label: '고블린', keys: GOBLIN_KEYS },
 ]
 
 /** 캐릭터 선택 화면에 나오는 순서. DB 에는 이 key 가 assetKey 로 저장된다. */
-export const PLAYER_ASSET_KEYS: readonly string[] = [...TINY_CHARACTER_KEYS, ...NINJA_CHARACTER_KEYS]
+export const PLAYER_ASSET_KEYS: readonly string[] = [...KNIGHT_KEYS, ...GOBLIN_KEYS]
 
-export const NPC_ELDER_KEY = 'npc_old_man'
+const KNOWN_KEYS = new Set(PLAYER_ASSET_KEYS)
+
+/** 계급도 구석의 조언자 NPC */
+export const NPC_ELDER_KEY = 'ts_monk_yellow'
 
 /** 예전 placeholder 키(player_01~12)로 저장된 캐릭터를 새 스프라이트에 대응시킨다. */
 const LEGACY_ALIASES: Record<string, string> = {
@@ -77,63 +51,64 @@ const LEGACY_ALIASES: Record<string, string> = {
   player_06: 'ts_torch_red',
   player_07: 'ts_tnt_purple',
   player_08: 'ts_barrel_yellow',
-  player_09: 'ts_warrior_purple',
-  player_10: 'ts_pawn_red',
+  player_09: 'ts_lancer_purple',
+  player_10: 'ts_monk_red',
   player_11: 'ts_archer_purple',
   player_12: 'ts_torch_blue',
 }
 
+function hash(value: string): number {
+  let h = 2166136261
+  for (let i = 0; i < value.length; i++) {
+    h ^= value.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return h >>> 0
+}
+
+/**
+ * DB 에 남아 있을 수 있는 알 수 없는 키(예: 예전 Ninja Adventure 키)는
+ * 항상 같은 Tiny Swords 캐릭터로 대체한다.
+ */
 export function resolveAssetKey(assetKey: string): string {
-  return LEGACY_ALIASES[assetKey] ?? assetKey
+  const aliased = LEGACY_ALIASES[assetKey] ?? assetKey
+  if (KNOWN_KEYS.has(aliased)) return aliased
+  return PLAYER_ASSET_KEYS[hash(assetKey) % PLAYER_ASSET_KEYS.length]
 }
 
-export function isTinySwords(assetKey: string): boolean {
-  return resolveAssetKey(assetKey).startsWith('ts_')
+/** 한 프레임의 원본 픽셀 크기 */
+export const SPRITE_FRAME = 96
+
+export function spriteFrameSize(_assetKey: string): number {
+  return SPRITE_FRAME
 }
 
-/** 한 프레임의 원본 픽셀 크기 (Tiny Swords 96, Ninja Adventure 16) */
-export function spriteFrameSize(assetKey: string): number {
-  return isTinySwords(assetKey) ? 96 : 16
-}
-
-/** 고해상도 스프라이트는 축소 시 부드럽게, 16px 도트는 항상 pixelated 로 그린다. */
-export function isHiResSprite(assetKey: string): boolean {
-  return isTinySwords(assetKey)
-}
-
-function charsBase(assetKey: string): string {
-  return isTinySwords(assetKey) ? `${TINY_BASE}/chars` : `${NINJA_BASE}/chars`
+/** 고해상도 스프라이트는 축소 시 부드럽게 그린다. */
+export function isHiResSprite(_assetKey: string): boolean {
+  return true
 }
 
 /** 정면 대기 스프라이트 */
 export function assetUrl(assetKey: string): string {
-  const key = resolveAssetKey(assetKey)
-  return `${charsBase(key)}/${encodeURIComponent(key)}.png`
+  return `${TINY_BASE}/chars/${encodeURIComponent(resolveAssetKey(assetKey))}.png`
 }
 
 /** 초상화 */
 export function faceUrl(assetKey: string): string {
-  const key = resolveAssetKey(assetKey)
-  return `${charsBase(key)}/${encodeURIComponent(key)}_face.png`
+  return `${TINY_BASE}/chars/${encodeURIComponent(resolveAssetKey(assetKey))}_face.png`
 }
 
 /** 걷기 스프라이트시트 (행 = 아래/위/왼/오른, 열 = 4프레임) */
 export function walkSheetUrl(assetKey: string): string {
-  const key = resolveAssetKey(assetKey)
-  return `${charsBase(key)}/${encodeURIComponent(key)}_walk.png`
+  return `${TINY_BASE}/chars/${encodeURIComponent(resolveAssetKey(assetKey))}_walk.png`
 }
 
-/** Ninja Adventure 16px 타일 */
+/** Ninja Adventure 16px 타일 (던전 석벽·등잔) */
 export function tileUrl(name: string): string {
   return `${NINJA_BASE}/tiles/${name}.png`
 }
 
-/** Ninja Adventure 소품 */
-export function propUrl(name: string): string {
-  return `${NINJA_BASE}/props/${name}.png`
-}
-
-/** Ninja Adventure UI 아이콘 */
+/** Ninja Adventure UI 아이콘 (검·트로피·이모트) */
 export function uiUrl(name: string): string {
   return `${NINJA_BASE}/ui/${name}.png`
 }

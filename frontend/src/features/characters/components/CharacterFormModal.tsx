@@ -290,14 +290,14 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
                         onClick={() => set('assetKey', key)}
                         title={key}
                       >
-                        <PixelAvatar assetKey={key} size={44} variant={group.id === 'tiny' ? 'sprite' : 'face'} />
+                        <PixelAvatar assetKey={key} size={48} />
                       </button>
                     ))}
                   </div>
                 </div>
               ))}
               <p className="cform__hint">
-                스킨 이미지는 <code>public/assets/players/</code> 의 PNG 를 같은 이름으로 바꾸면 교체됩니다.
+                Tiny Swords 기사단(5종 × 5색)과 고블린(3종 × 4색)입니다. 팀 배정 화면에서는 얼굴만, 계급도에서는 전신이 보입니다.
               </p>
             </div>
           )}
