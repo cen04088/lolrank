@@ -16,7 +16,8 @@ export interface BgmSettings {
   volume: number
 }
 
-const DEFAULTS: BgmSettings = { enabled: true, volume: DEFAULT_BGM_VOLUME }
+/** 기본은 꺼짐. 상단바 BGM 버튼으로 켠 사람만 듣는다. */
+const DEFAULTS: BgmSettings = { enabled: false, volume: DEFAULT_BGM_VOLUME }
 
 export const BGM_TRACKS: Record<SceneKind, { src: string; title: string }> = {
   village: { src: '/assets/audio/village.ogg', title: 'Calm Village' },

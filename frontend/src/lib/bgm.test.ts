@@ -6,8 +6,8 @@ describe('bgm settings', () => {
     window.localStorage.clear()
   })
 
-  it('저장된 값이 없으면 켜짐 + 기본 볼륨', () => {
-    expect(getBgmSettings()).toEqual({ enabled: true, volume: DEFAULT_BGM_VOLUME })
+  it('저장된 값이 없으면 꺼짐 + 기본 볼륨', () => {
+    expect(getBgmSettings()).toEqual({ enabled: false, volume: DEFAULT_BGM_VOLUME })
   })
 
   it('일부만 저장해도 나머지는 유지되고 볼륨은 0~1 로 잘린다', () => {
@@ -19,7 +19,7 @@ describe('bgm settings', () => {
 
   it('깨진 JSON 은 기본값으로 처리한다', () => {
     window.localStorage.setItem('lolrank.bgm', '{oops')
-    expect(getBgmSettings()).toEqual({ enabled: true, volume: DEFAULT_BGM_VOLUME })
+    expect(getBgmSettings()).toEqual({ enabled: false, volume: DEFAULT_BGM_VOLUME })
   })
 
   it('clampVolume', () => {
