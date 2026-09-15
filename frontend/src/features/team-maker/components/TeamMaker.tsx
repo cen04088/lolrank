@@ -16,6 +16,7 @@ import { useCharacters, useTeamBoard } from '@/api/queries'
 import type { AutoFillMode, Character } from '@/api/types'
 import { EmptyState } from '@/components/EmptyState'
 import { PixelButton } from '@/components/PixelButton'
+import { PixelIcon } from '@/components/PixelIcon'
 import { PixelLoader } from '@/components/PixelLoader'
 import { ConfirmModal } from '@/components/PixelModal'
 import { useTeamBoardMutations } from '../hooks/useTeamBoardMutations'
@@ -151,7 +152,7 @@ export function TeamMaker({ code }: TeamMakerProps) {
         <header className="tmk__head">
           <div className="page-title">
             <span className="page-title__icon" aria-hidden>
-              ⚔
+              <PixelIcon name="icon_guard" size={44} />
             </span>
             <div className="page-title__text">
               <h1>팀 배정</h1>
@@ -219,7 +220,7 @@ export function TeamMaker({ code }: TeamMakerProps) {
               <PixelButton
                 variant="gold"
                 size="lg"
-                icon="⚔"
+                icon={<PixelIcon name="big_sword" size={22} />}
                 className="tmk__autofill"
                 onClick={handleAutoFill}
                 loading={autoFill.isPending}

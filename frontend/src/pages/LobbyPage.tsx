@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useCharacters } from '@/api/queries'
-import { PixelAvatar } from '@/components/PixelAvatar'
+import { WalkingSprite } from '@/components/WalkingSprite'
 import { PixelButton } from '@/components/PixelButton'
 import { PlayerBadge } from '@/components/PlayerBadge'
 import { Scene } from '@/components/Scene'
+import { propUrl } from '@/lib/assets'
 import { useRoomCode, useRoomContext } from '@/pages/RoomLayout'
 import './lobby.css'
 
@@ -43,14 +44,15 @@ export function LobbyPage() {
         <div className="lobby__gates">
           <Gate
             tone="blue"
-            icon="⚔"
+            building="house_blue"
+            sign="dojo_sign"
             title="5 vs 5 팀 배정"
             description={['공정한 팀으로,', '더 재미있는 한 판!']}
             to={`/room/${code}/team`}
           />
           <Gate
             tone="red"
-            icon="👑"
+            building="house_red"
             title="롤 랭크 계급도"
             description={['우리만의 랭크,', '전설을 만들어보세요!']}
             to={`/room/${code}/hierarchy`}
@@ -67,10 +69,10 @@ export function LobbyPage() {
               <li
                 key={character.id}
                 className="parade__player"
-                style={{ animationDelay: `${index * 350}ms`, animationDuration: `${6 + (index % 3)}s` }}
+                style={{ animationDelay: `${-index * 2.3}s`, animationDuration: `${14 + (index % 4) * 3}s` }}
                 title={character.name}
               >
-                <PixelAvatar assetKey={character.assetKey} size={44} />
+                <WalkingSprite assetKey={character.assetKey} direction="right" scale={3} />
                 <span className="parade__name">{character.name}</span>
               </li>
             ))}
@@ -103,20 +105,21 @@ export function LobbyPage() {
 
 interface GateProps {
   tone: 'blue' | 'red'
-  icon: string
+  /** Ninja Adventure 집 소품 이름 */
+  building: string
+  sign?: string
   title: string
   description: string[]
   to: string
 }
 
-function Gate({ tone, icon, title, description, to }: GateProps) {
+function Gate({ tone, building, sign, title, description, to }: GateProps) {
   return (
     <div className={`gate gate--${tone}`}>
       <span className="gate__flag font-pixel" aria-hidden>{tone === 'blue' ? 'BLUE GATE' : 'ROYAL HALL'}</span>
-      <div className="gate__dome">
-        <span className="gate__icon" aria-hidden>
-          {icon}
-        </span>
+      <div className="gate__building">
+        <img className="gate__house" src={propUrl(building)} alt="" />
+        {sign && <img className="gate__sign" src={propUrl(sign)} alt="" />}
       </div>
       <div className="gate__body">
         <h2 className="gate__title">{title}</h2>

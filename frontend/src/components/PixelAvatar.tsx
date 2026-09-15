@@ -1,34 +1,30 @@
 import { useState, type CSSProperties } from 'react'
-import { assetUrl } from '@/lib/assets'
+import { assetUrl, faceUrl } from '@/lib/assets'
 
 interface PixelAvatarProps {
   assetKey: string
   size?: number
   alt?: string
   className?: string
+  /** sprite: 정면 전신(16x16) · face: 초상화(38x38) */
+  variant?: 'sprite' | 'face'
 }
 
 /**
- * /public/assets/players/{assetKey}.png 를 표시한다.
+ * Ninja Adventure 캐릭터 스프라이트를 표시한다.
  * 파일이 없으면 assetKey 로부터 결정론적으로 생성한 8x8 픽셀 아바타를 대신 그린다.
  */
-export function PixelAvatar({ assetKey, size = 48, alt = '', className = '' }: PixelAvatarProps) {
+export function PixelAvatar({ assetKey, size = 48, alt = '', className = '', variant = 'sprite' }: PixelAvatarProps) {
   const [failed, setFailed] = useState(false)
   const style = { '--avatar-size': `${size}px` } as CSSProperties
+  const src = variant === 'face' ? faceUrl(assetKey) : assetUrl(assetKey)
 
   return (
-    <span className={`pxavatar ${className}`.trim()} style={style}>
+    <span className={`pxavatar pxavatar--${variant} ${className}`.trim()} style={style}>
       {failed ? (
         <FallbackSprite seed={assetKey} />
       ) : (
-        <img
-          src={assetUrl(assetKey)}
-          alt={alt}
-          width={size}
-          height={size}
-          draggable={false}
-          onError={() => setFailed(true)}
-        />
+        <img src={src} alt={alt} width={size} height={size} draggable={false} onError={() => setFailed(true)} />
       )}
     </span>
   )

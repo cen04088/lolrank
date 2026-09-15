@@ -445,3 +445,11 @@
     min-width: 0;
   }
 }
+
+.npc__sprite {
+  filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.5));
+}
+
+.floor__crown {
+  filter: drop-shadow(1px 1px 0 var(--ink));
+}

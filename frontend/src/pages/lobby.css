@@ -421,3 +421,60 @@
 @media (max-width: 1180px) {
   .lobby__notice { position: static; width: min(100%, 320px); transform: none; }
 }
+
+/* ================= Ninja Adventure 소품 적용 ================= */
+.gate__building {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 150px;
+  margin-bottom: -6px;
+  z-index: 1;
+}
+
+.gate__house {
+  height: 144px;
+  width: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(4px 6px 0 rgba(0, 0, 0, 0.28));
+}
+
+.gate__sign {
+  position: absolute;
+  right: 6%;
+  top: 8px;
+  width: 96px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  transform: rotate(3deg);
+  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.35));
+}
+
+.gate:hover .gate__house {
+  animation: px-bounce 500ms var(--ease);
+}
+
+/* 광장 행렬: 걷기 스프라이트가 왼쪽→오른쪽으로 계속 이동 */
+.parade {
+  height: 96px;
+}
+
+.parade__player {
+  animation: parade-walk 16s linear infinite;
+  left: -80px;
+}
+
+.parade__player .pxavatar {
+  animation: none;
+}
+
+@keyframes parade-walk {
+  from {
+    left: -80px;
+  }
+  to {
+    left: 100%;
+  }
+}

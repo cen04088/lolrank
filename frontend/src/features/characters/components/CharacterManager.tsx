@@ -6,6 +6,7 @@ import { queryKeys, useCharacters } from '@/api/queries'
 import type { Character } from '@/api/types'
 import { EmptyState } from '@/components/EmptyState'
 import { PixelButton } from '@/components/PixelButton'
+import { PixelIcon } from '@/components/PixelIcon'
 import { PixelLoader } from '@/components/PixelLoader'
 import { ConfirmModal } from '@/components/PixelModal'
 import { useToast } from '@/components/Toast'
@@ -59,7 +60,7 @@ export function CharacterManager({ code }: CharacterManagerProps) {
       <header className="chars__head">
         <div className="page-title">
           <span className="page-title__icon" aria-hidden>
-            🎽
+            <PixelIcon name="icon_helmet" size={44} />
           </span>
           <div className="page-title__text">
             <h1>선수 명단</h1>

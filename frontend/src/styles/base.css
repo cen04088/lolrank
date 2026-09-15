@@ -382,3 +382,20 @@ ul {
     transition-duration: 1ms !important;
   }
 }
+
+/* 말풍선: Ninja Adventure 대화 상자 9-slice */
+.bubble {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-style: solid;
+  border-width: 12px;
+  border-image: url('/assets/ninja/ui/dialog_simple.png') 6 fill / 12px / 0 round;
+  image-rendering: pixelated;
+  padding: 2px 6px;
+}
+
+.bubble::before {
+  display: none;
+}

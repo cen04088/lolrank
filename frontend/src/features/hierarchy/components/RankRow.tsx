@@ -1,6 +1,7 @@
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import type { Character, HierarchyRank } from '@/api/types'
+import { PixelIcon } from '@/components/PixelIcon'
 import { RANK_LABELS } from '@/lib/labels'
 import { cardSortId, rankDropId } from '../utils/hierarchy'
 import { TrophyCard } from './TrophyCard'
@@ -31,11 +32,8 @@ export function RankRow({ rank, characters, dragging, selectedId, onSelect }: Ra
   return (
     <section className={classes} aria-label={RANK_LABELS[rank]}>
       <div className="floor__plaque">
-        {rank === 'LEGEND' && (
-          <span className="floor__crown" aria-hidden>
-            👑
-          </span>
-        )}
+        {rank === 'LEGEND' && <PixelIcon name="gold_cup" size={22} className="floor__crown" />}
+        {rank === 'S' && <PixelIcon name="silver_cup" size={18} className="floor__crown" />}
         <span className="floor__plaque-text font-pixel">{RANK_LABELS[rank]}</span>
       </div>
       <SortableContext items={characters.map((c) => cardSortId(c.id))} strategy={rectSortingStrategy}>

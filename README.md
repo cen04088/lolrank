@@ -21,28 +21,24 @@
 | `/room/{code}/hierarchy` | 계급도 |
 | `/room/{code}/characters` | 선수 명단 (캐릭터 생성·수정·삭제) |
 
-### 배경/에셋 교체
+### 그림 에셋 (Ninja Adventure Asset Pack, CC0)
 
-- 캐릭터 스프라이트: `frontend/public/assets/players/player_01~12.png`
-- 배경 그림(선택): `frontend/public/assets/bg/village.png`, `dungeon.png`, `castle.png` 를 두면 CSS 로 그린 배경 위에 자동으로 덮어 그려집니다. 없으면 CSS 배경만 보입니다.
-- 한글 픽셀 폰트는 [Galmuri](https://github.com/quiple/galmuri) (OFL-1.1), 영문 픽셀 폰트는 Press Start 2P (OFL) 를 사용합니다.
+캐릭터·타일·소품·UI 아이콘은 [Ninja Adventure Asset Pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack) (Pixel-boy & AAA, **CC0**) 에서 가져옵니다.
+저장소에는 추출된 결과물만 들어 있습니다: `frontend/public/assets/ninja/`
 
-| 구성 | 기술 |
+| 폴더 | 내용 |
 | --- | --- |
-| Frontend | React 19 + TypeScript + Vite 8, @tanstack/react-query, @dnd-kit, Vitest |
-| Backend | Spring Boot 4.1 (Java 21), Spring Data JPA, Flyway, Bean Validation |
-| Database | PostgreSQL 17 |
-| Deploy | Railway (Dockerfile 기반), 로컬은 docker-compose |
+| `chars/{key}.png` | 정면 대기 스프라이트 16×16 (캐릭터 카드·행렬) |
+| `chars/{key}_face.png` | 초상화 38×38 (팀 배정 행, 상세 카드, 스킨 선택) |
+| `chars/{key}_walk.png` | 걷기 시트 64×64 (로비 행렬, `WalkingSprite`) |
+| `tiles/` | 잔디·흙길·석벽 반복 타일 16×16 (`Scene` 배경) |
+| `props/` | 집·나무·바위·도리이 등 소품 (로비 건물, 배경) |
+| `ui/` | 말풍선 9-slice, 이모트, 검·트로피·아이콘 |
 
-```
-lol-rank/
-  frontend/          React 앱 (features/team-maker, hierarchy, characters)
-  backend/           Spring Boot API (room, character, team, hierarchy, changelog, common)
-  docker-compose.yml 로컬 PostgreSQL
-  .env.example       환경 변수 예시
-```
-
----
+- 캐릭터 목록/순서는 `frontend/src/lib/assets.ts` 의 `PLAYER_ASSET_KEYS`, 예전 `player_01~12` 키는 같은 파일의 alias 로 새 캐릭터에 매핑됩니다.
+- 다른 캐릭터를 추가하려면 팩을 `.tmp-ninja-pack/` 에 풀고 `frontend/scripts/extract-ninja-assets.py` 의 `CHARACTERS` 에 이름을 넣은 뒤 `python scripts/extract-ninja-assets.py` 를 실행하세요 (Pillow 필요).
+- 배경 그림 파일 `frontend/public/assets/bg/village.png`, `dungeon.png`, `castle.png` 를 두면 타일 배경 위에 덮어 그려집니다(선택).
+- 한글 픽셀 폰트는 [Galmuri](https://github.com/quiple/galmuri) (OFL-1.1), 영문 픽셀 폰트는 Press Start 2P (OFL) 를 사용합니다.
 
 ## 1. 로컬 실행 (요약)
 

@@ -384,3 +384,13 @@
     height: 170px;
   }
 }
+
+.cform__face {
+  position: absolute;
+  right: 40px;
+  bottom: 12px;
+}
+
+.cform__stage {
+  position: relative;
+}

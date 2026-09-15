@@ -21,7 +21,7 @@ export function PlayerBadge({ nickname, subtitle, bubble, onClick }: PlayerBadge
   return (
     <div className="pbadge">
       <button type="button" className="pbadge__card" onClick={onClick} title="닉네임 변경">
-        <PixelAvatar assetKey={avatarForNickname(nickname)} size={44} />
+        <PixelAvatar assetKey={avatarForNickname(nickname)} size={44} variant="face" />
         <span className="pbadge__text">
           <span className="pbadge__name">{nickname}</span>
           {subtitle && <span className="pbadge__sub">{subtitle}</span>}

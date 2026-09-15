@@ -19,6 +19,9 @@ import { queryKeys, useCharacters } from '@/api/queries'
 import { HIERARCHY_RANKS, type Character, type HierarchyEntry, type HierarchyRank } from '@/api/types'
 import { EmptyState } from '@/components/EmptyState'
 import { PixelButton } from '@/components/PixelButton'
+import { PixelIcon } from '@/components/PixelIcon'
+import { WalkingSprite } from '@/components/WalkingSprite'
+import { NPC_ELDER_KEY } from '@/lib/assets'
 import { PixelLoader } from '@/components/PixelLoader'
 import { ConfirmModal } from '@/components/PixelModal'
 import { useToast } from '@/components/Toast'
@@ -157,7 +160,7 @@ export function HierarchyBoard({ code }: HierarchyBoardProps) {
         <header className="hier__head">
           <div className="page-title">
             <span className="page-title__icon" aria-hidden>
-              👑
+              <PixelIcon name="gold_cup" size={44} />
             </span>
             <div className="page-title__text">
               <h1>계급도</h1>
@@ -232,7 +235,7 @@ export function HierarchyBoard({ code }: HierarchyBoardProps) {
               />
               <div className="npc" aria-hidden>
                 <div className="npc__bubble bubble bubble--right font-pixel-ko">언젠가, 너도 전설이 될 수 있어!</div>
-                <span className="npc__sprite">🧙</span>
+                <WalkingSprite assetKey={NPC_ELDER_KEY} direction="down" scale={4} paused className="npc__sprite" />
               </div>
             </aside>
           </div>

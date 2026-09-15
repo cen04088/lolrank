@@ -80,7 +80,7 @@ export function ParticipantPicker({ open, characters, selectedIds, saving, onClo
                 <span className="tm-picker__check font-pixel" aria-hidden>
                   {checked ? '✓' : ''}
                 </span>
-                <PixelAvatar assetKey={character.assetKey} size={36} />
+                <PixelAvatar assetKey={character.assetKey} size={36} variant="face" />
                 <span className="tm-picker__name">{character.name}</span>
                 <span className="tm-picker__meta font-pixel">{character.tierLabel}</span>
                 <span className="tm-picker__meta">{positionSummary(character)}</span>

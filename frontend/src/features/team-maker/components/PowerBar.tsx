@@ -1,6 +1,7 @@
 import type { Balance } from '@/api/types'
 import { Stars } from '@/components/Stars'
-import { GRADE_STARS } from '@/lib/labels'
+import { PixelIcon } from '@/components/PixelIcon'
+import { GRADE_EMOTES, GRADE_STARS } from '@/lib/labels'
 
 interface PowerBarProps {
   balance: Balance
@@ -29,7 +30,9 @@ export function PowerBar({ balance, boardEmpty, syncing }: PowerBarProps) {
         ) : (
           <div className="power__grade">
             <Stars value={GRADE_STARS[balance.grade]} />
-            <p className={`power__msg ${gradeClass} font-pixel-ko`}>{balance.message}</p>
+            <p className={`power__msg ${gradeClass} font-pixel-ko`}>
+              <PixelIcon name={GRADE_EMOTES[balance.grade]} size={28} /> {balance.message}
+            </p>
           </div>
         )}
         {syncing && <span className="power__sync font-pixel">SYNC</span>}

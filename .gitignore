@@ -22,3 +22,7 @@ Thumbs.db
 
 # claude local settings
 .claude/settings.local.json
+
+# downloaded asset packs (not committed; extract with frontend/scripts/extract-ninja-assets.py)
+.tmp-ninja-adventure/
+.tmp-ninja-pack/

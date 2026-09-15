@@ -307,3 +307,118 @@
     display: none;
   }
 }
+
+/* ================= Ninja Adventure 타일/소품 (CC0) ================= */
+/* 잔디: 16px 타일을 3배로 반복 */
+.scene--village .scene__ground {
+  background:
+    url('/assets/ninja/tiles/grass_tuft.png') 24px 24px / 48px 48px,
+    url('/assets/ninja/tiles/grass.png') 0 0 / 48px 48px;
+  background-blend-mode: normal;
+  border-top: 0;
+  image-rendering: pixelated;
+}
+
+.scene--village .scene__ground::after {
+  display: none;
+}
+
+/* 중앙 흙길: 가운데 타일 반복 + 좌우 가장자리 타일 한 줄씩 */
+.scene__path {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 42%;
+  width: clamp(240px, 26vw, 384px);
+  transform: translateX(-50%);
+  z-index: -2;
+  image-rendering: pixelated;
+  background: url('/assets/ninja/tiles/dirt.png') 0 0 / 48px 48px repeat;
+}
+
+.scene__path::before,
+.scene__path::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  image-rendering: pixelated;
+}
+
+.scene__path::before {
+  left: 0;
+  background: url('/assets/ninja/tiles/dirt_left.png') 0 0 / 48px 48px repeat-y;
+}
+
+.scene__path::after {
+  right: 0;
+  background: url('/assets/ninja/tiles/dirt_right.png') 0 0 / 48px 48px repeat-y;
+}
+
+/* 예전 CSS 나무는 숨기고 소품 이미지를 쓴다 */
+.scene__tree {
+  display: none;
+}
+
+.scene__prop {
+  position: absolute;
+  z-index: -2;
+  width: auto;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  transform: scale(var(--prop-scale, 3));
+  transform-origin: bottom left;
+  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.25));
+  pointer-events: none;
+}
+
+/* transform-origin 이 왼쪽 아래라 right 기준 소품은 오른쪽 아래를 기준으로 키운다 */
+.scene__prop[style*='right'] {
+  transform-origin: bottom right;
+}
+
+/* 석벽: 던전 타일 반복 */
+.scene--dungeon .scene__wall {
+  background: url('/assets/ninja/tiles/wall_red.png') 0 0 / 48px 48px repeat;
+  image-rendering: pixelated;
+}
+
+.scene--dungeon .scene__wall::after {
+  display: none;
+}
+
+.scene--castle .scene__wall {
+  background: url('/assets/ninja/tiles/wall_dark.png') 0 0 / 48px 48px repeat;
+  image-rendering: pixelated;
+}
+
+.scene--castle .scene__wall::after {
+  display: none;
+}
+
+.scene__vignette {
+  background: radial-gradient(ellipse at 50% 30%, rgba(0, 0, 0, 0.25) 30%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+/* 횃불: 등잔 스프라이트 + 불꽃 */
+.torch {
+  width: 48px;
+  height: 48px;
+  background: url('/assets/ninja/tiles/lamp_stand.png') center / 48px 48px no-repeat;
+  border: 0;
+  image-rendering: pixelated;
+}
+
+.torch__flame {
+  top: -20px;
+  width: 24px;
+  height: 30px;
+}
+
+@media (max-width: 900px) {
+  .scene__prop {
+    display: none;
+  }
+}

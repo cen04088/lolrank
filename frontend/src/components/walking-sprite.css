@@ -1,0 +1,22 @@
+.wsprite {
+  display: inline-block;
+  width: var(--ws-size);
+  height: var(--ws-size);
+  background-repeat: no-repeat;
+  background-size: var(--ws-sheet-w) auto;
+  background-position: 0 var(--ws-row);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  animation: wsprite-walk 560ms steps(4) infinite;
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.35));
+}
+
+.wsprite--paused {
+  animation: none;
+}
+
+@keyframes wsprite-walk {
+  to {
+    background-position: calc(-1 * var(--ws-sheet-w)) var(--ws-row);
+  }
+}

@@ -286,7 +286,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
                     onClick={() => set('assetKey', key)}
                     title={key}
                   >
-                    <PixelAvatar assetKey={key} size={44} />
+                    <PixelAvatar assetKey={key} size={44} variant="face" />
                   </button>
                 ))}
               </div>
@@ -328,6 +328,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
               ‹
             </button>
             <PixelAvatar assetKey={values.assetKey} size={128} />
+            <PixelAvatar assetKey={values.assetKey} size={56} variant="face" className="cform__face" />
             <button type="button" className="cform__arrow" onClick={() => cycleSkin(1)} aria-label="다음 스킨">
               ›
             </button>

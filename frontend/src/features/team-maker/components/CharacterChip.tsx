@@ -61,7 +61,7 @@ export function CharacterChip({
       title={character.description ?? character.name}
       {...dragProps}
     >
-      <PixelAvatar assetKey={character.assetKey} size={variant === 'row' ? 44 : 36} alt="" />
+      <PixelAvatar assetKey={character.assetKey} size={variant === 'row' ? 44 : 36} alt="" variant="face" />
       <div className="chip__info">
         <div className="chip__name font-pixel-ko">{character.name}</div>
         <div className="chip__tier font-pixel">{character.tierLabel}</div>

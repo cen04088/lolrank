@@ -26,7 +26,7 @@ export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete 
     <section className="detail" aria-label={`${character.name} 상세`}>
       <header className="detail__head">
         <div className="detail__avatar">
-          <PixelAvatar assetKey={character.assetKey} size={64} />
+          <PixelAvatar assetKey={character.assetKey} size={64} variant="face" />
         </div>
         <div className="detail__title">
           <h3 className="detail__name font-pixel-ko">{character.name}</h3>

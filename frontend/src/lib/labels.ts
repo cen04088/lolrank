@@ -108,3 +108,12 @@ export const AUTO_FILL_MODE_LABELS: Record<AutoFillMode, { icon: string; label: 
   POSITION_BALANCE: { icon: '👥', label: '포지션 균형', hint: '주/부 포지션을 최대한 지켜서 채웁니다.' },
   RANDOM: { icon: '🔀', label: '완전 랜덤', hint: '실력·포지션을 보지 않고 무작위로 채웁니다.' },
 }
+
+/** 밸런스 등급 → Ninja Adventure 이모트 (public/assets/ninja/ui/emote_*.png) */
+export const GRADE_EMOTES: Record<BalanceGrade, string> = {
+  PERFECT: 'emote_love',
+  VERY_GOOD: 'emote_happy',
+  GOOD: 'emote_question',
+  WARNING: 'emote_sweat',
+  UNBALANCED: 'emote_angry',
+}

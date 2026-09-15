@@ -202,6 +202,11 @@ function SettingsModal({ room, nickname, open, onClose, onEditNickname }: Settin
           </PixelButton>
         </div>
 
+        <p className="settings__credit">
+          Art: <a href="https://pixel-boy.itch.io/ninja-adventure-asset-pack" target="_blank" rel="noreferrer">Ninja Adventure Asset Pack</a>{' '}
+          by Pixel-boy &amp; AAA (CC0) · Font: Galmuri (OFL)
+        </p>
+
         <div>
           <p className="settings__section-title" style={{ marginBottom: 8 }}>
             최근 변경 기록
