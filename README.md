@@ -117,6 +117,7 @@ cd backend
 | GET | `/api/rooms/default` | 기본 방 (없으면 생성, 이름은 `APP_DEFAULT_ROOM_NAME` 에 맞춤) |
 | POST | `/api/rooms` | 방 생성 `{name}` |
 | GET | `/api/rooms/{inviteCode}` | 방 조회 |
+| DELETE | `/api/rooms/{inviteCode}` | 방과 그 안의 캐릭터·보드·기록 삭제 (기본 방은 불가) |
 | GET / POST | `/api/rooms/{inviteCode}/characters` | 캐릭터 목록 / 생성 |
 | PATCH / DELETE | `/api/characters/{id}` | 캐릭터 수정 / 삭제 |
 | GET / PUT | `/api/rooms/{inviteCode}/team-board` | 팀 보드 조회 / 전체 교체 |

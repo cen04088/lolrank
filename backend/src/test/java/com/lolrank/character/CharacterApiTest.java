@@ -84,6 +84,17 @@ class CharacterApiTest {
     }
 
     @Test
+    void 방을_삭제하면_조회되지_않고_기본_방은_삭제할_수_없다() throws Exception {
+        createCharacter("민준");
+        mockMvc.perform(delete("/api/rooms/" + code)).andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/rooms/" + code)).andExpect(status().isNotFound());
+
+        mockMvc.perform(delete("/api/rooms/LOLRNK"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code", is("BAD_REQUEST")));
+    }
+
+    @Test
     void 방을_초대코드로_조회한다() throws Exception {
         mockMvc.perform(get("/api/rooms/" + code))
                 .andExpect(status().isOk())
