@@ -18,6 +18,13 @@ export default defineConfig({
       '/api': {
         target: process.env.VITE_PROXY_TARGET ?? 'http://localhost:8080',
         changeOrigin: true,
+        // 프록시를 거친 요청은 사실상 same-origin 이므로 Origin 헤더를 지운다.
+        // (autoPort 로 5174 가 아닌 포트에서 열리면 백엔드 CORS 허용 목록에 없어 403 이 났다)
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.removeHeader('origin')
+          })
+        },
       },
     },
   },

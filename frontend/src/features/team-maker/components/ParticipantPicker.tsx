@@ -76,7 +76,13 @@ export function ParticipantPicker({ open, characters, selectedIds, saving, onClo
           return (
             <li key={character.id}>
               <label className={checked ? 'tm-picker__row tm-picker__row--on' : 'tm-picker__row'}>
-                <input type="checkbox" className="visually-hidden" checked={checked} onChange={() => toggle(character.id)} />
+                <input
+                  type="checkbox"
+                  className="visually-hidden"
+                  checked={checked}
+                  aria-label={character.name}
+                  onChange={() => toggle(character.id)}
+                />
                 <span className="tm-picker__check font-pixel" aria-hidden>
                   {checked ? '✓' : ''}
                 </span>

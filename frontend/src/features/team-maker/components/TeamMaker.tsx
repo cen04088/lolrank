@@ -12,6 +12,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
+import { DND_ANNOUNCEMENTS, DND_SCREEN_READER_INSTRUCTIONS } from '@/lib/dnd'
 import { useCharacters, useTeamBoard } from '@/api/queries'
 import type { AutoFillMode, Character } from '@/api/types'
 import { EmptyState } from '@/components/EmptyState'
@@ -182,6 +183,7 @@ export function TeamMaker({ code }: TeamMakerProps) {
           />
         ) : (
           <DndContext
+            accessibility={{ announcements: DND_ANNOUNCEMENTS, screenReaderInstructions: DND_SCREEN_READER_INSTRUCTIONS }}
             sensors={sensors}
             collisionDetection={collisionDetection}
             onDragStart={onDragStart}

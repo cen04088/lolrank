@@ -128,8 +128,11 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
     onError: (mutationError) => setError(errorMessage(mutationError, '캐릭터를 저장하지 못했습니다.')),
   })
 
-  const set = <K extends keyof FormValues>(key: K, value: FormValues[K]) =>
+  const set = <K extends keyof FormValues>(key: K, value: FormValues[K]) => {
     setValues((prev) => ({ ...prev, [key]: value }))
+    // 값을 고치기 시작하면 이전 제출의 오류 문구는 지운다.
+    setError(null)
+  }
 
   const cycleSkin = (step: number) => {
     const index = PLAYER_ASSET_KEYS.indexOf(values.assetKey)

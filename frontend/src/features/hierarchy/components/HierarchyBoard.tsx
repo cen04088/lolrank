@@ -12,6 +12,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
+import { DND_ANNOUNCEMENTS, DND_SCREEN_READER_INSTRUCTIONS } from '@/lib/dnd'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { errorMessage } from '@/api/client'
 import { charactersApi, hierarchyApi } from '@/api/endpoints'
@@ -187,6 +188,7 @@ export function HierarchyBoard({ code }: HierarchyBoardProps) {
         ) : (
           <div className="hier__layout">
             <DndContext
+              accessibility={{ announcements: DND_ANNOUNCEMENTS, screenReaderInstructions: DND_SCREEN_READER_INSTRUCTIONS }}
               sensors={sensors}
               collisionDetection={collisionDetection}
               onDragStart={onDragStart}

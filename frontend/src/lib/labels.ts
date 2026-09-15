@@ -102,9 +102,9 @@ export function positionSummary(character: Pick<Character, 'mainPosition' | 'sub
 }
 
 export const AUTO_FILL_MODE_LABELS: Record<AutoFillMode, { icon: string; label: string; hint: string }> = {
-  SKILL_BALANCE: { icon: '👑', label: '실력 균형', hint: '티어 합이 비슷해지도록 채웁니다. 포지션은 보조 기준.' },
+  SKILL_BALANCE: { icon: '👑', label: '실력 균형', hint: '계급도 등급(80%)과 티어(20%)를 합친 전투력이 비슷해지도록 채웁니다. 포지션은 보조 기준.' },
   POSITION_BALANCE: { icon: '👥', label: '포지션 균형', hint: '주/부 포지션을 최대한 지켜서 채웁니다.' },
-  RANDOM: { icon: '🔀', label: '완전 랜덤', hint: '실력·포지션을 보지 않고 무작위로 채웁니다.' },
+  RANDOM: { icon: '🔀', label: '완전 랜덤', hint: '등급·티어·포지션을 보지 않고 무작위로 채웁니다.' },
 }
 
 /** 밸런스 등급 → Ninja Adventure 이모트 (public/assets/ninja/ui/emote_*.png) */

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
+import { DonateBanner } from '@/components/DonateBanner'
 import { useCharacters } from '@/api/queries'
 import { WalkingSprite } from '@/components/WalkingSprite'
-import { PixelButton } from '@/components/PixelButton'
 import { PlayerBadge } from '@/components/PlayerBadge'
 import { Scene } from '@/components/Scene'
 import { tinyPropUrl } from '@/lib/assets'
@@ -97,6 +97,8 @@ export function LobbyPage() {
             <span>BE A LEGEND</span>
           </div>
         </div>
+
+        <DonateBanner />
       </main>
     </Scene>
   )
@@ -125,10 +127,9 @@ function Gate({ tone, building, title, description, to }: GateProps) {
             <span key={line}>{line}</span>
           ))}
         </p>
-        <Link to={to}>
-          <PixelButton variant={tone} size="lg" fullWidth>
-            입장하기 ›
-          </PixelButton>
+        {/* <a> 안에 <button> 을 넣을 수 없으므로 링크 자체에 버튼 스타일을 입힌다 */}
+        <Link to={to} className={`pxbtn pxbtn--${tone} pxbtn--lg pxbtn--full`}>
+          입장하기 ›
         </Link>
       </div>
       <div className="gate__steps" aria-hidden />
