@@ -1,5 +1,4 @@
 import type { Character, Slot, Team } from '@/api/types'
-import { PixelPanel } from '@/components/PixelPanel'
 import { slotDropId } from '../utils/board'
 import { PositionSlot } from './PositionSlot'
 
@@ -14,20 +13,14 @@ interface TeamColumnProps {
 export function TeamColumn({ team, slots, charactersById, activeCharacter, popSlots }: TeamColumnProps) {
   const filled = slots.filter((slot) => slot.characterId !== null).length
   return (
-    <PixelPanel
-      tone={team === 'BLUE' ? 'blue' : 'red'}
-      className={`tm-col tm-col--${team.toLowerCase()}`}
-      title={
-        <>
-          <span className="tm-col__flag" aria-hidden />
-          {team} TEAM
-          <span className="tm-col__count">
-            {filled}/{slots.length}
-          </span>
-        </>
-      }
-    >
-      <ul className="tm-col__slots">
+    <section className={`tcol tcol--${team.toLowerCase()}`} aria-label={`${team} TEAM`}>
+      <header className="tcol__head">
+        <h2 className="tcol__title font-pixel">{team} TEAM</h2>
+        <span className="tcol__count font-pixel">
+          {filled}/{slots.length}
+        </span>
+      </header>
+      <ul className="tcol__rows">
         {slots.map((slot) => (
           <PositionSlot
             key={slot.position}
@@ -38,6 +31,6 @@ export function TeamColumn({ team, slots, charactersById, activeCharacter, popSl
           />
         ))}
       </ul>
-    </PixelPanel>
+    </section>
   )
 }

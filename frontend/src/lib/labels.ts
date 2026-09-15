@@ -1,4 +1,4 @@
-import type { BalanceGrade, Character, HierarchyRank, Position, Tier } from '@/api/types'
+import type { AutoFillMode, BalanceGrade, Character, HierarchyRank, Position, Tier } from '@/api/types'
 
 export const TIER_NAMES: Record<Tier, string> = {
   IRON: 'Iron',
@@ -101,4 +101,10 @@ export function positionSummary(character: Pick<Character, 'mainPosition' | 'sub
   return character.subPosition
     ? `${POSITION_LABELS[character.mainPosition]} · ${POSITION_LABELS[character.subPosition]}`
     : POSITION_LABELS[character.mainPosition]
+}
+
+export const AUTO_FILL_MODE_LABELS: Record<AutoFillMode, { icon: string; label: string; hint: string }> = {
+  SKILL_BALANCE: { icon: '👑', label: '실력 균형', hint: '티어 합이 비슷해지도록 채웁니다. 포지션은 보조 기준.' },
+  POSITION_BALANCE: { icon: '👥', label: '포지션 균형', hint: '주/부 포지션을 최대한 지켜서 채웁니다.' },
+  RANDOM: { icon: '🔀', label: '완전 랜덤', hint: '실력·포지션을 보지 않고 무작위로 채웁니다.' },
 }

@@ -2,10 +2,29 @@
 
 친구들과 League of Legends 5:5 내전을 할 때 쓰는 **16-bit 픽셀 게임 스타일 팀 메이커 + 계급도** 웹앱.
 
-- 도트 캐릭터를 직접 드래그해서 BLUE / RED 팀의 TOP · JUNGLE · MID · ADC · SUPPORT 슬롯에 배치
-- 사람이 배치한 자리(MANUAL)는 고정하고, **남은 자리만** 티어 + 포지션 적합도로 자동 밸런싱(AUTO)
-- LEGEND / S / A / B / C 계급도를 드래그로 편집
+- 방에 들어오면 **마을 로비**(하늘·성·잔디)에서 "5 vs 5 팀 배정" / "롤 랭크 계급도" 건물로 입장
+- **팀 배정**: 도트 캐릭터를 직접 드래그해서 BLUE / RED 팀의 TOP · JUNGLE · MID · ADC · SUPPORT 슬롯에 배치. 사람이 배치한 자리(MANUAL)는 고정하고 **남은 자리만** 자동 채우기(AUTO)
+  - 배정 방식 3종: 실력 균형 / 포지션 균형 / 완전 랜덤 (`?mode=`)
+  - 하단 TEAM POWER 바(팀 평균 실력)와 밸런스 등급
+- **계급도**: 석조 타워 위 LEGEND / S / A / B / C 를 드래그로 편집, 카드를 클릭하면 우측 상세 카드에서 등급 변경·소개 수정·삭제
+- **캐릭터 생성**: 종이 패널 폼(기본 정보 · 캐릭터 선택 · 소개 문구) + 대형 스프라이트 미리보기
 - 로그인 없음. 방 링크(`/room/ABCD12`)를 아는 사람은 누구나 편집 가능. 닉네임은 변경 기록 표시용
+
+### 화면 경로
+
+| 경로 | 화면 |
+| --- | --- |
+| `/` | 방 만들기 / 초대 코드 입장 |
+| `/room/{code}` | 마을 로비 |
+| `/room/{code}/team` | 팀 배정 |
+| `/room/{code}/hierarchy` | 계급도 |
+| `/room/{code}/characters` | 선수 명단 (캐릭터 생성·수정·삭제) |
+
+### 배경/에셋 교체
+
+- 캐릭터 스프라이트: `frontend/public/assets/players/player_01~12.png`
+- 배경 그림(선택): `frontend/public/assets/bg/village.png`, `dungeon.png`, `castle.png` 를 두면 CSS 로 그린 배경 위에 자동으로 덮어 그려집니다. 없으면 CSS 배경만 보입니다.
+- 한글 픽셀 폰트는 [Galmuri](https://github.com/quiple/galmuri) (OFL-1.1), 영문 픽셀 폰트는 Press Start 2P (OFL) 를 사용합니다.
 
 | 구성 | 기술 |
 | --- | --- |
@@ -98,7 +117,7 @@ cd backend
 | PATCH / DELETE | `/api/characters/{id}` | 캐릭터 수정 / 삭제 |
 | GET / PUT | `/api/rooms/{inviteCode}/team-board` | 팀 보드 조회 / 전체 교체 |
 | PUT | `/api/rooms/{inviteCode}/participants` | 오늘의 참가자 (최대 10명) |
-| POST | `/api/rooms/{inviteCode}/team-board/auto-fill` | 남은 자리 자동 밸런싱 |
+| POST | `/api/rooms/{inviteCode}/team-board/auto-fill?mode=SKILL_BALANCE` | 남은 자리 자동 채우기 (`SKILL_BALANCE` / `POSITION_BALANCE` / `RANDOM`) |
 | PUT | `/api/rooms/{inviteCode}/hierarchy` | 계급도 저장 |
 | GET | `/api/rooms/{inviteCode}/change-logs?limit=50` | 변경 기록 |
 
@@ -107,8 +126,8 @@ cd backend
 ### 밸런싱 규칙 (모두 `team/balance/BalanceConfig.java` 에서 조정)
 
 - 티어 점수: IRON IV 10 … DIAMOND I 79, MASTER 85, GRANDMASTER 92, CHALLENGER 100 (DB 에 저장하지 않고 런타임 계산)
-- 포지션 페널티: 주 0 / 부 8 / 그 외 25
-- `totalCost = |blue - red| × 3 + Σ 포지션 페널티` 가 최소인 조합을 완전 탐색(`AutoFillSolver`)
+- 포지션 페널티: 주 0 / 부 8 / 그 외 25 (포지션 균형 모드는 가중치 1, 페널티 0 / 20 / 80)
+- `totalCost = |blue - red| × 가중치 + Σ 포지션 페널티` 가 최소인 조합을 완전 탐색(`AutoFillSolver`). 완전 랜덤 모드는 탐색 없이 무작위 배치
 - 동점: 비선호 포지션 적음 → 주 포지션 많음 → 실력 차이 작음 → 랜덤
 - Balance Grade: 차이 ≤2 PERFECT, ≤5 VERY_GOOD, ≤10 GOOD, ≤15 WARNING, 그 이상 UNBALANCED
 

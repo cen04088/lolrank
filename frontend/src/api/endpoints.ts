@@ -1,5 +1,6 @@
 import { api } from './client'
 import type {
+  AutoFillMode,
   ChangeLog,
   Character,
   CreateCharacterRequest,
@@ -30,8 +31,8 @@ export const teamBoardApi = {
     api<TeamBoard>(`/api/rooms/${inviteCode}/participants`, { method: 'PUT', body: { characterIds } }),
   update: (inviteCode: string, slots: SlotRequest[]) =>
     api<TeamBoard>(`/api/rooms/${inviteCode}/team-board`, { method: 'PUT', body: { slots } }),
-  autoFill: (inviteCode: string) =>
-    api<TeamBoard>(`/api/rooms/${inviteCode}/team-board/auto-fill`, { method: 'POST' }),
+  autoFill: (inviteCode: string, mode: AutoFillMode) =>
+    api<TeamBoard>(`/api/rooms/${inviteCode}/team-board/auto-fill?mode=${mode}`, { method: 'POST' }),
 }
 
 export const hierarchyApi = {

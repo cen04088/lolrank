@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { errorMessage } from '@/api/client'
 import { teamBoardApi } from '@/api/endpoints'
 import { queryKeys } from '@/api/queries'
-import type { Slot, TeamBoard } from '@/api/types'
+import type { AutoFillMode, Slot, TeamBoard } from '@/api/types'
 import { useToast } from '@/components/Toast'
 import { toSlotRequests } from '../utils/board'
 
@@ -44,8 +44,8 @@ export function useTeamBoardMutations(code: string) {
     onSettled: invalidateLogs,
   })
 
-  const autoFill = useMutation<TeamBoard, unknown, void>({
-    mutationFn: () => teamBoardApi.autoFill(code),
+  const autoFill = useMutation<TeamBoard, unknown, AutoFillMode>({
+    mutationFn: (mode) => teamBoardApi.autoFill(code, mode),
     onSuccess: (board) => {
       latestTicket.current++
       setBoard(board)

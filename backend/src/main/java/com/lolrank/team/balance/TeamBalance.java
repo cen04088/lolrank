@@ -12,7 +12,9 @@ public record TeamBalance(
         int blueCount,
         int redCount,
         String blueAverageTier,
-        String redAverageTier
+        String redAverageTier,
+        int bluePower,
+        int redPower
 ) {
 
     public static TeamBalance of(List<PlayerCharacter> blue, List<PlayerCharacter> red) {
@@ -27,12 +29,19 @@ public record TeamBalance(
                 blue.size(),
                 red.size(),
                 averageLabel(blueScore, blue.size()),
-                averageLabel(redScore, red.size())
+                averageLabel(redScore, red.size()),
+                power(blueScore, blue.size()),
+                power(redScore, red.size())
         );
     }
 
     private static int sum(List<PlayerCharacter> characters) {
         return characters.stream().mapToInt(SkillScoreCalculator::score).sum();
+    }
+
+    /** 팀 평균 실력 (0~100). UI 의 TEAM POWER 표시용. */
+    private static int power(int total, int count) {
+        return count == 0 ? 0 : (int) Math.round((double) total / count);
     }
 
     private static String averageLabel(int total, int count) {

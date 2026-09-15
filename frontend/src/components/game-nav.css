@@ -1,0 +1,69 @@
+.gnav {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 200;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  background: rgba(13, 21, 38, 0.92);
+  border: var(--border-w) solid var(--ink);
+  border-radius: 6px;
+  box-shadow: var(--px-shadow), inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(2px);
+}
+
+.gnav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 58px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  color: var(--muted);
+  font-family: var(--font-pixel-ko);
+  font-size: 12px;
+  line-height: 1;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.gnav__item:hover {
+  color: var(--text);
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gnav__item.active {
+  color: var(--ink);
+  background: var(--gold);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.gnav__icon {
+  font-size: 18px;
+  line-height: 1;
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.5));
+}
+
+.gnav__item.active .gnav__icon {
+  filter: none;
+}
+
+@media (max-width: 720px) {
+  .gnav {
+    top: auto;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    justify-content: space-between;
+  }
+
+  .gnav__item {
+    flex: 1;
+    min-width: 0;
+  }
+}

@@ -5,7 +5,7 @@ import { roomsApi } from '@/api/endpoints'
 import { errorMessage } from '@/api/client'
 import { PixelAvatar } from '@/components/PixelAvatar'
 import { PixelButton } from '@/components/PixelButton'
-import { PixelPanel } from '@/components/PixelPanel'
+import { Scene } from '@/components/Scene'
 import { useToast } from '@/components/Toast'
 import { PLAYER_ASSET_KEYS } from '@/lib/assets'
 
@@ -52,23 +52,27 @@ export function HomePage() {
   }
 
   return (
-    <main className="home">
-      <div className="home__hero">
-        <div className="home__mascots" aria-hidden>
-          {PLAYER_ASSET_KEYS.slice(0, 5).map((key) => (
-            <PixelAvatar key={key} assetKey={key} size={56} />
+    <Scene kind="village">
+      <main className="landing">
+        <div className="logo">
+          <span className="logo__crown" aria-hidden>
+            👑
+          </span>
+          <h1 className="logo__text">LOL RANK</h1>
+          <p className="logo__sub">우리들의 내전, 더 특별하게</p>
+        </div>
+
+        <div className="landing__mascots" aria-hidden>
+          {PLAYER_ASSET_KEYS.slice(0, 6).map((key) => (
+            <PixelAvatar key={key} assetKey={key} size={52} />
           ))}
         </div>
-        <h1 className="home__logo">
-          LOL RANK
-          <small>5 VS 5 TEAM MAKER</small>
-        </h1>
-        <p className="home__tagline">친구들과의 내전, 도트 캐릭터를 직접 끌어다 팀을 짜고 계급도를 세워보세요.</p>
-      </div>
 
-      <div className="home__grid">
-        <PixelPanel title="NEW ROOM" tone="wood">
-          <form className="home__card-form" onSubmit={onCreate}>
+        <section className="paper landing__panel">
+          <form className="landing__form" onSubmit={onCreate}>
+            <h2 className="landing__form-title landing__form-title--blue">
+              <span aria-hidden>⚔</span> 새 방 만들기
+            </h2>
             <div className="px-field">
               <label className="px-label" htmlFor="room-name">
                 방 이름
@@ -83,17 +87,16 @@ export function HomePage() {
                 autoComplete="off"
               />
             </div>
-            <PixelButton type="submit" variant="gold" size="lg" pixelFont fullWidth loading={createRoom.isPending}>
-              START
+            <PixelButton type="submit" variant="blue" size="lg" fullWidth loading={createRoom.isPending}>
+              입장하기 ›
             </PixelButton>
-            <p className="text-muted" style={{ fontSize: 13 }}>
-              방 링크를 친구들에게 공유하면 누구나 캐릭터를 만들고 팀을 편집할 수 있습니다.
-            </p>
+            <p className="landing__hint">방 링크를 친구들에게 공유하면 누구나 캐릭터를 만들고 팀을 편집할 수 있습니다.</p>
           </form>
-        </PixelPanel>
 
-        <PixelPanel title="JOIN ROOM" tone="blue">
-          <form className="home__card-form" onSubmit={onJoin}>
+          <form className="landing__form" onSubmit={onJoin}>
+            <h2 className="landing__form-title landing__form-title--red">
+              <span aria-hidden>👑</span> 초대 코드로 입장
+            </h2>
             <div className="px-field">
               <label className="px-label" htmlFor="invite-code">
                 초대 코드
@@ -110,14 +113,13 @@ export function HomePage() {
               />
               {codeError && <p className="px-error">{codeError}</p>}
             </div>
-            <PixelButton type="submit" variant="blue" size="lg" pixelFont fullWidth loading={joinRoom.isPending}>
-              ENTER
+            <PixelButton type="submit" variant="red" size="lg" fullWidth loading={joinRoom.isPending}>
+              입장하기 ›
             </PixelButton>
+            <p className="landing__hint">로그인 없음 · 방 링크만 있으면 OK</p>
           </form>
-        </PixelPanel>
-      </div>
-
-      <p className="home__footer">로그인 없음 · 방 링크만 있으면 OK · 픽셀 에셋은 자유롭게 교체 가능</p>
-    </main>
+        </section>
+      </main>
+    </Scene>
   )
 }

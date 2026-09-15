@@ -13,7 +13,7 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core'
 import { useCharacters, useTeamBoard } from '@/api/queries'
-import type { Character } from '@/api/types'
+import type { AutoFillMode, Character } from '@/api/types'
 import { EmptyState } from '@/components/EmptyState'
 import { PixelButton } from '@/components/PixelButton'
 import { PixelLoader } from '@/components/PixelLoader'
@@ -30,15 +30,17 @@ import {
   type DragData,
   type DropData,
 } from '../utils/board'
-import { BalanceBar } from './BalanceBar'
-import { BenchPanel } from './BenchPanel'
 import { CharacterChip } from './CharacterChip'
+import { ModeTabs } from './ModeTabs'
 import { ParticipantPicker } from './ParticipantPicker'
+import { Pitch } from './Pitch'
+import { PowerBar } from './PowerBar'
 import { TeamColumn } from './TeamColumn'
 import './team-maker.css'
 
 const AUTO_FILL_POP_RESET_MS = 1600
 const DRAG_ACTIVATION_DISTANCE = 6
+const MAX_PARTICIPANTS = 10
 
 /** 포인터가 들어간 영역을 우선하고, 없으면 사각형 교차로 판정한다. */
 const collisionDetection: CollisionDetection = (args) => {
@@ -58,6 +60,7 @@ export function TeamMaker({ code }: TeamMakerProps) {
   const [activeCharacterId, setActiveCharacterId] = useState<number | null>(null)
   const [pickerOpen, setPickerOpen] = useState(false)
   const [resetOpen, setResetOpen] = useState(false)
+  const [mode, setMode] = useState<AutoFillMode>('SKILL_BALANCE')
   const [popSlots, setPopSlots] = useState<Record<string, number>>({})
 
   const sensors = useSensors(
@@ -108,23 +111,6 @@ export function TeamMaker({ code }: TeamMakerProps) {
     )
   }
 
-  if (characters.data.length === 0) {
-    return (
-      <EmptyState
-        icon="🏟"
-        message="아직 등록된 선수가 없습니다!"
-        hint="캐릭터를 만들면 이 자리에 도트 선수들이 등장합니다."
-        action={
-          <Link to={`/room/${code}/characters`}>
-            <PixelButton variant="gold" pixelFont>
-              첫 캐릭터 만들기
-            </PixelButton>
-          </Link>
-        }
-      />
-    )
-  }
-
   const onDragStart = (event: DragStartEvent) => {
     const data = event.active.data.current as DragData | undefined
     setActiveCharacterId(data?.characterId ?? null)
@@ -141,7 +127,7 @@ export function TeamMaker({ code }: TeamMakerProps) {
   }
 
   const handleAutoFill = () => {
-    autoFill.mutate(undefined, {
+    autoFill.mutate(mode, {
       onSuccess: (result) => {
         const changed = changedSlotIds(slots, normalizeSlots(result.slots))
         setPopSlots(Object.fromEntries(changed.map((id, index) => [id, index])))
@@ -157,57 +143,102 @@ export function TeamMaker({ code }: TeamMakerProps) {
 
   const boardEmpty = emptySlotCount(slots) === slots.length
   const autoFillDisabled = bench.length === 0 || emptySlotCount(slots) === 0
+  const noCharacters = characters.data.length === 0
 
   return (
     <>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={collisionDetection}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-        onDragCancel={() => setActiveCharacterId(null)}
-      >
-        <div className="tm">
-          <div className="tm__grid">
-            <TeamColumn
-              team="BLUE"
-              slots={slotsForTeam(slots, 'BLUE')}
-              charactersById={charactersById}
-              activeCharacter={activeCharacter}
-              popSlots={popSlots}
-            />
-            <BenchPanel
-              bench={bench}
-              participantCount={participants.length}
-              totalCharacters={characters.data.length}
-              dragging={activeCharacter !== undefined}
-              onOpenPicker={() => setPickerOpen(true)}
-            />
-            <TeamColumn
-              team="RED"
-              slots={slotsForTeam(slots, 'RED')}
-              charactersById={charactersById}
-              activeCharacter={activeCharacter}
-              popSlots={popSlots}
-            />
+      <div className="tmk">
+        <header className="tmk__head">
+          <div className="page-title">
+            <span className="page-title__icon" aria-hidden>
+              ⚔
+            </span>
+            <div className="page-title__text">
+              <h1>팀 배정</h1>
+              <p>오늘도 즐거운 내전!</p>
+            </div>
           </div>
+          {!noCharacters && (
+            <PixelButton variant="blue" icon="👥" onClick={() => setPickerOpen(true)}>
+              참가자 선택
+              <span className="tmk__count font-pixel">
+                {participants.length}/{MAX_PARTICIPANTS}
+              </span>
+            </PixelButton>
+          )}
+        </header>
 
-          <BalanceBar
-            balance={board.data.balance}
-            boardEmpty={boardEmpty}
-            syncing={updateBoard.isPending}
-            autoFilling={autoFill.isPending}
-            autoFillDisabled={autoFillDisabled}
-            resetDisabled={boardEmpty}
-            onAutoFill={handleAutoFill}
-            onReset={() => setResetOpen(true)}
+        {noCharacters ? (
+          <EmptyState
+            icon="🏟"
+            message="아직 등록된 선수가 없습니다!"
+            hint="캐릭터를 만들면 이 자리에 도트 선수들이 등장합니다."
+            action={
+              <Link to={`/room/${code}/characters`}>
+                <PixelButton variant="gold">첫 캐릭터 만들기</PixelButton>
+              </Link>
+            }
           />
-        </div>
+        ) : (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={collisionDetection}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            onDragCancel={() => setActiveCharacterId(null)}
+          >
+            <ModeTabs value={mode} onChange={setMode} />
 
-        <DragOverlay dropAnimation={null}>
-          {activeCharacter ? <CharacterChip character={activeCharacter} overlay /> : null}
-        </DragOverlay>
-      </DndContext>
+            <div className="tmk__board">
+              <TeamColumn
+                team="BLUE"
+                slots={slotsForTeam(slots, 'BLUE')}
+                charactersById={charactersById}
+                activeCharacter={activeCharacter}
+                popSlots={popSlots}
+              />
+              <Pitch
+                bench={bench}
+                participantCount={participants.length}
+                totalCharacters={characters.data.length}
+                dragging={activeCharacter !== undefined}
+                onOpenPicker={() => setPickerOpen(true)}
+              />
+              <TeamColumn
+                team="RED"
+                slots={slotsForTeam(slots, 'RED')}
+                charactersById={charactersById}
+                activeCharacter={activeCharacter}
+                popSlots={popSlots}
+              />
+            </div>
+
+            <PowerBar balance={board.data.balance} boardEmpty={boardEmpty} syncing={updateBoard.isPending} />
+
+            <div className="tmk__actions">
+              <PixelButton
+                variant="gold"
+                size="lg"
+                icon="⚔"
+                className="tmk__autofill"
+                onClick={handleAutoFill}
+                loading={autoFill.isPending}
+                disabled={autoFillDisabled}
+                title={autoFillDisabled ? '대기 선수가 있고 빈 자리가 있을 때 사용할 수 있습니다.' : undefined}
+              >
+                남은 자리 균형 맞춰 채우기
+              </PixelButton>
+              <PixelButton variant="ghost" size="lg" onClick={() => setResetOpen(true)} disabled={boardEmpty}>
+                전체 초기화
+              </PixelButton>
+            </div>
+
+            <DragOverlay dropAnimation={null}>
+              {activeCharacter ? <CharacterChip character={activeCharacter} variant="overlay" /> : null}
+            </DragOverlay>
+          </DndContext>
+        )}
+      </div>
 
       <ParticipantPicker
         open={pickerOpen}

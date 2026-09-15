@@ -5,12 +5,14 @@ import java.util.Map;
 
 /**
  * 팀 밸런싱 알고리즘에 쓰이는 모든 상수.
- * 값을 바꾸고 싶을 때는 이 파일만 수정하면 된다. UI 에는 이 숫자를 직접 노출하지 않는다.
+ * 값을 바꾸고 싶을 때는 이 파일만 수정하면 된다.
  */
 public final class BalanceConfig {
 
     private BalanceConfig() {
     }
+
+    // ---------------------------------------------------------------- 실력 균형 모드 (기본)
 
     /** 두 팀 실력 합계 차이 1점당 비용 가중치. */
     public static final int RANK_BALANCE_WEIGHT = 3;
@@ -19,6 +21,15 @@ public final class BalanceConfig {
     public static final int MAIN_POSITION_PENALTY = 0;
     public static final int SUB_POSITION_PENALTY = 8;
     public static final int OFF_POSITION_PENALTY = 25;
+
+    // ---------------------------------------------------------------- 포지션 균형 모드
+
+    /** 포지션을 우선하되 실력 차이도 약하게 반영한다. */
+    public static final int POSITION_MODE_RANK_BALANCE_WEIGHT = 1;
+    public static final int POSITION_MODE_SUB_POSITION_PENALTY = 20;
+    public static final int POSITION_MODE_OFF_POSITION_PENALTY = 80;
+
+    // ---------------------------------------------------------------- 티어 점수
 
     /**
      * 티어별 skill score. 배열 인덱스 = division - 1 (index 0 = I, index 3 = IV).
@@ -41,7 +52,8 @@ public final class BalanceConfig {
             Tier.CHALLENGER, 100
     );
 
-    /** Balance Grade 기준 (두 팀 실력 합계 차이). */
+    // ---------------------------------------------------------------- Balance Grade (두 팀 실력 합계 차이)
+
     public static final int PERFECT_MAX_DIFFERENCE = 2;
     public static final int VERY_GOOD_MAX_DIFFERENCE = 5;
     public static final int GOOD_MAX_DIFFERENCE = 10;

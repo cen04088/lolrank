@@ -37,15 +37,15 @@ describe('PositionSlot', () => {
   it('빈 슬롯은 EMPTY 를 표시한다', () => {
     renderSlot()
     expect(screen.getByText('TOP')).toBeInTheDocument()
-    expect(screen.getByText('EMPTY')).toBeInTheDocument()
+    expect(screen.getByText('빈 자리')).toBeInTheDocument()
   })
 
   it('드래그 중이면 DROP HERE 와 포지션 적합도 클래스를 표시한다', () => {
     const { container } = renderSlot({ activeCharacter: character })
-    expect(screen.getByText('DROP HERE')).toBeInTheDocument()
-    const slot = container.querySelector('.tm-slot')
-    expect(slot).toHaveClass('tm-slot--droppable')
-    expect(slot).toHaveClass('tm-slot--fit-main')
+    expect(screen.getByText('여기에 놓기')).toBeInTheDocument()
+    const slot = container.querySelector('.trow')
+    expect(slot).toHaveClass('trow--droppable')
+    expect(slot).toHaveClass('trow--fit-main')
   })
 
   it('부 포지션 슬롯은 SUB, 그 외는 OFF 로 표시한다', () => {
@@ -53,13 +53,13 @@ describe('PositionSlot', () => {
       slot: { ...emptySlot, position: 'MID' },
       activeCharacter: character,
     })
-    expect(sub.querySelector('.tm-slot')).toHaveClass('tm-slot--fit-sub')
+    expect(sub.querySelector('.trow')).toHaveClass('trow--fit-sub')
 
     const { container: off } = renderSlot({
       slot: { ...emptySlot, position: 'ADC' },
       activeCharacter: character,
     })
-    expect(off.querySelector('.tm-slot')).toHaveClass('tm-slot--fit-off')
+    expect(off.querySelector('.trow')).toHaveClass('trow--fit-off')
   })
 
   it('배치된 캐릭터의 Compact Card 와 MANUAL 배지를 그린다', () => {
@@ -70,6 +70,6 @@ describe('PositionSlot', () => {
     expect(screen.getAllByText('민준').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Gold IV').length).toBeGreaterThan(0)
     expect(screen.getByText('MANUAL')).toBeInTheDocument()
-    expect(screen.getByText('TOP · MID')).toBeInTheDocument()
+    expect(screen.getByText('라인전은 강하지만 한타에서 사라짐')).toBeInTheDocument()
   })
 })

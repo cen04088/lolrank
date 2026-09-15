@@ -11,9 +11,20 @@ interface PixelModalProps {
   width?: number
   /** true 면 배경 클릭/ESC 로 닫을 수 없다 (닉네임 입력 등) */
   locked?: boolean
+  /** paper: 밝은 종이 질감 (캐릭터 생성 등 폼) */
+  tone?: 'dark' | 'paper'
 }
 
-export function PixelModal({ open, title, onClose, children, footer, width, locked = false }: PixelModalProps) {
+export function PixelModal({
+  open,
+  title,
+  onClose,
+  children,
+  footer,
+  width,
+  locked = false,
+  tone = 'dark',
+}: PixelModalProps) {
   useEffect(() => {
     if (!open || locked || !onClose) return
     const onKey = (event: KeyboardEvent) => {
@@ -43,7 +54,7 @@ export function PixelModal({ open, title, onClose, children, footer, width, lock
         if (!locked && onClose && event.target === event.currentTarget) onClose()
       }}
     >
-      <div className="pxmodal" role="dialog" aria-modal="true" style={style}>
+      <div className={tone === 'paper' ? 'pxmodal pxmodal--paper' : 'pxmodal'} role="dialog" aria-modal="true" style={style}>
         <header className="pxmodal__header">
           <h2 className="pxmodal__title">{title}</h2>
           {!locked && onClose && (

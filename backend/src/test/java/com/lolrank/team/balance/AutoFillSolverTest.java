@@ -246,6 +246,54 @@ class AutoFillSolverTest {
         assertThat(first.assignments()).isEqualTo(second.assignments());
     }
 
+    @Test
+    void 포지션균형_모드는_실력차이보다_주포지션을_우선한다() {
+        // 실력 균형 모드에선 OFF 포지션을 감수하고 차이를 줄이는 것이 이득인 구성
+        List<SlotKey> slots = allSlots();
+        List<Candidate> candidates = List.of(
+                candidate(1, Tier.CHALLENGER, null, Position.TOP, null),
+                candidate(2, Tier.IRON, 4, Position.TOP, null),
+                candidate(3, Tier.CHALLENGER, null, Position.JUNGLE, null),
+                candidate(4, Tier.IRON, 4, Position.JUNGLE, null),
+                candidate(5, Tier.GOLD, 4, Position.MID, null),
+                candidate(6, Tier.GOLD, 4, Position.MID, null),
+                candidate(7, Tier.GOLD, 4, Position.ADC, null),
+                candidate(8, Tier.GOLD, 4, Position.ADC, null),
+                candidate(9, Tier.GOLD, 4, Position.SUPPORT, null),
+                candidate(10, Tier.GOLD, 4, Position.SUPPORT, null)
+        );
+
+        Solution positionFirst = solver.solve(slots, candidates, 0, 0, AutoFillMode.POSITION_BALANCE);
+
+        assertValidAssignment(positionFirst, slots, candidates);
+        assertThat(positionFirst.assignments()).allMatch(a -> a.fit() == PositionFit.MAIN);
+        assertThat(positionFirst.totalPositionPenalty()).isZero();
+        assertThat(positionFirst.totalCost())
+                .isEqualTo(positionFirst.difference() * BalanceConfig.POSITION_MODE_RANK_BALANCE_WEIGHT);
+    }
+
+    @Test
+    void 랜덤_모드는_모든_슬롯을_유효하게_채우고_점수를_정확히_합산한다() {
+        List<SlotKey> slots = allSlots();
+        List<Candidate> candidates = balancedTen();
+
+        Solution solution = solver.solve(slots, candidates, 5, 7, AutoFillMode.RANDOM);
+
+        assertValidAssignment(solution, slots, candidates);
+        int expectedBlue = 5;
+        int expectedRed = 7;
+        for (Assignment a : solution.assignments()) {
+            int score = candidates.stream().filter(c -> c.characterId() == a.characterId()).findFirst().orElseThrow().skillScore();
+            if (a.slot().team() == Team.BLUE) {
+                expectedBlue += score;
+            } else {
+                expectedRed += score;
+            }
+        }
+        assertThat(solution.blueScore()).isEqualTo(expectedBlue);
+        assertThat(solution.redScore()).isEqualTo(expectedRed);
+    }
+
     private static Team teamOf(Solution solution, long characterId) {
         return solution.assignments().stream()
                 .filter(a -> a.characterId() == characterId)

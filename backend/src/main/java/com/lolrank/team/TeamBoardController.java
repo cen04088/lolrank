@@ -1,6 +1,7 @@
 package com.lolrank.team;
 
 import com.lolrank.common.web.Nicknames;
+import com.lolrank.team.balance.AutoFillMode;
 import com.lolrank.team.dto.TeamBoardResponse;
 import com.lolrank.team.dto.UpdateParticipantsRequest;
 import com.lolrank.team.dto.UpdateTeamBoardRequest;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -45,7 +47,8 @@ public class TeamBoardController {
 
     @PostMapping("/team-board/auto-fill")
     public TeamBoardResponse autoFill(@PathVariable String inviteCode,
+                                      @RequestParam(defaultValue = "SKILL_BALANCE") AutoFillMode mode,
                                       @RequestHeader(value = Nicknames.HEADER, required = false) String nickname) {
-        return teamBoardService.autoFill(inviteCode, Nicknames.resolve(nickname));
+        return teamBoardService.autoFill(inviteCode, mode, Nicknames.resolve(nickname));
     }
 }

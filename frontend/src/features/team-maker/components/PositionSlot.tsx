@@ -1,7 +1,8 @@
 import type { CSSProperties } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 import type { Character, Slot } from '@/api/types'
-import { FIT_LABELS, POSITION_ICONS, positionFit } from '@/lib/labels'
+import { PositionBadge } from '@/components/PositionBadge'
+import { FIT_LABELS, positionFit } from '@/lib/labels'
 import { slotDropId, type DropData } from '../utils/board'
 import { CharacterChip } from './CharacterChip'
 
@@ -14,21 +15,23 @@ interface PositionSlotProps {
   popIndex?: number
 }
 
+/** 팀 패널의 한 줄 = 하나의 포지션 슬롯(드롭 영역). */
 export function PositionSlot({ slot, character, activeCharacter, popIndex }: PositionSlotProps) {
   const dropData: DropData = { kind: 'slot', team: slot.team, position: slot.position }
   const { setNodeRef, isOver } = useDroppable({ id: slotDropId(slot.team, slot.position), data: dropData })
 
   const fit = activeCharacter ? positionFit(activeCharacter, slot.position) : null
   const isSelf = activeCharacter !== undefined && activeCharacter.id === slot.characterId
+  const dragging = activeCharacter !== undefined && !isSelf
 
   const classes = [
-    'tm-slot',
-    `tm-slot--${slot.team.toLowerCase()}`,
-    character && 'tm-slot--filled',
-    activeCharacter && !isSelf && 'tm-slot--droppable',
-    fit && !isSelf && `tm-slot--fit-${fit.toLowerCase()}`,
-    isOver && !isSelf && 'tm-slot--over',
-    popIndex !== undefined && 'tm-slot--pop',
+    'trow',
+    `trow--${slot.team.toLowerCase()}`,
+    character && 'trow--filled',
+    dragging && 'trow--droppable',
+    dragging && fit && `trow--fit-${fit.toLowerCase()}`,
+    dragging && isOver && 'trow--over',
+    popIndex !== undefined && 'trow--pop',
   ]
     .filter(Boolean)
     .join(' ')
@@ -38,25 +41,23 @@ export function PositionSlot({ slot, character, activeCharacter, popIndex }: Pos
 
   return (
     <li ref={setNodeRef} className={classes} style={style}>
-      <div className="tm-slot__label">
-        <span className="tm-slot__icon" aria-hidden>
-          {POSITION_ICONS[slot.position]}
-        </span>
-        <span className="tm-slot__pos font-pixel">{slot.position}</span>
-      </div>
-      <div className="tm-slot__body">
-        {character ? (
-          <CharacterChip
-            character={character}
-            from={{ kind: 'slot', team: slot.team, position: slot.position }}
-            source={slot.source}
-          />
-        ) : (
-          <div className="tm-slot__empty font-pixel">{activeCharacter && !isSelf ? 'DROP HERE' : 'EMPTY'}</div>
-        )}
-      </div>
-      {isOver && fit && !isSelf && (
-        <div className={`tm-slot__hint tm-slot__hint--${fit.toLowerCase()} font-pixel`}>{FIT_LABELS[fit]}</div>
+      {character ? (
+        <CharacterChip
+          character={character}
+          variant="row"
+          team={slot.team}
+          position={slot.position}
+          from={{ kind: 'slot', team: slot.team, position: slot.position }}
+          source={slot.source}
+        />
+      ) : (
+        <div className="trow__empty">
+          <PositionBadge position={slot.position} ghost />
+          <span className="trow__empty-text font-pixel-ko">{dragging ? '여기에 놓기' : '빈 자리'}</span>
+        </div>
+      )}
+      {dragging && isOver && fit && (
+        <div className={`trow__hint trow__hint--${fit.toLowerCase()} font-pixel`}>{FIT_LABELS[fit]}</div>
       )}
     </li>
   )

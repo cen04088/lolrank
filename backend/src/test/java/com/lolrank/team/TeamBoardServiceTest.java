@@ -11,6 +11,7 @@ import com.lolrank.character.dto.CreateCharacterRequest;
 import com.lolrank.common.exception.BadRequestException;
 import com.lolrank.room.Room;
 import com.lolrank.room.RoomService;
+import com.lolrank.team.balance.AutoFillMode;
 import com.lolrank.team.dto.SlotRequest;
 import com.lolrank.team.dto.SlotResponse;
 import com.lolrank.team.dto.TeamBoardResponse;
@@ -122,7 +123,7 @@ class TeamBoardServiceTest {
                 new SlotRequest(Team.BLUE, Position.TOP, manualBlueTop, AssignmentSource.MANUAL),
                 new SlotRequest(Team.RED, Position.ADC, manualRedAdc, AssignmentSource.MANUAL))), NICK);
 
-        TeamBoardResponse board = teamBoardService.autoFill(code, NICK);
+        TeamBoardResponse board = teamBoardService.autoFill(code, AutoFillMode.SKILL_BALANCE, NICK);
 
         assertThat(slot(board, Team.BLUE, Position.TOP).characterId()).isEqualTo(manualBlueTop);
         assertThat(slot(board, Team.BLUE, Position.TOP).source()).isEqualTo(AssignmentSource.MANUAL);
@@ -143,7 +144,7 @@ class TeamBoardServiceTest {
         Long manualId = characters.get(0).id();
         teamBoardService.updateBoard(code, new UpdateTeamBoardRequest(List.of(
                 new SlotRequest(Team.BLUE, Position.TOP, manualId, AssignmentSource.MANUAL))), NICK);
-        TeamBoardResponse first = teamBoardService.autoFill(code, NICK);
+        TeamBoardResponse first = teamBoardService.autoFill(code, AutoFillMode.SKILL_BALANCE, NICK);
 
         // 사용자가 AUTO 캐릭터 하나를 다른 자리로 직접 옮기면 그 캐릭터는 MANUAL 이 된다.
         SlotResponse movedFrom = first.slots().stream()
@@ -162,7 +163,7 @@ class TeamBoardServiceTest {
         }
         teamBoardService.updateBoard(code, new UpdateTeamBoardRequest(nextSlots), NICK);
 
-        TeamBoardResponse second = teamBoardService.autoFill(code, NICK);
+        TeamBoardResponse second = teamBoardService.autoFill(code, AutoFillMode.SKILL_BALANCE, NICK);
 
         assertThat(slot(second, Team.BLUE, Position.TOP).characterId()).isEqualTo(manualId);
         assertThat(slot(second, Team.BLUE, Position.SUPPORT).characterId()).isEqualTo(movedId);

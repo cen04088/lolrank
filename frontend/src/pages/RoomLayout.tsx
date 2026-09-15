@@ -1,54 +1,64 @@
-import { useState, type FormEvent } from 'react'
-import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
+import { createContext, useContext, useState, type FormEvent } from 'react'
+import { Link, Outlet, useParams } from 'react-router-dom'
 import { ApiError } from '@/api/client'
 import { useChangeLogs, useRoom } from '@/api/queries'
+import type { Room } from '@/api/types'
+import { GameNav } from '@/components/GameNav'
 import { PixelButton } from '@/components/PixelButton'
 import { PixelLoader } from '@/components/PixelLoader'
 import { PixelModal } from '@/components/PixelModal'
+import { Scene } from '@/components/Scene'
 import { useToast } from '@/components/Toast'
 import { NICKNAME_MAX_LENGTH, useNickname } from '@/lib/nickname'
+
+interface RoomContextValue {
+  room: Room
+  nickname: string
+  openSettings: () => void
+}
+
+const RoomContext = createContext<RoomContextValue | null>(null)
 
 export function useRoomCode(): string {
   const { code } = useParams<{ code: string }>()
   return (code ?? '').toUpperCase()
 }
 
+export function useRoomContext(): RoomContextValue {
+  const value = useContext(RoomContext)
+  if (!value) throw new Error('useRoomContext 는 RoomLayout 안에서만 사용할 수 있습니다.')
+  return value
+}
+
 export function RoomLayout() {
   const code = useRoomCode()
   const room = useRoom(code)
-  const toast = useToast()
   const [nickname, setNickname] = useNickname()
   const [editingNickname, setEditingNickname] = useState(false)
-  const [logsOpen, setLogsOpen] = useState(false)
-
-  const copyInvite = async () => {
-    const url = `${window.location.origin}/room/${code}`
-    try {
-      await navigator.clipboard.writeText(url)
-      toast.success('초대 링크를 복사했습니다!')
-    } catch {
-      toast.info(`초대 코드: ${code}`)
-    }
-  }
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   if (room.isPending) {
     return (
-      <div className="room">
-        <PixelLoader label="ENTERING ROOM" />
-      </div>
+      <Scene kind="dungeon">
+        <div className="room">
+          <PixelLoader label="ENTERING ROOM" />
+        </div>
+      </Scene>
     )
   }
 
   if (room.isError) {
     const notFound = room.error instanceof ApiError && room.error.status === 404
     return (
-      <div className="room">
+      <Scene kind="dungeon">
         <div className="room__error">
           <h1 className="font-pixel text-gold" style={{ fontSize: 22 }}>
             {notFound ? 'ROOM NOT FOUND' : 'CONNECTION LOST'}
           </h1>
           <p className="text-muted">
-            {notFound ? `초대 코드 ${code} 에 해당하는 방이 없습니다.` : '서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.'}
+            {notFound
+              ? `초대 코드 ${code} 에 해당하는 방이 없습니다.`
+              : '서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.'}
           </p>
           <div style={{ display: 'flex', gap: 10 }}>
             {!notFound && (
@@ -61,57 +71,22 @@ export function RoomLayout() {
             </Link>
           </div>
         </div>
-      </div>
+      </Scene>
     )
   }
 
-  return (
-    <div className="room">
-      <header className="room__header">
-        <Link to="/" className="room__brand" aria-label="LOL RANK 홈">
-          <span className="room__brand-ball" aria-hidden />
-          LOL RANK
-        </Link>
-        <div className="room__name">
-          <span className="room__name-text" title={room.data.name}>
-            {room.data.name}
-          </span>
-          <button type="button" className="room__code" onClick={copyInvite} title="초대 링크 복사">
-            #{room.data.inviteCode} <span aria-hidden>⧉</span>
-          </button>
-        </div>
-        <nav className="room__nav" aria-label="메인 메뉴">
-          <NavLink to={`/room/${code}`} end className="room__tab">
-            <span className="room__tab-icon" aria-hidden>
-              ⚔
-            </span>
-            <span className="room__tab-label">TEAM MAKER</span>
-          </NavLink>
-          <NavLink to={`/room/${code}/hierarchy`} className="room__tab">
-            <span className="room__tab-icon" aria-hidden>
-              👑
-            </span>
-            <span className="room__tab-label">계급도</span>
-          </NavLink>
-          <NavLink to={`/room/${code}/characters`} className="room__tab">
-            <span className="room__tab-icon" aria-hidden>
-              🎽
-            </span>
-            <span className="room__tab-label">캐릭터 관리</span>
-          </NavLink>
-        </nav>
-        <PixelButton variant="ghost" size="sm" onClick={() => setLogsOpen(true)} title="최근 변경 기록">
-          📜
-        </PixelButton>
-        <button type="button" className="room__me" onClick={() => setEditingNickname(true)} title="닉네임 변경">
-          <span aria-hidden>🙂</span>
-          <span className="room__me-name">{nickname ?? '닉네임 설정'}</span>
-        </button>
-      </header>
+  const contextValue: RoomContextValue = {
+    room: room.data,
+    nickname: nickname ?? '',
+    openSettings: () => setSettingsOpen(true),
+  }
 
-      <main className="room__main">
+  return (
+    <RoomContext.Provider value={contextValue}>
+      <div className="room">
+        <GameNav code={code} onOpenSettings={() => setSettingsOpen(true)} />
         <Outlet />
-      </main>
+      </div>
 
       <NicknameModal
         open={!nickname || editingNickname}
@@ -124,8 +99,17 @@ export function RoomLayout() {
         onClose={() => setEditingNickname(false)}
       />
 
-      <ChangeLogModal code={code} open={logsOpen} onClose={() => setLogsOpen(false)} />
-    </div>
+      <SettingsModal
+        room={room.data}
+        nickname={nickname ?? ''}
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        onEditNickname={() => {
+          setSettingsOpen(false)
+          setEditingNickname(true)
+        }}
+      />
+    </RoomContext.Provider>
   )
 }
 
@@ -173,31 +157,75 @@ function NicknameModal({ open, locked, initial, onSubmit, onClose }: NicknameMod
   )
 }
 
-interface ChangeLogModalProps {
-  code: string
+interface SettingsModalProps {
+  room: Room
+  nickname: string
   open: boolean
   onClose: () => void
+  onEditNickname: () => void
 }
 
-function ChangeLogModal({ code, open, onClose }: ChangeLogModalProps) {
-  const logs = useChangeLogs(code, open)
+function SettingsModal({ room, nickname, open, onClose, onEditNickname }: SettingsModalProps) {
+  const toast = useToast()
+  const logs = useChangeLogs(room.inviteCode, open)
+
+  const copyInvite = async () => {
+    const url = `${window.location.origin}/room/${room.inviteCode}`
+    try {
+      await navigator.clipboard.writeText(url)
+      toast.success('초대 링크를 복사했습니다!')
+    } catch {
+      toast.info(`초대 코드: ${room.inviteCode}`)
+    }
+  }
+
   return (
-    <PixelModal open={open} title="CHANGE LOG" onClose={onClose} width={560}>
-      {logs.isPending && <PixelLoader inline label="LOADING" />}
-      {logs.isError && <p className="px-error">기록을 불러오지 못했습니다.</p>}
-      {logs.data && logs.data.length === 0 && <p className="text-muted">아직 변경 기록이 없습니다.</p>}
-      {logs.data && logs.data.length > 0 && (
-        <ul className="changelog">
-          {logs.data.map((log) => (
-            <li key={log.id} className="changelog__item">
-              <span>{log.message}</span>
-              <time className="changelog__time" dateTime={log.createdAt}>
-                {formatTime(log.createdAt)}
-              </time>
-            </li>
-          ))}
-        </ul>
-      )}
+    <PixelModal open={open} title="SETTINGS" onClose={onClose} width={560}>
+      <div className="settings">
+        <div className="settings__row">
+          <div>
+            <span className="px-label">방</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <strong>{room.name}</strong>
+              <span className="settings__code">#{room.inviteCode}</span>
+            </div>
+          </div>
+          <PixelButton variant="blue" size="sm" onClick={copyInvite}>
+            초대 링크 복사
+          </PixelButton>
+        </div>
+
+        <div className="settings__row">
+          <div>
+            <span className="px-label">내 닉네임</span>
+            <strong>{nickname}</strong>
+          </div>
+          <PixelButton variant="ghost" size="sm" onClick={onEditNickname}>
+            변경
+          </PixelButton>
+        </div>
+
+        <div>
+          <p className="settings__section-title" style={{ marginBottom: 8 }}>
+            최근 변경 기록
+          </p>
+          {logs.isPending && <PixelLoader inline label="LOADING" />}
+          {logs.isError && <p className="px-error">기록을 불러오지 못했습니다.</p>}
+          {logs.data && logs.data.length === 0 && <p className="text-muted">아직 변경 기록이 없습니다.</p>}
+          {logs.data && logs.data.length > 0 && (
+            <ul className="changelog">
+              {logs.data.map((log) => (
+                <li key={log.id} className="changelog__item">
+                  <span>{log.message}</span>
+                  <time className="changelog__time" dateTime={log.createdAt}>
+                    {formatTime(log.createdAt)}
+                  </time>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
     </PixelModal>
   )
 }

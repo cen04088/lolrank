@@ -28,6 +28,9 @@ export type AssignmentSource = 'MANUAL' | 'AUTO'
 
 export type BalanceGrade = 'PERFECT' | 'VERY_GOOD' | 'GOOD' | 'WARNING' | 'UNBALANCED'
 
+export const AUTO_FILL_MODES = ['SKILL_BALANCE', 'POSITION_BALANCE', 'RANDOM'] as const
+export type AutoFillMode = (typeof AUTO_FILL_MODES)[number]
+
 export interface Room {
   id: number
   name: string
@@ -90,6 +93,9 @@ export interface Balance {
   redCount: number
   blueAverageTier: string | null
   redAverageTier: string | null
+  /** 팀 평균 실력 (0~100), UI 의 TEAM POWER */
+  bluePower: number
+  redPower: number
 }
 
 export interface TeamBoard {

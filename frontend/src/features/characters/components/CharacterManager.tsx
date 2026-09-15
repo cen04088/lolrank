@@ -57,13 +57,16 @@ export function CharacterManager({ code }: CharacterManagerProps) {
   return (
     <div className="chars">
       <header className="chars__head">
-        <div>
-          <h1 className="chars__title font-pixel">ROSTER</h1>
-          <p className="chars__sub">
-            전체 캐릭터 <strong>{characters.data.length}</strong>명 · 누구나 만들고 수정할 수 있습니다.
-          </p>
+        <div className="page-title">
+          <span className="page-title__icon" aria-hidden>
+            🎽
+          </span>
+          <div className="page-title__text">
+            <h1>선수 명단</h1>
+            <p>전체 {characters.data.length}명 · 누구나 만들고 수정할 수 있어요</p>
+          </div>
         </div>
-        <PixelButton variant="gold" icon="+" onClick={() => setForm({ mode: 'create' })}>
+        <PixelButton variant="blue" icon="+" onClick={() => setForm({ mode: 'create' })}>
           새 캐릭터
         </PixelButton>
       </header>
@@ -72,9 +75,9 @@ export function CharacterManager({ code }: CharacterManagerProps) {
         <EmptyState
           icon="🏟"
           message="아직 등록된 선수가 없습니다!"
-          hint="첫 캐릭터를 만들어 팀 메이커에 등장시켜 보세요."
+          hint="첫 캐릭터를 만들어 팀 배정에 등장시켜 보세요."
           action={
-            <PixelButton variant="gold" pixelFont onClick={() => setForm({ mode: 'create' })}>
+            <PixelButton variant="gold" onClick={() => setForm({ mode: 'create' })}>
               첫 캐릭터 만들기
             </PixelButton>
           }

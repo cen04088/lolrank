@@ -8,6 +8,7 @@ import com.lolrank.character.Position;
 import com.lolrank.common.exception.BadRequestException;
 import com.lolrank.room.Room;
 import com.lolrank.room.RoomService;
+import com.lolrank.team.balance.AutoFillMode;
 import com.lolrank.team.balance.AutoFillSolver;
 import com.lolrank.team.balance.SkillScoreCalculator;
 import com.lolrank.team.balance.TeamBalance;
@@ -135,7 +136,7 @@ public class TeamBoardService {
      * MANUAL 슬롯은 고정하고, AUTO 슬롯은 비운 뒤 남은 참가자를 남은 슬롯에 최적 배치한다.
      */
     @Transactional
-    public TeamBoardResponse autoFill(String inviteCode, String nickname) {
+    public TeamBoardResponse autoFill(String inviteCode, AutoFillMode mode, String nickname) {
         Room room = roomService.getByInviteCode(inviteCode);
         List<TeamSlot> slots = ensureSlots(room);
         List<PlayerCharacter> participants = selectedParticipants(room);
@@ -172,7 +173,7 @@ public class TeamBoardService {
                         c.getMainPosition(), c.getSubPosition()))
                 .toList();
 
-        AutoFillSolver.Solution solution = autoFillSolver.solve(emptySlots, candidates, fixedBlue, fixedRed);
+        AutoFillSolver.Solution solution = autoFillSolver.solve(emptySlots, candidates, fixedBlue, fixedRed, mode);
 
         Map<Long, PlayerCharacter> participantsById = participants.stream()
                 .collect(Collectors.toMap(PlayerCharacter::getId, Function.identity()));
@@ -187,7 +188,7 @@ public class TeamBoardService {
         TeamBoardResponse response = toResponse(slots, participants);
         changeLogService.record(room, null, nickname, ChangeLogAction.TEAM_AUTO_FILLED,
                 before, response.slots(),
-                nickname + "님이 남은 자리를 자동으로 채웠습니다. (밸런스: " + response.balance().grade() + ")");
+                nickname + "님이 남은 자리를 자동으로 채웠습니다. (" + mode + ", 밸런스: " + response.balance().grade() + ")");
         return response;
     }
 

@@ -1,0 +1,83 @@
+.pbadge {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 220px;
+}
+
+.pbadge__card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 8px;
+  background: rgba(13, 21, 38, 0.92);
+  border: var(--border-w) solid var(--gold-dark);
+  border-radius: 6px;
+  box-shadow: var(--px-shadow), inset 0 0 0 2px var(--ink);
+  color: var(--text);
+  text-align: left;
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.pbadge__card:hover {
+  transform: translateY(-1px);
+}
+
+.pbadge__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pbadge__name {
+  font-family: var(--font-pixel-ko);
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pbadge__sub {
+  font-size: 11px;
+  color: var(--gold);
+}
+
+.pbadge__bubble {
+  position: relative;
+  align-self: flex-start;
+  margin-left: 14px;
+  padding: 8px 12px;
+  background: #fff;
+  color: var(--paper-ink);
+  border: var(--border-w) solid var(--ink);
+  border-radius: 6px;
+  box-shadow: var(--px-shadow-sm);
+  font-family: var(--font-pixel-ko);
+  font-size: 13px;
+  line-height: 1.35;
+  animation: px-rise var(--dur-slow) var(--ease) both;
+}
+
+.pbadge__bubble::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-left: var(--border-w) solid var(--ink);
+  border-top: var(--border-w) solid var(--ink);
+  transform: rotate(45deg);
+}
+
+@media (max-width: 720px) {
+  .pbadge__bubble {
+    display: none;
+  }
+}

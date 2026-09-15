@@ -12,7 +12,9 @@ public record BalanceResponse(
         int blueCount,
         int redCount,
         String blueAverageTier,
-        String redAverageTier
+        String redAverageTier,
+        int bluePower,
+        int redPower
 ) {
 
     public static BalanceResponse from(TeamBalance balance) {
@@ -25,7 +27,9 @@ public record BalanceResponse(
                 balance.blueCount(),
                 balance.redCount(),
                 balance.blueAverageTier(),
-                balance.redAverageTier()
+                balance.redAverageTier(),
+                balance.bluePower(),
+                balance.redPower()
         );
     }
 }

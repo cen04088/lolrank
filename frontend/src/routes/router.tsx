@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { HomePage } from '@/pages/HomePage'
 import { RoomLayout } from '@/pages/RoomLayout'
+import { LobbyPage } from '@/pages/LobbyPage'
 import { TeamMakerPage } from '@/pages/TeamMakerPage'
 import { HierarchyPage } from '@/pages/HierarchyPage'
 import { CharactersPage } from '@/pages/CharactersPage'
@@ -12,7 +13,8 @@ export const router = createBrowserRouter([
     path: '/room/:code',
     element: <RoomLayout />,
     children: [
-      { index: true, element: <TeamMakerPage /> },
+      { index: true, element: <LobbyPage /> },
+      { path: 'team', element: <TeamMakerPage /> },
       { path: 'hierarchy', element: <HierarchyPage /> },
       { path: 'characters', element: <CharactersPage /> },
     ],
