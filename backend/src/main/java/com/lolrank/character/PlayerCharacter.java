@@ -41,6 +41,10 @@ public class PlayerCharacter {
     @Column(length = 100)
     private String description;
 
+    /** 칭호: 이름 옆에 붙는 짧은 별칭 (선택) */
+    @Column(length = 20)
+    private String title;
+
     @Column(name = "asset_key", nullable = false, length = 40)
     private String assetKey;
 
@@ -127,6 +131,14 @@ public class PlayerCharacter {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
     }
 
     public String getAssetKey() {

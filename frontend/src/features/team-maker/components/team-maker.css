@@ -775,3 +775,8 @@
     width: 100%;
   }
 }
+
+.chip__ttag {
+  margin-right: 6px;
+  max-width: 45%;
+}

@@ -55,6 +55,7 @@ export function TrophyCard({ character, rank, overlay = false, selected = false,
         <PixelAvatar assetKey={character.assetKey} size={size} />
       </div>
       <div className="trophy__plate">
+        {character.title && <span className="trophy__title font-pixel-ko">✦ {character.title}</span>}
         <span className="trophy__name font-pixel-ko">{character.name}</span>
         <span className="trophy__tier font-pixel">{character.tierLabel}</span>
       </div>

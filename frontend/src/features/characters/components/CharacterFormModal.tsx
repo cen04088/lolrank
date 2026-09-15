@@ -22,6 +22,7 @@ import { ASSET_GROUPS, PLAYER_ASSET_KEYS, assetLabel, isSpecialAsset } from '@/l
 import { POSITION_ICONS, POSITION_LABELS, TIER_NAMES, tierHasDivision, tierLabel } from '@/lib/labels'
 
 const NAME_MAX = 20
+const TITLE_MAX = 20
 const DESCRIPTION_MAX = 100
 const ROMAN: Record<number, string> = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV' }
 
@@ -35,6 +36,7 @@ const TABS: { key: Tab; icon: string; label: string }[] = [
 
 interface FormValues {
   name: string
+  title: string
   description: string
   assetKey: string
   tier: Tier
@@ -45,6 +47,7 @@ interface FormValues {
 
 const DEFAULT_VALUES: FormValues = {
   name: '',
+  title: '',
   description: '',
   assetKey: PLAYER_ASSET_KEYS[0],
   tier: 'GOLD',
@@ -56,6 +59,7 @@ const DEFAULT_VALUES: FormValues = {
 function fromCharacter(character: Character): FormValues {
   return {
     name: character.name,
+    title: character.title ?? '',
     description: character.description ?? '',
     assetKey: character.assetKey,
     tier: character.tier,
@@ -100,6 +104,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
       if (character) {
         const body: UpdateCharacterRequest = {
           name: form.name.trim(),
+          title: form.title.trim(),
           description: form.description.trim(),
           assetKey: form.assetKey,
           tier: form.tier,
@@ -111,6 +116,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
       }
       const body: CreateCharacterRequest = {
         name: form.name.trim(),
+        title: form.title.trim() || null,
         description: form.description.trim() || null,
         assetKey: form.assetKey,
         tier: form.tier,
@@ -208,6 +214,20 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
                   onChange={(event) => set('name', event.target.value)}
                   placeholder="예: 민준"
                   autoFocus
+                />
+              </div>
+
+              <div className="px-field">
+                <label className="px-label" htmlFor="char-title">
+                  칭호 <span className="cform__max">(선택, 최대 {TITLE_MAX}자 · 이름 옆에 표시)</span>
+                </label>
+                <input
+                  id="char-title"
+                  className="px-input"
+                  maxLength={TITLE_MAX}
+                  value={values.title}
+                  onChange={(event) => set('title', event.target.value)}
+                  placeholder="예: 철벽 탑솔, 한타의 신"
                 />
               </div>
 
@@ -339,7 +359,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
             <button type="button" className="cform__arrow" onClick={() => cycleSkin(-1)} aria-label="이전 스킨">
               ‹
             </button>
-            <PixelAvatar assetKey={values.assetKey} size={128} />
+            <PixelAvatar assetKey={values.assetKey} size={176} className="cform__hero" />
             <PixelAvatar assetKey={values.assetKey} size={56} variant="face" className="cform__face" />
             <button type="button" className="cform__arrow" onClick={() => cycleSkin(1)} aria-label="다음 스킨">
               ›

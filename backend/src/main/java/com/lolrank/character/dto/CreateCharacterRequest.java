@@ -17,6 +17,10 @@ public record CreateCharacterRequest(
         @Size(max = 100, message = "설명은 100자 이하여야 합니다.")
         String description,
 
+        /** 칭호 (선택, 이름 옆에 표시) */
+        @Size(max = 20, message = "칭호는 20자 이하여야 합니다.")
+        String title,
+
         @NotBlank(message = "캐릭터 이미지를 선택해주세요.")
         @Size(max = 40, message = "assetKey 가 너무 깁니다.")
         String assetKey,

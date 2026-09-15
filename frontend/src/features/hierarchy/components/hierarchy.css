@@ -525,3 +525,20 @@
   flex-wrap: wrap;
   gap: 4px;
 }
+
+.detail__namewrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+
+.trophy__title {
+  max-width: 100px;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--gold-hi);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

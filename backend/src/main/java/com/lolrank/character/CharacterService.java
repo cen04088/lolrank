@@ -60,7 +60,7 @@ public class CharacterService {
                 .map(max -> max + 1)
                 .orElse(0);
 
-        PlayerCharacter saved = characterRepository.save(new PlayerCharacter(
+        PlayerCharacter character = new PlayerCharacter(
                 room,
                 request.name().strip(),
                 blankToNull(request.description()),
@@ -71,7 +71,9 @@ public class CharacterService {
                 subPositions,
                 DEFAULT_HIERARCHY_RANK,
                 order
-        ));
+        );
+        character.changeTitle(blankToNull(request.title()));
+        PlayerCharacter saved = characterRepository.save(character);
 
         CharacterResponse response = CharacterResponse.from(saved);
         changeLogService.record(room, saved, nickname, ChangeLogAction.CHARACTER_CREATED,
@@ -92,6 +94,9 @@ public class CharacterService {
         List<Position> subPositions = normalizeSubPositions(mainPosition,
                 request.subPositions() != null ? request.subPositions() : character.getSubPositions());
 
+        if (request.title() != null) {
+            character.changeTitle(blankToNull(request.title()));
+        }
         character.updateProfile(
                 request.name() != null ? request.name().strip() : character.getName(),
                 request.description() != null ? blankToNull(request.description()) : character.getDescription(),

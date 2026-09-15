@@ -674,3 +674,33 @@
   transform: scale(1.85);
   transform-origin: 50% 38%;
 }
+
+/* ================= 칭호 리본 ================= */
+.ttag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 2px 8px 3px;
+  font-size: 12px;
+  line-height: 1;
+  color: #2b1d0e;
+  background: linear-gradient(180deg, #ffe9a3, var(--gold));
+  border: 1px solid #7a5a1c;
+  box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+.ttag--sm {
+  padding: 1px 5px 2px;
+  font-size: 10px;
+  gap: 3px;
+}
+
+.ttag__star {
+  font-size: 0.85em;
+  color: #7a5a1c;
+}

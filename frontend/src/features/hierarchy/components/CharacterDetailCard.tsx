@@ -3,6 +3,7 @@ import { PixelAvatar } from '@/components/PixelAvatar'
 import { PixelButton } from '@/components/PixelButton'
 import { PositionBadge } from '@/components/PositionBadge'
 import { TierBadge } from '@/components/TierBadge'
+import { TitleTag } from '@/components/TitleTag'
 import { RANK_LABELS } from '@/lib/labels'
 
 interface CharacterDetailCardProps {
@@ -29,7 +30,10 @@ export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete 
           <PixelAvatar assetKey={character.assetKey} size={64} variant="face" />
         </div>
         <div className="detail__title">
-          <h3 className="detail__name font-pixel-ko">{character.name}</h3>
+          <div className="detail__namewrap">
+            <h3 className="detail__name font-pixel-ko">{character.name}</h3>
+            <TitleTag title={character.title} />
+          </div>
           <TierBadge tier={character.tier} division={character.division} />
         </div>
       </header>
@@ -54,10 +58,6 @@ export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete 
               ? '—'
               : character.subPositions.map((position) => <PositionBadge key={position} position={position} ghost />)}
           </dd>
-        </div>
-        <div>
-          <dt>등록일</dt>
-          <dd>{formatDate(character.createdAt)}</dd>
         </div>
       </dl>
 
@@ -85,10 +85,4 @@ export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete 
       </div>
     </section>
   )
-}
-
-function formatDate(iso: string): string {
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return '—'
-  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`
 }

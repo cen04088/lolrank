@@ -15,6 +15,10 @@ public record UpdateCharacterRequest(
         @Size(max = 100, message = "설명은 100자 이하여야 합니다.")
         String description,
 
+        /** 칭호. 빈 문자열을 보내면 지운다 */
+        @Size(max = 20, message = "칭호는 20자 이하여야 합니다.")
+        String title,
+
         @Size(min = 1, max = 40, message = "assetKey 가 올바르지 않습니다.")
         String assetKey,
 

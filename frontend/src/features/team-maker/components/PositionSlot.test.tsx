@@ -9,6 +9,7 @@ const character: Character = {
   roomId: 1,
   name: '민준',
   description: '라인전은 강하지만 한타에서 사라짐',
+  title: null,
   assetKey: 'player_01',
   tier: 'GOLD',
   division: 4,

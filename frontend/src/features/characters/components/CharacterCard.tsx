@@ -4,6 +4,7 @@ import { PixelAvatar } from '@/components/PixelAvatar'
 import { PixelButton } from '@/components/PixelButton'
 import { PositionBadge } from '@/components/PositionBadge'
 import { TierBadge } from '@/components/TierBadge'
+import { TitleTag } from '@/components/TitleTag'
 import { isSpecialAsset } from '@/lib/assets'
 import { RANK_LABELS, TIER_COLORS } from '@/lib/labels'
 
@@ -26,7 +27,10 @@ export function CharacterCard({ character, onEdit, onDelete }: CharacterCardProp
       </div>
       <div className="ccard__body">
         <div className="ccard__title">
-          <h3 className="ccard__name font-pixel-ko">{character.name}</h3>
+          <div className="ccard__namewrap">
+            <h3 className="ccard__name font-pixel-ko">{character.name}</h3>
+            <TitleTag title={character.title} />
+          </div>
           <TierBadge tier={character.tier} division={character.division} />
         </div>
         <div className="ccard__positions">

@@ -43,6 +43,8 @@ export interface Character {
   roomId: number
   name: string
   description: string | null
+  /** 칭호: 이름 옆에 붙는 짧은 별칭 */
+  title: string | null
   assetKey: string
   tier: Tier
   division: number | null
@@ -59,6 +61,7 @@ export interface Character {
 export interface CreateCharacterRequest {
   name: string
   description: string | null
+  title: string | null
   assetKey: string
   tier: Tier
   division: number | null
@@ -69,6 +72,8 @@ export interface CreateCharacterRequest {
 export interface UpdateCharacterRequest {
   name?: string
   description?: string
+  /** 빈 문자열을 보내면 칭호를 지운다 */
+  title?: string
   assetKey?: string
   tier?: Tier
   division?: number

@@ -8,6 +8,7 @@ function character(id: number, rank: HierarchyRank, order: number): Character {
     roomId: 1,
     name: `c${id}`,
     description: null,
+    title: null,
     assetKey: 'player_01',
     tier: 'GOLD',
     division: 4,

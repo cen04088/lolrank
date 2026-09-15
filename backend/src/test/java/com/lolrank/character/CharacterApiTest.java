@@ -111,7 +111,7 @@ class CharacterApiTest {
                         .header(Nicknames.HEADER, nicknameHeader)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {"name":"태현","description":"라인전은 강하지만 한타에서 사라짐",
+                                {"name":"태현","description":"라인전은 강하지만 한타에서 사라짐","title":"철벽 탑솔",
                                  "assetKey":"player_03","tier":"GOLD","division":4,
                                  "mainPosition":"TOP","subPositions":["MID","ADC"]}
                                 """))
@@ -120,6 +120,7 @@ class CharacterApiTest {
                 .andExpect(jsonPath("$.subPositions", hasSize(2)))
                 .andExpect(jsonPath("$.subPositions[1]", is("ADC")))
                 .andExpect(jsonPath("$.hierarchyRank", is("C")))
+                .andExpect(jsonPath("$.title", is("철벽 탑솔")))
                 .andReturn().getResponse().getContentAsString();
         long id = objectMapper.readTree(created).get("id").asLong();
 
@@ -131,8 +132,9 @@ class CharacterApiTest {
         mockMvc.perform(patch("/api/characters/" + id)
                         .header(Nicknames.HEADER, nicknameHeader)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"tier\":\"MASTER\"}"))
+                        .content("{\"tier\":\"MASTER\",\"title\":\"\"}"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").doesNotExist())
                 .andExpect(jsonPath("$.tier", is("MASTER")))
                 .andExpect(jsonPath("$.division", nullValue()))
                 .andExpect(jsonPath("$.tierLabel", is("Master")));

@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import type { AssignmentSource, Character, Position, Team } from '@/api/types'
 import { PixelAvatar } from '@/components/PixelAvatar'
+import { TitleTag } from '@/components/TitleTag'
 import { PositionBadge } from '@/components/PositionBadge'
 import { TIER_COLORS, positionSummary } from '@/lib/labels'
 import { characterDragId, type DragData } from '../utils/board'
@@ -63,7 +64,10 @@ export function CharacterChip({
     >
       <PixelAvatar assetKey={character.assetKey} size={variant === 'row' ? 44 : 36} alt="" variant="face" />
       <div className="chip__info">
-        <div className="chip__name font-pixel-ko">{character.name}</div>
+        <div className="chip__name font-pixel-ko">
+          <TitleTag title={character.title} size="sm" className="chip__ttag" />
+          {character.name}
+        </div>
         <div className="chip__tier font-pixel">{character.tierLabel}</div>
         {variant !== 'row' && <div className="chip__pos">{positionSummary(character)}</div>}
       </div>
