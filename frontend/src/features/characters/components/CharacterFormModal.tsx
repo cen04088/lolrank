@@ -297,7 +297,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
                 </div>
               ))}
               <p className="cform__hint">
-                Tiny Swords 기사단(5종 × 5색)과 고블린(3종 × 4색)입니다. 팀 배정 화면에서는 얼굴만, 계급도에서는 전신이 보입니다.
+                Tiny Swords 기사단(5종 × 5색)과 고블린(2종 × 4색)입니다. 팀 배정 화면에서는 얼굴만, 계급도에서는 전신이 보입니다.
               </p>
             </div>
           )}

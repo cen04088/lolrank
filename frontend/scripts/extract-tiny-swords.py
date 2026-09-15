@@ -4,7 +4,7 @@ Tiny Swords (Pixel Frog) 에서 앱에 필요한 스프라이트를 잘라 front
 두 소스를 함께 쓴다.
   - Free Pack (현행판):   기사단 5종(Warrior, Archer, Lancer, Monk, Pawn) × 5색(Black, Blue, Purple, Red, Yellow)
                           라이선스: 개인·상업 사용/수정 가능, 재배포·재판매 금지
-  - 구버전 (Update 010, CC0): 고블린 3종(Torch, TNT, Barrel) × 4색, 성/집/탑/나무/장식, 타일, 리본 UI
+  - 구버전 (Update 010, CC0): 고블린 2종(Torch, TNT) × 4색, 성/집/탑/나무/장식, 타일, 리본 UI
 
 사용법:
   python scripts/extract-tiny-swords.py
@@ -52,7 +52,6 @@ OLD_COLORS = ["Blue", "Red", "Yellow", "Purple"]
 OLD_UNITS: dict[str, tuple[str, int]] = {
     "torch": ("Factions/Goblins/Troops/Torch/{c}/Torch_{c}.png", 1),
     "tnt": ("Factions/Goblins/Troops/TNT/{c}/TNT_{c}.png", 1),
-    "barrel": ("Factions/Goblins/Troops/Barrel/{c}/Barrel_{c}.png", 1),  # 통에서 나오는 동작을 걷기로 쓴다
 }
 OLD_FRAME = 192
 

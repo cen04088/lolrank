@@ -1,7 +1,7 @@
 /**
  * 캐릭터/배경/소품 스프라이트 경로.
  *
- * - 캐릭터: Tiny Swords (Pixel Frog). 기사단 5종 × 5색 (Free Pack) + 고블린 3종 × 4색 (구버전 CC0).
+ * - 캐릭터: Tiny Swords (Pixel Frog). 기사단 5종 × 5색 (Free Pack) + 고블린 2종 × 4색 (구버전 CC0).
  *   192/320px 프레임을 96px 로 잘라 1x 로 쓴다 → scripts/extract-tiny-swords.py
  * - 마을 배경/건물/리본: Tiny Swords 구버전 (CC0)
  * - 던전 석벽·말풍선·이모트·아이콘: Ninja Adventure (Pixel-boy & AAA, CC0) → scripts/extract-ninja-assets.py
@@ -17,7 +17,7 @@ export interface AssetGroup {
 
 const KNIGHT_UNITS = ['warrior', 'archer', 'lancer', 'monk', 'pawn'] as const
 const KNIGHT_COLORS = ['blue', 'red', 'yellow', 'purple', 'black'] as const
-const GOBLIN_UNITS = ['torch', 'tnt', 'barrel'] as const
+const GOBLIN_UNITS = ['torch', 'tnt'] as const
 const GOBLIN_COLORS = ['blue', 'red', 'yellow', 'purple'] as const
 
 export const KNIGHT_KEYS: readonly string[] = KNIGHT_UNITS.flatMap((unit) =>
@@ -50,7 +50,7 @@ const LEGACY_ALIASES: Record<string, string> = {
   player_05: 'ts_pawn_blue',
   player_06: 'ts_torch_red',
   player_07: 'ts_tnt_purple',
-  player_08: 'ts_barrel_yellow',
+  player_08: 'ts_tnt_yellow',
   player_09: 'ts_lancer_purple',
   player_10: 'ts_monk_red',
   player_11: 'ts_archer_purple',

@@ -26,10 +26,10 @@
 | 팩 | 라이선스 | 용도 | 결과물 | 추출 스크립트 |
 | --- | --- | --- | --- | --- |
 | [Tiny Swords Free Pack](https://pixelfrog-assets.itch.io/tiny-swords) by Pixel Frog | 개인·상업 사용/수정 가능, **재배포·재판매 금지** | 캐릭터 기사단 5종(Warrior·Archer·Lancer·Monk·Pawn) × 5색 = 25 | `frontend/public/assets/tiny/chars/` | `frontend/scripts/extract-tiny-swords.py` |
-| Tiny Swords 구버전 (Update 010) | CC0 | 고블린 3종 × 4색 = 12, 로비 성·집·탑·나무·장식, 잔디/모래 타일, 리본 UI | `frontend/public/assets/tiny/` | 같은 스크립트 |
+| Tiny Swords 구버전 (Update 010) | CC0 | 고블린 2종(Torch·TNT) × 4색 = 8, 로비 성·집·탑·나무·장식, 잔디/모래 타일, 리본 UI | `frontend/public/assets/tiny/` | 같은 스크립트 |
 | [Ninja Adventure](https://pixel-boy.itch.io/ninja-adventure-asset-pack) by Pixel-boy & AAA | CC0 | 던전 석벽 타일·등잔, 말풍선·이모트·아이콘 | `frontend/public/assets/ninja/` | `frontend/scripts/extract-ninja-assets.py` |
 
-- 캐릭터는 총 **37종**, 키는 `ts_{병종}_{색}` (예 `ts_lancer_black`). 목록과 순서는 `frontend/src/lib/assets.ts` 의 `ASSET_GROUPS`, 예전 `player_01~12` 키는 alias 로, 알 수 없는 키는 해시로 고정된 캐릭터에 매핑됩니다.
+- 캐릭터는 총 **33종**, 키는 `ts_{병종}_{색}` (예 `ts_lancer_black`). 목록과 순서는 `frontend/src/lib/assets.ts` 의 `ASSET_GROUPS`, 예전 `player_01~12` 키는 alias 로, 알 수 없는 키는 해시로 고정된 캐릭터에 매핑됩니다.
 - 각 캐릭터는 `{key}.png`(정면 96×96), `{key}_face.png`(초상화 60×60), `{key}_walk.png`(달리기 시트 4방향×4프레임) 세 파일입니다.
 - 원본 팩은 `.tmp-tiny-swords/{old,free}/`, `.tmp-ninja-pack/` 에 풀어두고(git ignore) 스크립트를 실행하면 다시 만들어집니다 (Pillow 필요).
 - Free Pack 은 재배포 금지 조건이 있으므로 이 저장소를 공개로 유지할 경우 해당 캐릭터 파일의 재배포 책임은 저장소 소유자에게 있습니다. 저장소 밖에서 관리하려면 `public/assets/tiny/chars/ts_{warrior,archer,lancer,monk,pawn}_*` 를 `.gitignore` 에 넣고 배포 시에만 복사하세요.
