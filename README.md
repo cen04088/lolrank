@@ -141,19 +141,45 @@ Railway 프로젝트에 **PostgreSQL**, **backend**, **frontend** 세 서비스�
 
 ## 6. Railway 배포 방법
 
-1. GitHub 에 이 리포지토리를 push 합니다.
-2. Railway → **New Project → Deploy PostgreSQL** 로 DB 를 먼저 만듭니다.
-3. **New Service → GitHub Repo** 로 backend 를 추가하고 Settings 에서
-   - Root Directory: `backend`
-   - Builder: Dockerfile (`backend/Dockerfile` 자동 인식)
-   - Variables: 위 backend 표 입력
-   - Networking: Generate Domain
-4. 같은 방식으로 frontend 를 추가하고
-   - Root Directory: `frontend`
-   - Variables: `VITE_API_BASE_URL` = 3번에서 만든 backend 도메인
-   - Networking: Generate Domain
-5. backend 의 `APP_CORS_ALLOWED_ORIGINS` 에 frontend 도메인을 넣고 재배포합니다.
-6. 프론트 도메인에 접속해 방을 만들고, 친구에게 `/room/XXXXXX` 링크를 공유하면 끝.
+현재 배포 (2026-09-15 기준, 프로젝트 `lolrank`):
+
+| 서비스 | URL |
+| --- | --- |
+| frontend | https://frontend-production-5880f.up.railway.app |
+| backend | https://backend-production-878d.up.railway.app (`/actuator/health`) |
+| Postgres | Railway 내부 네트워크 (`postgres.railway.internal`) |
+
+### CLI 로 처음부터 만들기
+
+```bash
+railway login
+railway init --name lolrank                 # 프로젝트 생성 + 현재 폴더 링크
+railway add -d postgres                     # Postgres 서비스
+railway add -s backend
+railway add -s frontend
+
+railway variable set -s backend --skip-deploys   'PGHOST=${{Postgres.PGHOST}}' 'PGPORT=${{Postgres.PGPORT}}'   'PGDATABASE=${{Postgres.PGDATABASE}}' 'PGUSER=${{Postgres.PGUSER}}' 'PGPASSWORD=${{Postgres.PGPASSWORD}}'
+railway domain -s backend                   # 백엔드 공개 도메인 생성
+railway domain -s frontend                  # 프론트 공개 도메인 생성
+railway variable set -s backend  --skip-deploys 'APP_CORS_ALLOWED_ORIGINS=https://<frontend-domain>'
+railway variable set -s frontend --skip-deploys 'VITE_API_BASE_URL=https://<backend-domain>'
+```
+
+### 배포 (코드 업로드)
+
+각 서비스는 하위 폴더의 Dockerfile 로 빌드합니다. **해당 폴더 안에서** `railway up` 을 실행하세요.
+
+```bash
+cd backend  && railway up -s backend  -d
+cd frontend && railway up -s frontend -d
+```
+
+> Windows CLI 에서 `railway up <path>` 가 `prefix not found` 로 실패하면, 링크된 폴더 밖(예: 임시 폴더)에 backend/ 또는 frontend/ 를 복사한 뒤
+> `railway up -p <projectId> -e production -s <service> -d` 로 올리면 됩니다.
+
+### GitHub 자동 배포로 바꾸려면
+
+Railway 대시보드에서 각 서비스 → Settings → Source 에 GitHub 리포 `cen04088/lolrank` 를 연결하고 **Root Directory** 를 `backend` / `frontend` 로 지정하면 push 마다 자동 배포됩니다. `VITE_*` 값을 바꾸면 프론트는 재배포가 필요합니다.
 
 헬스체크가 필요하면 backend 는 `/actuator/health` 를 사용하세요.
 
