@@ -28,6 +28,12 @@ public class RoomController {
         return RoomResponse.from(roomService.create(request.name()));
     }
 
+    /** 단일 방 모드: 프론트 "/" 가 이 방으로 바로 들어간다. */
+    @GetMapping("/default")
+    public RoomResponse getDefault() {
+        return RoomResponse.from(roomService.getOrCreateDefaultRoom());
+    }
+
     @GetMapping("/{inviteCode}")
     public RoomResponse get(@PathVariable String inviteCode) {
         return RoomResponse.from(roomService.getByInviteCode(inviteCode));

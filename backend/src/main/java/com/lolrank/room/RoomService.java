@@ -1,6 +1,7 @@
 package com.lolrank.room;
 
 import com.lolrank.common.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,10 +13,24 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final InviteCodeGenerator inviteCodeGenerator;
+    private final String defaultRoomCode;
+    private final String defaultRoomName;
 
-    public RoomService(RoomRepository roomRepository, InviteCodeGenerator inviteCodeGenerator) {
+    public RoomService(RoomRepository roomRepository,
+                       InviteCodeGenerator inviteCodeGenerator,
+                       @Value("${app.default-room.code}") String defaultRoomCode,
+                       @Value("${app.default-room.name}") String defaultRoomName) {
         this.roomRepository = roomRepository;
         this.inviteCodeGenerator = inviteCodeGenerator;
+        this.defaultRoomCode = defaultRoomCode.strip().toUpperCase();
+        this.defaultRoomName = defaultRoomName;
+    }
+
+    /** 단일 방 모드의 기본 방. 없으면 만든다 (기동 시 한 번 호출되고, 이후엔 조회만). */
+    @Transactional
+    public Room getOrCreateDefaultRoom() {
+        return roomRepository.findByInviteCode(defaultRoomCode)
+                .orElseGet(() -> roomRepository.save(new Room(defaultRoomName, defaultRoomCode)));
     }
 
     @Transactional

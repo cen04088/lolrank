@@ -8,13 +8,14 @@
   - 하단 TEAM POWER 바(팀 평균 실력)와 밸런스 등급
 - **계급도**: 석조 타워 위 LEGEND / S / A / B / C 를 드래그로 편집, 카드를 클릭하면 우측 상세 카드에서 등급 변경·소개 수정·삭제
 - **캐릭터 생성**: 종이 패널 폼(기본 정보 · 캐릭터 선택 · 소개 문구) + 대형 스프라이트 미리보기
-- 로그인 없음. 방 링크(`/room/ABCD12`)를 아는 사람은 누구나 편집 가능. 닉네임은 변경 기록 표시용
+- 로그인 없음. 사이트 링크를 아는 사람은 누구나 편집 가능. 닉네임은 변경 기록 표시용
+- **단일 방 모드**: 서버가 기동할 때 기본 방(`APP_DEFAULT_ROOM_CODE`, 기본 `LOLRNK`)을 만들고 `/` 는 그 방 로비로 바로 이동합니다. 다른 그룹용 방이 필요하면 `POST /api/rooms` 로 만든 뒤 `/room/{code}` URL 을 공유하면 됩니다.
 
 ### 화면 경로
 
 | 경로 | 화면 |
 | --- | --- |
-| `/` | 방 만들기 / 초대 코드 입장 |
+| `/` | 기본 방 로비로 자동 이동 |
 | `/room/{code}` | 마을 로비 |
 | `/room/{code}/team` | 팀 배정 |
 | `/room/{code}/hierarchy` | 계급도 |
@@ -106,11 +107,13 @@ cd backend
 | `SPRING_DATASOURCE_URL` | JDBC URL 을 직접 지정할 때 (PG* 보다 우선) | `jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}` |
 | `PORT` | HTTP 포트 | 8080 |
 | `APP_CORS_ALLOWED_ORIGINS` | 허용 origin (콤마 구분) | `http://localhost:5173,http://localhost:5174,http://localhost:4173` |
+| `APP_DEFAULT_ROOM_CODE` / `APP_DEFAULT_ROOM_NAME` | 단일 방 모드의 기본 방 코드/이름 | `LOLRNK` / `우리들의 내전` |
 
 ### REST API
 
 | Method | Path | 설명 |
 | --- | --- | --- |
+| GET | `/api/rooms/default` | 기본 방 (없으면 생성) |
 | POST | `/api/rooms` | 방 생성 `{name}` |
 | GET | `/api/rooms/{inviteCode}` | 방 조회 |
 | GET / POST | `/api/rooms/{inviteCode}/characters` | 캐릭터 목록 / 생성 |

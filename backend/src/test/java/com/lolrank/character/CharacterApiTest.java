@@ -54,6 +54,19 @@ class CharacterApiTest {
     }
 
     @Test
+    void 기본_방은_항상_존재하고_같은_방을_돌려준다() throws Exception {
+        String first = mockMvc.perform(get("/api/rooms/default"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.inviteCode", is("LOLRNK")))
+                .andReturn().getResponse().getContentAsString();
+        String second = mockMvc.perform(get("/api/rooms/default"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        org.assertj.core.api.Assertions.assertThat(objectMapper.readTree(first).get("id"))
+                .isEqualTo(objectMapper.readTree(second).get("id"));
+    }
+
+    @Test
     void 방을_초대코드로_조회한다() throws Exception {
         mockMvc.perform(get("/api/rooms/" + code))
                 .andExpect(status().isOk())

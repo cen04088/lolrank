@@ -12,6 +12,8 @@ import type {
 } from './types'
 
 export const roomsApi = {
+  /** 단일 방 모드의 기본 방 */
+  getDefault: () => api<Room>('/api/rooms/default'),
   create: (name: string) => api<Room>('/api/rooms', { method: 'POST', body: { name } }),
   get: (inviteCode: string) => api<Room>(`/api/rooms/${encodeURIComponent(inviteCode)}`),
 }

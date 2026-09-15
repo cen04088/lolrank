@@ -23,5 +23,9 @@ management:
         include: health
 
 app:
+  # 단일 방 모드: 기동 시 이 코드로 기본 방을 만들고 프론트 "/" 는 이 방으로 바로 들어간다.
+  default-room:
+    code: ${APP_DEFAULT_ROOM_CODE:LOLRNK}
+    name: ${APP_DEFAULT_ROOM_NAME:우리들의 내전}
   cors:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5174,http://localhost:4173}

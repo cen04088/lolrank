@@ -170,12 +170,12 @@ function SettingsModal({ room, nickname, open, onClose, onEditNickname }: Settin
   const logs = useChangeLogs(room.inviteCode, open)
 
   const copyInvite = async () => {
-    const url = `${window.location.origin}/room/${room.inviteCode}`
+    const url = window.location.origin
     try {
       await navigator.clipboard.writeText(url)
-      toast.success('초대 링크를 복사했습니다!')
+      toast.success('사이트 링크를 복사했습니다! 친구에게 보내주세요.')
     } catch {
-      toast.info(`초대 코드: ${room.inviteCode}`)
+      toast.info(url)
     }
   }
 
@@ -185,13 +185,10 @@ function SettingsModal({ room, nickname, open, onClose, onEditNickname }: Settin
         <div className="settings__row">
           <div>
             <span className="px-label">방</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <strong>{room.name}</strong>
-              <span className="settings__code">#{room.inviteCode}</span>
-            </div>
+            <strong>{room.name}</strong>
           </div>
           <PixelButton variant="blue" size="sm" onClick={copyInvite}>
-            초대 링크 복사
+            링크 복사
           </PixelButton>
         </div>
 

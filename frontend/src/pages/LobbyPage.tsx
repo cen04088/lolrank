@@ -35,9 +35,7 @@ export function LobbyPage() {
 
         <div className="lobby__notice paper">
           <p className="lobby__notice-title">{room.name}</p>
-          <p className="lobby__notice-sub">
-            초대 코드 <strong className="font-pixel">#{room.inviteCode}</strong>
-          </p>
+          <p className="lobby__notice-sub">선수 {characters.data?.length ?? 0}명 등록</p>
           <p className="lobby__notice-text">좋은 팀은 좋은 친구로부터!</p>
         </div>
 
