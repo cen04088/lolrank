@@ -18,7 +18,7 @@ import { PixelButton } from '@/components/PixelButton'
 import { PixelModal } from '@/components/PixelModal'
 import { PositionBadge } from '@/components/PositionBadge'
 import { useToast } from '@/components/Toast'
-import { PLAYER_ASSET_KEYS } from '@/lib/assets'
+import { ASSET_GROUPS, PLAYER_ASSET_KEYS } from '@/lib/assets'
 import { POSITION_ICONS, POSITION_LABELS, TIER_NAMES, tierHasDivision, tierLabel } from '@/lib/labels'
 
 const NAME_MAX = 20
@@ -274,22 +274,28 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
 
           {tab === 'skin' && (
             <div className="cform__section">
-              <span className="px-label">캐릭터 스킨 선택</span>
-              <div className="cform__skins" role="radiogroup" aria-label="캐릭터 스킨">
-                {PLAYER_ASSET_KEYS.map((key) => (
-                  <button
-                    key={key}
-                    type="button"
-                    role="radio"
-                    aria-checked={values.assetKey === key}
-                    className={values.assetKey === key ? 'cform__skin cform__skin--on' : 'cform__skin'}
-                    onClick={() => set('assetKey', key)}
-                    title={key}
-                  >
-                    <PixelAvatar assetKey={key} size={44} variant="face" />
-                  </button>
-                ))}
-              </div>
+              {ASSET_GROUPS.map((group) => (
+                <div key={group.id} className="cform__skin-group">
+                  <span className="px-label">
+                    캐릭터 스킨 선택 <span className="cform__max">· {group.label}</span>
+                  </span>
+                  <div className="cform__skins" role="radiogroup" aria-label={`${group.label} 캐릭터 스킨`}>
+                    {group.keys.map((key) => (
+                      <button
+                        key={key}
+                        type="button"
+                        role="radio"
+                        aria-checked={values.assetKey === key}
+                        className={values.assetKey === key ? 'cform__skin cform__skin--on' : 'cform__skin'}
+                        onClick={() => set('assetKey', key)}
+                        title={key}
+                      >
+                        <PixelAvatar assetKey={key} size={44} variant={group.id === 'tiny' ? 'sprite' : 'face'} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
               <p className="cform__hint">
                 스킨 이미지는 <code>public/assets/players/</code> 의 PNG 를 같은 이름으로 바꾸면 교체됩니다.
               </p>

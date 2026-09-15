@@ -394,3 +394,17 @@
 .cform__stage {
   position: relative;
 }
+
+.cform__skin-group + .cform__skin-group {
+  margin-top: 14px;
+}
+
+.cform__skins {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+@media (max-width: 900px) {
+  .cform__skins {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}

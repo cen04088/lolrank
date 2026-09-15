@@ -26,3 +26,4 @@ Thumbs.db
 # downloaded asset packs (not committed; extract with frontend/scripts/extract-ninja-assets.py)
 .tmp-ninja-adventure/
 .tmp-ninja-pack/
+.tmp-tiny-swords/

@@ -235,7 +235,7 @@ export function HierarchyBoard({ code }: HierarchyBoardProps) {
               />
               <div className="npc" aria-hidden>
                 <div className="npc__bubble bubble bubble--right font-pixel-ko">언젠가, 너도 전설이 될 수 있어!</div>
-                <WalkingSprite assetKey={NPC_ELDER_KEY} direction="down" scale={4} paused className="npc__sprite" />
+                <WalkingSprite assetKey={NPC_ELDER_KEY} direction="down" size={64} paused className="npc__sprite" />
               </div>
             </aside>
           </div>

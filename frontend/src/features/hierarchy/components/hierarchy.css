@@ -453,3 +453,39 @@
 .floor__crown {
   filter: drop-shadow(1px 1px 0 var(--ink));
 }
+
+/* Tiny Swords 리본을 명판 배경으로 (3-slice) */
+.floor__plaque {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 14px 40px 20px;
+  border-style: solid;
+  border-width: 0 40px;
+  border-image: url('/assets/tiny/ui/ribbon_yellow.png') 0 64 fill / 0 40px stretch;
+  color: var(--paper-ink);
+  image-rendering: auto;
+  top: -26px;
+}
+
+.floor--legend .floor__plaque {
+  background: none;
+  border-image-source: url('/assets/tiny/ui/ribbon_yellow.png');
+}
+
+.floor--s .floor__plaque,
+.floor--a .floor__plaque {
+  border-image-source: url('/assets/tiny/ui/ribbon_blue.png');
+  color: #fff;
+}
+
+.floor--b .floor__plaque,
+.floor--c .floor__plaque {
+  border-image-source: url('/assets/tiny/ui/ribbon_red.png');
+  color: #fff;
+}
+
+.floor__plaque-text {
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+}

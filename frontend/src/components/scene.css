@@ -422,3 +422,39 @@
     display: none;
   }
 }
+
+/* ================= Tiny Swords 마을 (CC0) ================= */
+/* 잔디: 64px 타일 그대로 반복 */
+.scene--village .scene__ground {
+  background: url('/assets/tiny/tiles/grass.png') 0 0 / 64px 64px repeat;
+  image-rendering: pixelated;
+}
+
+/* 모래길: 가운데 + 좌우 가장자리 */
+.scene__path {
+  width: clamp(256px, 26vw, 448px);
+  background: url('/assets/tiny/tiles/sand.png') 0 0 / 64px 64px repeat;
+}
+
+.scene__path::before,
+.scene__path::after {
+  width: 64px;
+}
+
+.scene__path::before {
+  background: url('/assets/tiny/tiles/sand_left.png') 0 0 / 64px 64px repeat-y;
+}
+
+.scene__path::after {
+  background: url('/assets/tiny/tiles/sand_right.png') 0 0 / 64px 64px repeat-y;
+}
+
+/* 소품은 원본 해상도(1x)가 기본. 축소할 때만 부드럽게 */
+.scene__prop {
+  transform: scale(var(--prop-scale, 1));
+  filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, 0.18));
+}
+
+.scene__prop[style*='--prop-scale: 0'] {
+  image-rendering: auto;
+}

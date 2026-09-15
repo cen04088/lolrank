@@ -478,3 +478,15 @@
     left: 100%;
   }
 }
+
+/* Tiny Swords 성: 원본 320x256 을 카드 너비에 맞춘다 */
+.gate__building {
+  height: 190px;
+  margin-bottom: -22px;
+}
+
+.gate__house {
+  height: auto;
+  width: min(100%, 300px);
+  image-rendering: auto;
+}

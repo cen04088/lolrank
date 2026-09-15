@@ -21,22 +21,17 @@
 | `/room/{code}/hierarchy` | 계급도 |
 | `/room/{code}/characters` | 선수 명단 (캐릭터 생성·수정·삭제) |
 
-### 그림 에셋 (Ninja Adventure Asset Pack, CC0)
+### 그림 에셋 (모두 CC0)
 
-캐릭터·타일·소품·UI 아이콘은 [Ninja Adventure Asset Pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack) (Pixel-boy & AAA, **CC0**) 에서 가져옵니다.
-저장소에는 추출된 결과물만 들어 있습니다: `frontend/public/assets/ninja/`
+| 팩 | 용도 | 결과물 | 추출 스크립트 |
+| --- | --- | --- | --- |
+| [Tiny Swords (구버전)](https://pixelfrog-assets.itch.io/tiny-swords) by Pixel Frog | 캐릭터 24종(기사·궁수·농민·고블린 3종 × 4색), 로비 성·집·탑·나무·장식, 잔디/모래 타일, 리본 UI | `frontend/public/assets/tiny/` | `frontend/scripts/extract-tiny-swords.py` |
+| [Ninja Adventure](https://pixel-boy.itch.io/ninja-adventure-asset-pack) by Pixel-boy & AAA | 캐릭터 32종 + NPC, 던전 석벽 타일·등잔, 말풍선·이모트·아이콘 | `frontend/public/assets/ninja/` | `frontend/scripts/extract-ninja-assets.py` |
 
-| 폴더 | 내용 |
-| --- | --- |
-| `chars/{key}.png` | 정면 대기 스프라이트 16×16 (캐릭터 카드·행렬) |
-| `chars/{key}_face.png` | 초상화 38×38 (팀 배정 행, 상세 카드, 스킨 선택) |
-| `chars/{key}_walk.png` | 걷기 시트 64×64 (로비 행렬, `WalkingSprite`) |
-| `tiles/` | 잔디·흙길·석벽 반복 타일 16×16 (`Scene` 배경) |
-| `props/` | 집·나무·바위·도리이 등 소품 (로비 건물, 배경) |
-| `ui/` | 말풍선 9-slice, 이모트, 검·트로피·아이콘 |
-
-- 캐릭터 목록/순서는 `frontend/src/lib/assets.ts` 의 `PLAYER_ASSET_KEYS`, 예전 `player_01~12` 키는 같은 파일의 alias 로 새 캐릭터에 매핑됩니다.
-- 다른 캐릭터를 추가하려면 팩을 `.tmp-ninja-pack/` 에 풀고 `frontend/scripts/extract-ninja-assets.py` 의 `CHARACTERS` 에 이름을 넣은 뒤 `python scripts/extract-ninja-assets.py` 를 실행하세요 (Pillow 필요).
+- 저장소에는 추출된 결과물만 들어 있습니다. 원본 팩은 `.tmp-tiny-swords/`, `.tmp-ninja-pack/` 에 풀어두고(git ignore) 스크립트를 실행하면 다시 만들어집니다 (Pillow 필요).
+- 캐릭터 키: Tiny Swords 는 `ts_{병종}_{색}` (예 `ts_warrior_blue`, 96px 프레임), Ninja Adventure 는 `ninja_blue` 등(16px). 목록과 순서는 `frontend/src/lib/assets.ts` 의 `ASSET_GROUPS`, 예전 `player_01~12` 키는 같은 파일의 alias 로 매핑됩니다.
+- 각 캐릭터는 `{key}.png`(정면), `{key}_face.png`(초상화), `{key}_walk.png`(걷기 시트 4방향×4프레임) 세 파일로 구성되며 `PixelAvatar` / `WalkingSprite` 가 프레임 크기를 키로 판별합니다.
+- Tiny Swords **Free Pack(현행판)** 은 재배포 금지 조건이라 사용하지 않습니다. CC0 인 구버전만 씁니다.
 - 배경 그림 파일 `frontend/public/assets/bg/village.png`, `dungeon.png`, `castle.png` 를 두면 타일 배경 위에 덮어 그려집니다(선택).
 - 한글 픽셀 폰트는 [Galmuri](https://github.com/quiple/galmuri) (OFL-1.1), 영문 픽셀 폰트는 Press Start 2P (OFL) 를 사용합니다.
 

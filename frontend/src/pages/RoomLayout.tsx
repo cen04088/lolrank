@@ -203,8 +203,10 @@ function SettingsModal({ room, nickname, open, onClose, onEditNickname }: Settin
         </div>
 
         <p className="settings__credit">
-          Art: <a href="https://pixel-boy.itch.io/ninja-adventure-asset-pack" target="_blank" rel="noreferrer">Ninja Adventure Asset Pack</a>{' '}
-          by Pixel-boy &amp; AAA (CC0) · Font: Galmuri (OFL)
+          Art: <a href="https://pixelfrog-assets.itch.io/tiny-swords" target="_blank" rel="noreferrer">Tiny Swords</a> by Pixel Frog (CC0)
+          {' · '}
+          <a href="https://pixel-boy.itch.io/ninja-adventure-asset-pack" target="_blank" rel="noreferrer">Ninja Adventure</a> by Pixel-boy &amp; AAA (CC0)
+          {' · '}Font: Galmuri (OFL)
         </p>
 
         <div>

@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import { propUrl } from '@/lib/assets'
+import type { CSSProperties, ReactNode } from 'react'
+import { tinyPropUrl } from '@/lib/assets'
 import './scene.css'
 
 export type SceneKind = 'village' | 'dungeon' | 'castle'
@@ -11,8 +11,10 @@ interface SceneProps {
 }
 
 /**
- * 화면 전체 배경 무대. Ninja Adventure 타일/소품으로 하늘·잔디·석벽을 그린다.
- * /public/assets/bg/{kind}.png 가 있으면 그 위에 덮어 그려진다 (없으면 타일 버전만 보인다).
+ * 화면 전체 배경 무대.
+ * - village: Tiny Swords 잔디/모래 타일 + 집·탑·나무·장식 소품 (CC0)
+ * - dungeon/castle: Ninja Adventure 석벽 타일 + 등잔 횃불 (CC0)
+ * /public/assets/bg/{kind}.png 가 있으면 그 위에 덮어 그려진다.
  */
 export function Scene({ kind, children, className = '' }: SceneProps) {
   return (
@@ -26,20 +28,31 @@ export function Scene({ kind, children, className = '' }: SceneProps) {
   )
 }
 
-/** 마을 뒤편 소품 (잔디 위, 콘텐츠 뒤) */
-const VILLAGE_PROPS: { name: string; left?: string; right?: string; bottom: string; scale?: number }[] = [
-  { name: 'house_orange', left: '2%', bottom: '30%', scale: 3 },
-  { name: 'tree_big', left: '15%', bottom: '31%', scale: 3 },
-  { name: 'tree_pine', left: '25%', bottom: '32%', scale: 3 },
-  { name: 'torii', left: '31%', bottom: '18%', scale: 3 },
-  { name: 'tree_pink', right: '14%', bottom: '31%', scale: 3 },
-  { name: 'house_red', right: '2%', bottom: '30%', scale: 3 },
-  { name: 'tree_round', right: '24%', bottom: '31%', scale: 2 },
-  { name: 'rock_gray', left: '6%', bottom: '8%', scale: 2 },
-  { name: 'bush', left: '20%', bottom: '6%', scale: 3 },
-  { name: 'stump', right: '8%', bottom: '10%', scale: 3 },
-  { name: 'bush', right: '20%', bottom: '5%', scale: 3 },
-  { name: 'rock_brown', right: '30%', bottom: '3%', scale: 2 },
+interface VillageProp {
+  name: string
+  left?: string
+  right?: string
+  bottom: string
+  /** 원본 대비 배율 (Tiny Swords 는 1x 가 기본) */
+  scale?: number
+}
+
+/** 마을 뒤편 소품 (잔디 위, 콘텐츠 뒤). 좌우 대칭으로 배치. */
+const VILLAGE_PROPS: VillageProp[] = [
+  { name: 'house_yellow', left: '1%', bottom: '30%' },
+  { name: 'tower_blue', left: '10%', bottom: '31%', scale: 0.9 },
+  { name: 'tree', left: '16%', bottom: '28%' },
+  { name: 'tree', left: '25%', bottom: '33%', scale: 0.75 },
+  { name: 'house_purple', right: '1%', bottom: '30%' },
+  { name: 'tower_red', right: '10%', bottom: '31%', scale: 0.9 },
+  { name: 'tree', right: '16%', bottom: '28%' },
+  { name: 'tree', right: '25%', bottom: '33%', scale: 0.75 },
+  { name: 'deco_02', left: '6%', bottom: '10%' },
+  { name: 'deco_05', left: '21%', bottom: '5%' },
+  { name: 'sheep', left: '30%', bottom: '4%', scale: 0.8 },
+  { name: 'deco_09', right: '7%', bottom: '9%' },
+  { name: 'deco_12', right: '22%', bottom: '4%' },
+  { name: 'deco_16', right: '31%', bottom: '2%', scale: 0.9 },
 ]
 
 function VillageBackdrop() {
@@ -77,14 +90,16 @@ function VillageBackdrop() {
         <img
           key={`${prop.name}-${index}`}
           className="scene__prop"
-          src={propUrl(prop.name)}
+          src={tinyPropUrl(prop.name)}
           alt=""
-          style={{
-            left: prop.left,
-            right: prop.right,
-            bottom: prop.bottom,
-            ['--prop-scale' as string]: prop.scale ?? 3,
-          }}
+          style={
+            {
+              left: prop.left,
+              right: prop.right,
+              bottom: prop.bottom,
+              '--prop-scale': prop.scale ?? 1,
+            } as CSSProperties
+          }
         />
       ))}
     </>
