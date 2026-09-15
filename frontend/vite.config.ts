@@ -11,7 +11,8 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5174,
+    // 데스크톱 앱 미리보기가 PORT 를 넘겨주면 그 포트를, 아니면 5174
+    port: Number(process.env.PORT) || 5174,
     proxy: {
       // 로컬 개발: VITE_API_BASE_URL 이 비어 있으면 같은 origin 의 /api 를 백엔드로 프록시한다.
       '/api': {
