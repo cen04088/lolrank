@@ -2,7 +2,8 @@
 #   ./gradlew bootRun --args='--spring.profiles.active=local-h2'
 spring:
   datasource:
-    url: jdbc:h2:mem:lolrank;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    # DB_CLOSE_DELAY=-1: 커넥션 풀이 잠시 비어도 메모리 DB 가 사라지지 않게 한다 (없으면 "this database is empty" 500)
+    url: jdbc:h2:mem:lolrank;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
     username: sa
     password:
     driver-class-name: org.h2.Driver

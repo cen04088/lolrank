@@ -403,3 +403,31 @@
 .cform__skins {
   grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
 }
+
+/* ------------------------------------------------------------ 특수 인물 카드: 무대를 일러스트 배경 톤으로 */
+.ccard--special .ccard__stage {
+  padding: 14px 12px 12px;
+  background:
+    linear-gradient(90deg, transparent 46%, rgba(255, 255, 255, 0.10) 46% 54%, transparent 54%),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0 26px, transparent 26px 52px),
+    linear-gradient(180deg, var(--special-bg-top), var(--special-bg-bottom));
+}
+
+.ccard--special .ccard__stage .pxavatar--special {
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px var(--special-edge), 0 6px 0 rgba(2, 7, 18, 0.35);
+}
+
+/* 캐릭터 폼 미리보기 무대도 같은 톤 */
+.cform__stage--special {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.12), transparent 55%),
+    linear-gradient(90deg, transparent 46%, rgba(255, 255, 255, 0.10) 46% 54%, transparent 54%),
+    linear-gradient(180deg, var(--special-bg-top), var(--special-bg-bottom));
+}
+
+.cform__stage--special::before,
+.cform__stage--special::after {
+  background: #d9d6f0;
+  box-shadow: 0 0 12px rgba(217, 214, 240, 0.8);
+}

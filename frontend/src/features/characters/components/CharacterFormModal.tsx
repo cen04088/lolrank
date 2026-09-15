@@ -18,7 +18,7 @@ import { PixelButton } from '@/components/PixelButton'
 import { PixelModal } from '@/components/PixelModal'
 import { PositionBadge } from '@/components/PositionBadge'
 import { useToast } from '@/components/Toast'
-import { ASSET_GROUPS, PLAYER_ASSET_KEYS, assetLabel } from '@/lib/assets'
+import { ASSET_GROUPS, PLAYER_ASSET_KEYS, assetLabel, isSpecialAsset } from '@/lib/assets'
 import { POSITION_ICONS, POSITION_LABELS, TIER_NAMES, tierHasDivision, tierLabel } from '@/lib/labels'
 
 const NAME_MAX = 20
@@ -335,7 +335,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
         </div>
 
         <aside className="cform__preview">
-          <div className="cform__stage">
+          <div className={isSpecialAsset(values.assetKey) ? 'cform__stage cform__stage--special' : 'cform__stage'}>
             <button type="button" className="cform__arrow" onClick={() => cycleSkin(-1)} aria-label="이전 스킨">
               ‹
             </button>

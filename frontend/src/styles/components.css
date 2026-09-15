@@ -645,12 +645,20 @@
   image-rendering: auto;
 }
 
-/* 특수 인물은 배경까지 완성된 일러스트이므로 작은 초상화에서는 얼굴을 중심으로 확대한다. */
+/* 특수 인물은 배경까지 완성된 일러스트이므로 작은 초상화에서는 얼굴을 중심으로 확대한다.
+   틀 색은 일러스트 자체의 배경(슬레이트 퍼플 #3a395c → #4d4b6e)에서 뽑아 그림과 이어지게 한다. */
+:root {
+  --special-bg-top: #3a395c;
+  --special-bg-bottom: #4d4b6e;
+  --special-bg-mid: #45436a;
+  --special-edge: rgba(160, 156, 200, 0.45);
+}
+
 .pxavatar--special {
   overflow: hidden;
   border-radius: 4px;
-  background: #202844;
-  box-shadow: inset 0 0 0 2px rgba(229, 185, 79, 0.5), 2px 3px 0 rgba(2, 7, 18, 0.4);
+  background: linear-gradient(180deg, var(--special-bg-top), var(--special-bg-bottom));
+  box-shadow: inset 0 0 0 2px var(--special-edge), 2px 3px 0 rgba(2, 7, 18, 0.4);
 }
 
 .pxavatar--special img {
