@@ -367,41 +367,34 @@
   }
 }
 
-/* 프로필(얼굴) 사진은 무대 우측 하단 모서리 (.pxavatar 의 position: relative 보다 우선) */
-.cform__stage .cform__face.pxavatar {
+/* 메인 캐릭터는 무대를 꽉 채운다 (.pxavatar 의 크기 변수보다 우선) */
+.cform__stage .cform__hero.pxavatar {
   position: absolute;
-  right: 10px;
-  bottom: 10px;
-  z-index: 2;
-  grid-area: auto;
-}
-
-/* 메인 캐릭터는 무대를 꽉 채운다 */
-.cform__hero {
-  width: 100% !important;
-  height: 100% !important;
-  align-self: stretch;
-  justify-self: stretch;
+  inset: 0;
+  display: block; /* inline-grid 면 img 의 height:100% 가 정사각형으로 풀려 아래가 잘린다 */
+  width: auto;
+  height: auto;
 }
 
 .cform__hero img,
 .cform__hero svg {
   width: 100%;
   height: 100%;
+  padding: 10px 10px 6px;
+  box-sizing: border-box;
   object-fit: contain;
   object-position: center bottom;
 }
 
-/* 특수 인물 일러스트는 배경까지 포함된 정사각형이므로 무대 전체(화살표 뒤까지)를 덮는다 */
+/* 특수 인물 일러스트는 배경까지 포함된 정사각형이므로 무대 전체를 덮는다 */
 .cform__stage--special .cform__hero {
-  position: absolute;
-  inset: 0;
   border-radius: 0;
   box-shadow: none;
   background: transparent;
 }
 
 .cform__stage--special .cform__hero img {
+  padding: 0;
   object-fit: cover;
   object-position: center 30%;
 }

@@ -357,7 +357,6 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
         <aside className="cform__preview">
           <div className={isSpecialAsset(values.assetKey) ? 'cform__stage cform__stage--special' : 'cform__stage'}>
             <PixelAvatar assetKey={values.assetKey} size={176} className="cform__hero" />
-            <PixelAvatar assetKey={values.assetKey} size={56} variant="face" className="cform__face" />
           </div>
           <div className="cform__plate">
             <span className="cform__plate-name font-pixel-ko">{values.name.trim() || '이름 없는 선수'}</span>
