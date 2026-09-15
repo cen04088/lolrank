@@ -399,12 +399,7 @@
   margin-top: 14px;
 }
 
+/* 좁은 화면에서 미리보기 영역을 침범하지 않도록 칸 수를 자동 계산 */
 .cform__skins {
-  grid-template-columns: repeat(8, 1fr);
-}
-
-@media (max-width: 900px) {
-  .cform__skins {
-    grid-template-columns: repeat(6, 1fr);
-  }
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
 }
