@@ -107,13 +107,14 @@ cd backend
 | `SPRING_DATASOURCE_URL` | JDBC URL 을 직접 지정할 때 (PG* 보다 우선) | `jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}` |
 | `PORT` | HTTP 포트 | 8080 |
 | `APP_CORS_ALLOWED_ORIGINS` | 허용 origin (콤마 구분) | `http://localhost:5173,http://localhost:5174,http://localhost:4173` |
-| `APP_DEFAULT_ROOM_CODE` / `APP_DEFAULT_ROOM_NAME` | 단일 방 모드의 기본 방 코드/이름 | `LOLRNK` / `우리들의 내전` |
+| `APP_DEFAULT_ROOM_CODE` / `APP_DEFAULT_ROOM_NAME` | 단일 방 모드의 기본 방 코드/이름. 이름은 기동 시마다 DB 에 반영되므로 변수만 바꾸고 재배포하면 방 이름이 바뀝니다 | `LOLRNK` / `우리들의 내전` |
 
 ### REST API
 
 | Method | Path | 설명 |
 | --- | --- | --- |
-| GET | `/api/rooms/default` | 기본 방 (없으면 생성) |
+| GET | `/api/rooms` | 모든 방 목록 + 캐릭터 수 (데이터가 어느 방에 있는지 확인용) |
+| GET | `/api/rooms/default` | 기본 방 (없으면 생성, 이름은 `APP_DEFAULT_ROOM_NAME` 에 맞춤) |
 | POST | `/api/rooms` | 방 생성 `{name}` |
 | GET | `/api/rooms/{inviteCode}` | 방 조회 |
 | GET / POST | `/api/rooms/{inviteCode}/characters` | 캐릭터 목록 / 생성 |

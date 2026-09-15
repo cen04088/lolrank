@@ -2,6 +2,8 @@ package com.lolrank.room;
 
 import com.lolrank.room.dto.CreateRoomRequest;
 import com.lolrank.room.dto.RoomResponse;
+import com.lolrank.room.dto.RoomSummaryResponse;
+import java.util.List;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,11 @@ public class RoomController {
     @ResponseStatus(HttpStatus.CREATED)
     public RoomResponse create(@Valid @RequestBody CreateRoomRequest request) {
         return RoomResponse.from(roomService.create(request.name()));
+    }
+
+    @GetMapping
+    public List<RoomSummaryResponse> list() {
+        return roomService.listSummaries();
     }
 
     /** 단일 방 모드: 프론트 "/" 가 이 방으로 바로 들어간다. */

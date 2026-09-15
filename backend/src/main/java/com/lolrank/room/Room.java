@@ -35,6 +35,10 @@ public class Room {
         this.inviteCode = inviteCode;
     }
 
+    public void rename(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

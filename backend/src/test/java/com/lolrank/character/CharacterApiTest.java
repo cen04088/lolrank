@@ -67,6 +67,23 @@ class CharacterApiTest {
     }
 
     @Test
+    void 방_목록에_캐릭터_수가_포함된다() throws Exception {
+        createCharacter("민준");
+        String body = mockMvc.perform(get("/api/rooms"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        JsonNode list = objectMapper.readTree(body);
+        boolean found = false;
+        for (JsonNode node : list) {
+            if (code.equals(node.get("inviteCode").asString())) {
+                found = true;
+                org.assertj.core.api.Assertions.assertThat(node.get("characterCount").asLong()).isEqualTo(1);
+            }
+        }
+        org.assertj.core.api.Assertions.assertThat(found).isTrue();
+    }
+
+    @Test
     void 방을_초대코드로_조회한다() throws Exception {
         mockMvc.perform(get("/api/rooms/" + code))
                 .andExpect(status().isOk())
