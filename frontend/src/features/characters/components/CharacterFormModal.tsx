@@ -356,14 +356,8 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
 
         <aside className="cform__preview">
           <div className={isSpecialAsset(values.assetKey) ? 'cform__stage cform__stage--special' : 'cform__stage'}>
-            <button type="button" className="cform__arrow" onClick={() => cycleSkin(-1)} aria-label="이전 스킨">
-              ‹
-            </button>
             <PixelAvatar assetKey={values.assetKey} size={176} className="cform__hero" />
             <PixelAvatar assetKey={values.assetKey} size={56} variant="face" className="cform__face" />
-            <button type="button" className="cform__arrow" onClick={() => cycleSkin(1)} aria-label="다음 스킨">
-              ›
-            </button>
           </div>
           <div className="cform__plate">
             <span className="cform__plate-name font-pixel-ko">{values.name.trim() || '이름 없는 선수'}</span>
