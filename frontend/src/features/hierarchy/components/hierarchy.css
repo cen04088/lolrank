@@ -22,7 +22,7 @@
 
 .hier__saving {
   color: var(--gold);
-  font-size: 8px;
+  font-size: 10px;
   animation: px-blink 700ms steps(1) infinite;
 }
 
@@ -52,7 +52,7 @@
   background: linear-gradient(180deg, var(--blue-dim) 0%, var(--blue-deep) 100%);
   border: 2px solid #050a13;
   color: var(--gold);
-  font-size: 9px;
+  font-size: 10px;
   text-align: center;
   text-shadow: 2px 2px 0 var(--ink);
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), 50% 100%, 0 calc(100% - 22px));
@@ -275,7 +275,7 @@
 }
 
 .trophy__tier {
-  font-size: 6px;
+  font-size: 9px;
   color: var(--tier-color);
 }
 

@@ -19,8 +19,8 @@
 .lobby__eyebrow {
   margin-bottom: 2px;
   color: #163250;
-  font-size: 7px;
-  letter-spacing: .18em;
+  font-size: 9px;
+  letter-spacing: .14em;
 }
 
 .lobby__logo .logo__crown {
@@ -108,8 +108,8 @@
   left: 50%;
   transform: translateX(-50%);
   color: rgba(255,255,255,.78);
-  font-size: 6px;
-  letter-spacing: .12em;
+  font-size: 8px;
+  letter-spacing: .1em;
 }
 
 .gate--red {
@@ -344,7 +344,7 @@
   border: 2px solid #342313;
   box-shadow: 3px 4px 0 rgba(31,25,17,.35), inset 0 0 0 2px rgba(74,49,25,.65);
   font-family: var(--font-pixel);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.04em;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
   text-align: center;
@@ -540,7 +540,7 @@
 .donate__badge {
   margin-left: 6px;
   padding: 5px 8px;
-  font-size: 8px;
+  font-size: 10px;
   background: #2b1d0e;
   color: #ffe45c;
   letter-spacing: 0.06em;

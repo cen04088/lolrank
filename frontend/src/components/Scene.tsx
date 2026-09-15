@@ -14,7 +14,7 @@ interface SceneProps {
  * 화면 전체 배경 무대.
  * - village: Tiny Swords 잔디/모래 타일 + 집·탑·나무·장식 소품 (CC0)
  * - dungeon/castle: Ninja Adventure 석벽 타일 + 등잔 횃불 (CC0)
- * /public/assets/bg/{kind}.png 가 있으면 그 위에 덮어 그려진다.
+ * 외부 배경 이미지 없이 포함된 타일과 CSS 레이어만으로 그린다.
  */
 export function Scene({ kind, children, className = '' }: SceneProps) {
   return (

@@ -18,19 +18,6 @@
   min-height: 100dvh;
 }
 
-/* 이미지 에셋이 있으면 CSS 배경 위에 덮어 그려진다 */
-.scene--village .scene__bg {
-  background: url('/assets/bg/village.png') center bottom / cover no-repeat;
-}
-
-.scene--dungeon .scene__bg {
-  background: url('/assets/bg/dungeon.png') center / cover no-repeat;
-}
-
-.scene--castle .scene__bg {
-  background: url('/assets/bg/castle.png') center / cover no-repeat;
-}
-
 /* ================= village ================= */
 .scene__sky {
   position: absolute;

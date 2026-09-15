@@ -24,3 +24,13 @@
 .wsprite--smooth {
   image-rendering: auto;
 }
+
+.wsprite-special {
+  animation: special-float 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes special-float {
+  to {
+    transform: translateY(-3px);
+  }
+}

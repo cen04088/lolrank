@@ -18,7 +18,7 @@ import { PixelButton } from '@/components/PixelButton'
 import { PixelModal } from '@/components/PixelModal'
 import { PositionBadge } from '@/components/PositionBadge'
 import { useToast } from '@/components/Toast'
-import { ASSET_GROUPS, PLAYER_ASSET_KEYS } from '@/lib/assets'
+import { ASSET_GROUPS, PLAYER_ASSET_KEYS, assetLabel } from '@/lib/assets'
 import { POSITION_ICONS, POSITION_LABELS, TIER_NAMES, tierHasDivision, tierLabel } from '@/lib/labels'
 
 const NAME_MAX = 20
@@ -294,7 +294,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
                         aria-checked={values.assetKey === key}
                         className={values.assetKey === key ? 'cform__skin cform__skin--on' : 'cform__skin'}
                         onClick={() => set('assetKey', key)}
-                        title={key}
+                        title={assetLabel(key)}
                       >
                         <PixelAvatar assetKey={key} size={48} />
                       </button>
@@ -303,7 +303,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
                 </div>
               ))}
               <p className="cform__hint">
-                Tiny Swords 기사단(5종 × 5색)과 고블린(2종 × 4색)입니다. 팀 배정 화면에서는 얼굴만, 계급도에서는 전신이 보입니다.
+                Tiny Swords 기사단·고블린과 특별 제작된 특수 인물입니다. 팀 배정 화면에서는 얼굴을 중심으로, 계급도에서는 전신이 보입니다.
               </p>
             </div>
           )}

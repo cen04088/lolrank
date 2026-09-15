@@ -16,6 +16,8 @@ interface PitchProps {
 export function Pitch({ bench, participantCount, totalCharacters, dragging, onOpenPicker }: PitchProps) {
   const dropData: DropData = { kind: 'bench' }
   const { setNodeRef, isOver } = useDroppable({ id: BENCH_DROP_ID, data: dropData })
+  const participantLimit = Math.min(totalCharacters, 10)
+  const canSelectMore = participantCount < participantLimit
 
   const classes = ['pitch', dragging && 'pitch--droppable', isOver && 'pitch--over'].filter(Boolean).join(' ')
 
@@ -42,8 +44,15 @@ export function Pitch({ bench, participantCount, totalCharacters, dragging, onOp
           </div>
         ) : bench.length === 0 ? (
           <div className="pitch__empty">
-            <p className="font-pixel text-gold">ALL SET!</p>
-            <small>모든 참가자가 배치되었습니다.{dragging ? ' 여기에 놓으면 대기석으로 돌아옵니다.' : ''}</small>
+            <p className="font-pixel-ko text-gold">{participantCount === 10 ? '배치 완료' : `${participantCount}명 배치 완료`}</p>
+            <small>
+              선택한 참가자가 모두 팀에 배치되었습니다.{dragging ? ' 여기에 놓으면 대기석으로 돌아옵니다.' : ''}
+            </small>
+            {canSelectMore && (
+              <PixelButton variant="gold" size="sm" onClick={onOpenPicker}>
+                참가자 더 선택
+              </PixelButton>
+            )}
           </div>
         ) : (
           <ul className="pitch__list">

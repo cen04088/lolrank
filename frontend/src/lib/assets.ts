@@ -8,9 +8,10 @@
  */
 const TINY_BASE = '/assets/tiny'
 const NINJA_BASE = '/assets/ninja'
+const SPECIAL_BASE = '/assets/special'
 
 export interface AssetGroup {
-  id: 'knights' | 'goblins'
+  id: 'knights' | 'goblins' | 'special'
   label: string
   keys: readonly string[]
 }
@@ -20,6 +21,11 @@ const KNIGHT_COLORS = ['blue', 'red', 'yellow', 'purple', 'black'] as const
 const GOBLIN_UNITS = ['torch', 'tnt'] as const
 const GOBLIN_COLORS = ['blue', 'red', 'yellow', 'purple'] as const
 
+const SPECIAL_ASSETS = {
+  special_fire_guardian: { file: 'fire_guardian.png', label: '안영동' },
+  special_arcane_king: { file: 'arcane_king.png', label: '정재원' },
+} as const
+
 export const KNIGHT_KEYS: readonly string[] = KNIGHT_UNITS.flatMap((unit) =>
   KNIGHT_COLORS.map((color) => `ts_${unit}_${color}`),
 )
@@ -28,13 +34,16 @@ export const GOBLIN_KEYS: readonly string[] = GOBLIN_UNITS.flatMap((unit) =>
   GOBLIN_COLORS.map((color) => `ts_${unit}_${color}`),
 )
 
+export const SPECIAL_KEYS: readonly string[] = Object.keys(SPECIAL_ASSETS)
+
 export const ASSET_GROUPS: readonly AssetGroup[] = [
   { id: 'knights', label: '기사단', keys: KNIGHT_KEYS },
   { id: 'goblins', label: '고블린', keys: GOBLIN_KEYS },
+  { id: 'special', label: '특수 인물', keys: SPECIAL_KEYS },
 ]
 
 /** 캐릭터 선택 화면에 나오는 순서. DB 에는 이 key 가 assetKey 로 저장된다. */
-export const PLAYER_ASSET_KEYS: readonly string[] = [...KNIGHT_KEYS, ...GOBLIN_KEYS]
+export const PLAYER_ASSET_KEYS: readonly string[] = [...KNIGHT_KEYS, ...GOBLIN_KEYS, ...SPECIAL_KEYS]
 
 const KNOWN_KEYS = new Set(PLAYER_ASSET_KEYS)
 
@@ -79,8 +88,8 @@ export function resolveAssetKey(assetKey: string): string {
 /** 한 프레임의 원본 픽셀 크기 */
 export const SPRITE_FRAME = 96
 
-export function spriteFrameSize(_assetKey: string): number {
-  return SPRITE_FRAME
+export function spriteFrameSize(assetKey: string): number {
+  return isSpecialAsset(assetKey) ? 1254 : SPRITE_FRAME
 }
 
 /** 고해상도 스프라이트는 축소 시 부드럽게 그린다. */
@@ -88,13 +97,27 @@ export function isHiResSprite(_assetKey: string): boolean {
   return true
 }
 
+export function isSpecialAsset(assetKey: string): assetKey is keyof typeof SPECIAL_ASSETS {
+  return assetKey in SPECIAL_ASSETS
+}
+
+export function assetLabel(assetKey: string): string {
+  return isSpecialAsset(assetKey) ? SPECIAL_ASSETS[assetKey].label : assetKey
+}
+
+function specialAssetUrl(assetKey: keyof typeof SPECIAL_ASSETS): string {
+  return `${SPECIAL_BASE}/${SPECIAL_ASSETS[assetKey].file}`
+}
+
 /** 정면 대기 스프라이트 */
 export function assetUrl(assetKey: string): string {
+  if (isSpecialAsset(assetKey)) return specialAssetUrl(assetKey)
   return `${TINY_BASE}/chars/${encodeURIComponent(resolveAssetKey(assetKey))}.png`
 }
 
 /** 초상화 */
 export function faceUrl(assetKey: string): string {
+  if (isSpecialAsset(assetKey)) return specialAssetUrl(assetKey)
   return `${TINY_BASE}/chars/${encodeURIComponent(resolveAssetKey(assetKey))}_face.png`
 }
 

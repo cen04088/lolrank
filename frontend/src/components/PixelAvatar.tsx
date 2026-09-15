@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from 'react'
-import { assetUrl, faceUrl, isHiResSprite, spriteFrameSize } from '@/lib/assets'
+import { assetUrl, faceUrl, isHiResSprite, isSpecialAsset, spriteFrameSize } from '@/lib/assets'
 
 interface PixelAvatarProps {
   assetKey: string
@@ -21,7 +21,15 @@ export function PixelAvatar({ assetKey, size = 48, alt = '', className = '', var
   // 고해상도(Tiny Swords) 스프라이트를 원본보다 작게 그릴 때는 부드럽게 축소한다.
   const native = variant === 'face' ? spriteFrameSize(assetKey) / 2 : spriteFrameSize(assetKey)
   const smooth = isHiResSprite(assetKey) && size < native
-  const classes = ['pxavatar', `pxavatar--${variant}`, smooth && 'pxavatar--smooth', className].filter(Boolean).join(' ')
+  const classes = [
+    'pxavatar',
+    `pxavatar--${variant}`,
+    smooth && 'pxavatar--smooth',
+    isSpecialAsset(assetKey) && 'pxavatar--special',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <span className={classes} style={style}>

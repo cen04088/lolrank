@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
-import { isHiResSprite, spriteFrameSize, walkSheetUrl } from '@/lib/assets'
+import { PixelAvatar } from '@/components/PixelAvatar'
+import { isHiResSprite, isSpecialAsset, spriteFrameSize, walkSheetUrl } from '@/lib/assets'
 import './walking-sprite.css'
 
 type Direction = 'down' | 'up' | 'left' | 'right'
@@ -19,6 +20,10 @@ interface WalkingSpriteProps {
 
 /** 걷기 스프라이트시트(4방향 × 4프레임)를 CSS steps 애니메이션으로 재생한다. */
 export function WalkingSprite({ assetKey, direction = 'right', size = 48, paused = false, className = '' }: WalkingSpriteProps) {
+  if (isSpecialAsset(assetKey)) {
+    return <PixelAvatar assetKey={assetKey} size={size} className={`wsprite-special ${className}`.trim()} />
+  }
+
   const style = {
     '--ws-size': `${size}px`,
     '--ws-sheet-w': `${size * FRAMES}px`,

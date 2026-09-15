@@ -241,7 +241,7 @@
   left: 50%;
   transform: translateX(-50%);
   padding: 4px 8px;
-  font-size: 8px;
+  font-size: 10px;
   color: var(--ink);
   background: var(--gold);
   border: 2px solid var(--ink);
@@ -318,7 +318,7 @@
 }
 
 .chip__tier {
-  font-size: 8px;
+  font-size: 10px;
   color: var(--tier-color);
 }
 
@@ -332,7 +332,7 @@
   top: -3px;
   right: -3px;
   padding: 2px 5px;
-  font-size: 6px;
+  font-size: 8px;
   color: var(--ink);
   background: var(--muted);
   border: 2px solid var(--ink);
@@ -360,7 +360,7 @@
 }
 
 .chip--row .chip__tier {
-  font-size: 7px;
+  font-size: 9px;
 }
 
 .chip__badge {
@@ -556,7 +556,7 @@
 }
 
 .power__label {
-  font-size: 9px;
+  font-size: 10px;
   color: var(--team);
 }
 
@@ -656,7 +656,7 @@
   position: absolute;
   top: -8px;
   right: 0;
-  font-size: 7px;
+  font-size: 9px;
   color: var(--muted);
   animation: px-blink 700ms steps(1) infinite;
 }

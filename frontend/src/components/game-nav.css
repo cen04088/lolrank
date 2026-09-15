@@ -26,7 +26,7 @@
 .gnav__brand-crown { font-family: Georgia, serif; font-size: 31px; line-height: 1; text-shadow: 2px 3px 0 #5f4214; }
 .gnav__brand span:last-child { display: flex; flex-direction: column; gap: 3px; }
 .gnav__brand strong { font-family: var(--font-pixel); font-size: 11px; letter-spacing: .04em; }
-.gnav__brand small { color: var(--muted); font-family: var(--font-pixel); font-size: 6px; letter-spacing: .13em; }
+.gnav__brand small { color: var(--muted); font-family: var(--font-pixel); font-size: 8px; letter-spacing: .1em; }
 .gnav__links { display: flex; align-items: stretch; gap: 3px; }
 
 .gnav__item {
