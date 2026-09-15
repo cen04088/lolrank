@@ -1,0 +1,24 @@
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# node
+node_modules/
+frontend/dist/
+
+# java
+backend/.gradle/
+backend/build/
+backend/out/
+
+# ide / os
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+
+# claude local settings
+.claude/settings.local.json

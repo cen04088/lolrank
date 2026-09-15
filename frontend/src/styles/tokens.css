@@ -1,0 +1,57 @@
+/* LOL RANK Design Tokens — 16-bit pixel sports club */
+:root {
+  /* surfaces */
+  --bg: #0d1526;
+  --panel: #172238;
+  --panel-2: #202e48;
+  --panel-3: #2a3a5a;
+
+  /* team colors */
+  --blue: #4298ff;
+  --blue-hi: #77b9ff;
+  --blue-dim: #1f4f8f;
+  --red: #ff5868;
+  --red-hi: #ff8792;
+  --red-dim: #8f2a35;
+
+  /* accents */
+  --gold: #f5c451;
+  --gold-hi: #ffe08a;
+  --grass: #3e7548;
+  --grass-dark: #285536;
+  --wood: #76502f;
+  --wood-dark: #4a3119;
+
+  /* text */
+  --text: #f6ebd3;
+  --muted: #a9b2c3;
+  --dim: #6c7690;
+
+  /* pixel chrome */
+  --ink: #060a14;
+  --shadow: rgba(0, 0, 0, 0.55);
+  --border-w: 3px;
+  --radius: 2px;
+  --px-shadow: 4px 4px 0 var(--shadow);
+  --px-shadow-sm: 2px 2px 0 var(--shadow);
+  --px-inset: inset 0 0 0 2px rgba(255, 255, 255, 0.06);
+
+  /* status */
+  --ok: #6fd18a;
+  --warn: #f5a451;
+  --bad: #ff5868;
+
+  /* typography */
+  --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+  --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Segoe UI', sans-serif;
+
+  /* motion */
+  --dur-fast: 120ms;
+  --dur: 180ms;
+  --dur-slow: 250ms;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* layout */
+  --header-h: 64px;
+  --content-max: 1440px;
+}

@@ -1,0 +1,12 @@
+package com.lolrank.changelog;
+
+public enum ChangeLogAction {
+    CHARACTER_CREATED,
+    CHARACTER_UPDATED,
+    CHARACTER_DELETED,
+    PARTICIPANTS_UPDATED,
+    TEAM_BOARD_UPDATED,
+    TEAM_BOARD_RESET,
+    TEAM_AUTO_FILLED,
+    HIERARCHY_UPDATED
+}

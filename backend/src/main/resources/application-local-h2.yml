@@ -1,0 +1,13 @@
+# Docker/PostgreSQL 없이 빠르게 띄워볼 때 사용하는 개발 전용 프로필 (인메모리 H2, 재시작 시 데이터 소멸)
+#   ./gradlew bootRun --args='--spring.profiles.active=local-h2'
+spring:
+  datasource:
+    url: jdbc:h2:mem:lolrank;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false

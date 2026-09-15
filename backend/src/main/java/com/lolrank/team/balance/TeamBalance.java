@@ -1,0 +1,44 @@
+package com.lolrank.team.balance;
+
+import com.lolrank.character.PlayerCharacter;
+import java.util.List;
+
+/** 현재 보드 기준 두 팀의 실력 합계와 등급. */
+public record TeamBalance(
+        int blueScore,
+        int redScore,
+        int difference,
+        BalanceGrade grade,
+        int blueCount,
+        int redCount,
+        String blueAverageTier,
+        String redAverageTier
+) {
+
+    public static TeamBalance of(List<PlayerCharacter> blue, List<PlayerCharacter> red) {
+        int blueScore = sum(blue);
+        int redScore = sum(red);
+        int difference = Math.abs(blueScore - redScore);
+        return new TeamBalance(
+                blueScore,
+                redScore,
+                difference,
+                BalanceGrade.of(difference),
+                blue.size(),
+                red.size(),
+                averageLabel(blueScore, blue.size()),
+                averageLabel(redScore, red.size())
+        );
+    }
+
+    private static int sum(List<PlayerCharacter> characters) {
+        return characters.stream().mapToInt(SkillScoreCalculator::score).sum();
+    }
+
+    private static String averageLabel(int total, int count) {
+        if (count == 0) {
+            return null;
+        }
+        return SkillScoreCalculator.nearestTierLabel((double) total / count);
+    }
+}
