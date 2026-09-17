@@ -386,7 +386,7 @@
   object-position: center bottom;
 }
 
-/* 특수 인물 일러스트는 배경까지 포함된 정사각형이므로 무대 전체를 덮는다 */
+/* 투명 배경 특수 인물은 무대 안에 전신과 이펙트가 보이도록 맞춘다. */
 .cform__stage--special .cform__hero {
   border-radius: 0;
   box-shadow: none;
@@ -395,8 +395,8 @@
 
 .cform__stage--special .cform__hero img {
   padding: 0;
-  object-fit: cover;
-  object-position: center 30%;
+  object-fit: contain;
+  object-position: center bottom;
 }
 
 
