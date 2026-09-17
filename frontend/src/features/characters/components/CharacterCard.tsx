@@ -23,7 +23,7 @@ export function CharacterCard({ character, onEdit, onDelete }: CharacterCardProp
     <article className={special ? 'ccard ccard--special' : 'ccard'} style={style}>
       <div className="ccard__stage">
         <PixelAvatar assetKey={character.assetKey} size={special ? 132 : 96} alt={character.name} />
-        <span className="ccard__rank font-pixel">{RANK_LABELS[character.hierarchyRank]}</span>
+        <span className="ccard__rank font-pixel-ko">{RANK_LABELS[character.hierarchyRank]}</span>
       </div>
       <div className="ccard__body">
         <div className="ccard__title">

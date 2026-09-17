@@ -34,7 +34,7 @@ export function RankRow({ rank, characters, dragging, selectedId, onSelect }: Ra
       <div className="floor__plaque">
         {rank === 'LEGEND' && <PixelIcon name="gold_cup" size={22} className="floor__crown" />}
         {rank === 'S' && <PixelIcon name="silver_cup" size={18} className="floor__crown" />}
-        <span className="floor__plaque-text font-pixel">{RANK_LABELS[rank]}</span>
+        <span className="floor__plaque-text font-pixel-ko">{RANK_LABELS[rank]}</span>
       </div>
       <SortableContext items={characters.map((c) => cardSortId(c.id))} strategy={rectSortingStrategy}>
         <div ref={setNodeRef} className="floor__cards">
