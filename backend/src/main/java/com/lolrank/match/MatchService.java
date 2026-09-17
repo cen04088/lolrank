@@ -13,7 +13,7 @@ import com.lolrank.room.RoomService;
 import com.lolrank.team.Team;
 import com.lolrank.team.TeamSlot;
 import com.lolrank.team.TeamSlotRepository;
-import com.lolrank.team.balance.StrengthCalculator;
+import com.lolrank.team.StrengthService;
 import com.lolrank.team.balance.TeamBalance;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
@@ -33,15 +33,17 @@ public class MatchService {
     private final MatchRecordRepository matchRepository;
     private final ChangeLogService changeLogService;
     private final RatingService ratingService;
+    private final StrengthService strengthService;
 
     public MatchService(RoomService roomService, TeamSlotRepository slotRepository,
                         MatchRecordRepository matchRepository, ChangeLogService changeLogService,
-                        RatingService ratingService) {
+                        RatingService ratingService, StrengthService strengthService) {
         this.roomService = roomService;
         this.slotRepository = slotRepository;
         this.matchRepository = matchRepository;
         this.changeLogService = changeLogService;
         this.ratingService = ratingService;
+        this.strengthService = strengthService;
     }
 
     public MatchResponse record(String inviteCode, RecordMatchRequest request, String nickname) {
@@ -57,12 +59,13 @@ public class MatchService {
         List<PlayerCharacter> red = slots.stream().filter(s -> s.getTeam() == Team.RED).map(TeamSlot::getCharacter).toList();
         // 화면과 같은 실효 전투력으로 당시 밸런스를 남긴다. 슬롯 스냅샷에는 재생용 기본 전투력을 넣는다.
         TeamBalance balance = TeamBalance.of(blue, red, ratingService.strengthFunction(room.getId()));
+        java.util.function.ToIntFunction<PlayerCharacter> baseStrength = strengthService.baseStrengthFunction(room.getId());
 
         MatchRecord record = new MatchRecord(room, request.winner(), blankToNull(request.note()), nickname,
                 balance.blueScore(), balance.redScore(), balance.difference(), balance.grade());
         for (TeamSlot slot : slots) {
             record.addSlot(new MatchRecordSlot(record, slot.getTeam(), slot.getPosition(), slot.getCharacter(),
-                    StrengthCalculator.strength(slot.getCharacter())));
+                    baseStrength.applyAsInt(slot.getCharacter())));
         }
         MatchRecord saved = matchRepository.save(record);
 

@@ -1,7 +1,7 @@
 import type { Balance, HierarchyRank } from '@/api/types'
 import { Stars } from '@/components/Stars'
 import { PixelIcon } from '@/components/PixelIcon'
-import { GRADE_EMOTES, GRADE_STARS } from '@/lib/labels'
+import { GRADE_EMOTES, GRADE_STARS, RANK_SHORT_LABELS } from '@/lib/labels'
 
 interface PowerBarProps {
   balance: Balance
@@ -69,7 +69,7 @@ function PowerSide({ team, power, rank, tier, count }: PowerSideProps) {
       <span className="power__label font-pixel">TEAM POWER</span>
       <span className="power__value font-pixel">{count === 0 ? '--' : power}</span>
       <span className="power__tier">
-        {rank && tier ? `평균 ${rank}등급 · ${tier}` : '배치 없음'} · {count}/5
+        {rank && tier ? `평균 ${RANK_SHORT_LABELS[rank]}등급 · ${tier}` : '배치 없음'} · {count}/5
       </span>
     </div>
   )

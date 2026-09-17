@@ -96,7 +96,7 @@ export function LobbyPage() {
           </Link>
           <div className="sign sign--right">
             <span>PLAY · RANK UP</span>
-            <span>BE A LEGEND</span>
+            <span>REACH THE TOP</span>
           </div>
         </div>
 

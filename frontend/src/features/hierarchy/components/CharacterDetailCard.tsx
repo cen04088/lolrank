@@ -8,13 +8,15 @@ import { RANK_LABELS } from '@/lib/labels'
 
 interface CharacterDetailCardProps {
   character?: Character
+  /** 같은 계급 안 순번·인원·등급 점수 */
+  rankPlacement?: { index: number; count: number; score: number }
   onChangeRank: (rank: HierarchyRank) => void
   onEdit: () => void
   onDelete: () => void
 }
 
 /** 계급도 우측 상세 카드 (초안의 민준 / Gold IV / 소개 / 버튼 영역). */
-export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete }: CharacterDetailCardProps) {
+export function CharacterDetailCard({ character, rankPlacement, onChangeRank, onEdit, onDelete }: CharacterDetailCardProps) {
   if (!character) {
     return (
       <section className="detail detail--empty">
@@ -43,7 +45,14 @@ export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete 
       <dl className="detail__stats">
         <div>
           <dt>계급</dt>
-          <dd className="font-pixel text-gold">{RANK_LABELS[character.hierarchyRank]}</dd>
+          <dd className="font-pixel-ko text-gold">
+            {RANK_LABELS[character.hierarchyRank]}
+            {rankPlacement && (
+              <small className="detail__placement">
+                {rankPlacement.index + 1}/{rankPlacement.count}위 · 등급 점수 {rankPlacement.score}
+              </small>
+            )}
+          </dd>
         </div>
         {character.champions && (
           <div className="detail__wide">

@@ -5,6 +5,7 @@ import com.lolrank.character.PlayerCharacterRepository;
 import com.lolrank.match.dto.RatingResponse;
 import com.lolrank.room.Room;
 import com.lolrank.room.RoomService;
+import com.lolrank.team.StrengthService;
 import com.lolrank.team.balance.RatingCalculator;
 import com.lolrank.team.balance.RatingCalculator.Rating;
 import com.lolrank.team.balance.StrengthCalculator;
@@ -23,14 +24,17 @@ public class RatingService {
     private final MatchRecordRepository matchRepository;
     private final PlayerCharacterRepository characterRepository;
     private final RoomService roomService;
+    private final StrengthService strengthService;
     /** 꺼져 있으면 보정치는 항상 0 이고 실효 전투력 = 기본 전투력. (APP_RATING_ENABLED) */
     private final boolean enabled;
 
     public RatingService(MatchRecordRepository matchRepository, PlayerCharacterRepository characterRepository,
-                         RoomService roomService, @Value("${app.balance.rating-enabled:false}") boolean enabled) {
+                         RoomService roomService, StrengthService strengthService,
+                         @Value("${app.balance.rating-enabled:false}") boolean enabled) {
         this.matchRepository = matchRepository;
         this.characterRepository = characterRepository;
         this.roomService = roomService;
+        this.strengthService = strengthService;
         this.enabled = enabled;
     }
 
@@ -53,22 +57,25 @@ public class RatingService {
         return RatingCalculator.replay(inputs);
     }
 
-    /** 밸런싱용: 기본 전투력(계급 80% + 티어 20%) + 기록 보정치. */
+    /** 밸런싱용: 기본 전투력(계급·계급 안 순서 80% + 티어 20%) + (켜져 있으면) 기록 보정치. */
     @Transactional(readOnly = true)
     public ToIntFunction<PlayerCharacter> strengthFunction(Long roomId) {
+        ToIntFunction<PlayerCharacter> base = strengthService.baseStrengthFunction(roomId);
         if (!enabled) {
-            return StrengthCalculator::strength;
+            return base;
         }
         Map<Long, Rating> ratings = ratings(roomId);
-        return c -> StrengthCalculator.strength(c) + ratings.getOrDefault(c.getId(), Rating.NONE).delta();
+        return c -> base.applyAsInt(c) + ratings.getOrDefault(c.getId(), Rating.NONE).delta();
     }
 
     @Transactional(readOnly = true)
     public List<RatingResponse> list(String inviteCode) {
         Room room = roomService.getByInviteCode(inviteCode);
         Map<Long, Rating> ratings = ratings(room.getId());
+        Map<Long, Integer> base = strengthService.baseStrengths(room.getId());
         return characterRepository.findAllByRoomIdOrderByIdAsc(room.getId()).stream()
-                .map(c -> RatingResponse.from(c, ratings.getOrDefault(c.getId(), Rating.NONE)))
+                .map(c -> RatingResponse.from(c, ratings.getOrDefault(c.getId(), Rating.NONE),
+                        base.getOrDefault(c.getId(), StrengthCalculator.strength(c))))
                 .sorted(Comparator.comparingInt(RatingResponse::delta).reversed()
                         .thenComparing(RatingResponse::characterId))
                 .toList();

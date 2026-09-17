@@ -25,7 +25,7 @@ describe('PowerBar', () => {
     expect(screen.getAllByText('57')).toHaveLength(2)
     expect(screen.getByText('완벽에 가까운 밸런스!')).toBeInTheDocument()
     expect(screen.getByLabelText('5 / 5')).toBeInTheDocument()
-    expect(screen.getAllByText(/평균 A등급 · Gold II/)).toHaveLength(2)
+    expect(screen.getAllByText(/평균 A등급 · Gold II/)).toHaveLength(2) // RANK_SHORT_LABELS.A
   })
 
   it('보드가 비어 있으면 안내 문구만 보여준다', () => {

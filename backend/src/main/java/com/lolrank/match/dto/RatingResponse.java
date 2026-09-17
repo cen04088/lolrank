@@ -25,8 +25,7 @@ public record RatingResponse(
         Integer winRate
 ) {
 
-    public static RatingResponse from(PlayerCharacter c, Rating rating) {
-        int base = StrengthCalculator.strength(c);
+    public static RatingResponse from(PlayerCharacter c, Rating rating, int base) {
         int effective = base + rating.delta();
         Integer winRate = rating.played() == 0 ? null : (int) Math.round(100.0 * rating.wins() / rating.played());
         return new RatingResponse(c.getId(), c.getName(), rating.deltaPoints(),

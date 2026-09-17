@@ -59,7 +59,8 @@
   top: 8px;
   left: 8px;
   padding: 3px 6px;
-  font-size: 9px;
+  font-family: var(--font-pixel-ko);
+  font-size: 11px;
   color: var(--ink);
   background: var(--gold);
   border: 1px solid rgba(53,43,32,.82);

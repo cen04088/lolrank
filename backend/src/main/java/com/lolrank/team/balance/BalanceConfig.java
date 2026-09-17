@@ -20,7 +20,13 @@ public final class BalanceConfig {
     /** 롤 티어 점수 + 포지션 적합도 비중 %. */
     public static final int SKILL_WEIGHT = 20;
 
-    /** 계급도 등급 점수 (0~100). */
+    /**
+     * 같은 계급 안에서 순서에 따라 나뉘는 점수 폭. 계급 맨 앞 = RANK_SCORES 값, 맨 뒤 = 그 값 − RANK_BAND_POINTS.
+     * 계급 사이 간격(20)보다 작아 아래 계급 1위가 위 계급 꼴찌를 넘지 못한다.
+     */
+    public static final int RANK_BAND_POINTS = 10;
+
+    /** 계급도 등급 점수 (0~100). 계급 맨 앞 기준값. */
     public static final Map<HierarchyRank, Integer> RANK_SCORES = Map.of(
             HierarchyRank.LEGEND, 100,
             HierarchyRank.S, 80,

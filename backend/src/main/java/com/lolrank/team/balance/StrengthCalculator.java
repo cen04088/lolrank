@@ -16,12 +16,33 @@ public final class StrengthCalculator {
     private StrengthCalculator() {
     }
 
-    /** 등급 점수 (0~100). */
+    /** 등급 점수 (0~100). 계급 맨 앞(순서 정보가 없을 때) 기준. */
     public static int rankScore(HierarchyRank rank) {
         return BalanceConfig.RANK_SCORES.get(rank);
     }
 
-    /** 전투력 (×100 단위). */
+    /**
+     * 같은 계급 안의 순서까지 반영한 등급 점수.
+     *
+     * @param indexInRank 계급 안에서 0부터 시작하는 순번 (0 = 맨 앞)
+     * @param countInRank 그 계급의 인원. 1명이면 맨 앞 점수 그대로
+     */
+    public static int rankScore(HierarchyRank rank, int indexInRank, int countInRank) {
+        int top = rankScore(rank);
+        if (countInRank <= 1 || indexInRank <= 0) {
+            return top;
+        }
+        int index = Math.min(indexInRank, countInRank - 1);
+        return top - (int) Math.round((double) BalanceConfig.RANK_BAND_POINTS * index / (countInRank - 1));
+    }
+
+    /** 전투력 (×100 단위), 계급 안 순서 반영. */
+    public static int strength(HierarchyRank rank, int indexInRank, int countInRank, Tier tier, Integer division) {
+        return BalanceConfig.HIERARCHY_WEIGHT * rankScore(rank, indexInRank, countInRank)
+                + BalanceConfig.SKILL_WEIGHT * SkillScoreCalculator.score(tier, division);
+    }
+
+    /** 전투력 (×100 단위). 순서 정보 없이 계급 맨 앞 기준. */
     public static int strength(HierarchyRank rank, Tier tier, Integer division) {
         return BalanceConfig.HIERARCHY_WEIGHT * rankScore(rank)
                 + BalanceConfig.SKILL_WEIGHT * SkillScoreCalculator.score(tier, division);

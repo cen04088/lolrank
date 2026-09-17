@@ -546,3 +546,24 @@
 .detail__stats .detail__wide {
   grid-column: 1 / -1;
 }
+
+/* 계급 안 순서·등급 점수 */
+.trophy__score {
+  margin-top: 2px;
+  font-size: 9px;
+  color: var(--gold-hi);
+  opacity: 0.9;
+}
+
+.detail__placement {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* 한글 계급명(국가권력급)이 들어가므로 한글 픽셀 폰트로 */
+.floor__plaque-text,
+.ccard__rank {
+  font-family: var(--font-pixel-ko);
+}

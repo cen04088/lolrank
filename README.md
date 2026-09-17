@@ -136,7 +136,7 @@ cd backend
 ### 밸런싱 규칙 (모두 `team/balance/BalanceConfig.java` 에서 조정)
 
 - **전투력 = 계급도 등급 80% + 롤 티어 20%** (`StrengthCalculator`, DB 에 저장하지 않고 런타임 계산)
-  - 등급 점수: LEGEND 100 / S 80 / A 60 / B 40 / C 20
+  - 등급 점수: 국가권력급(LEGEND) 100 / S 80 / A 60 / B 40 / C 20 — 계급 맨 앞 기준. **같은 계급 안에서는 순서(계급도에서 앞·왼쪽)가 앞일수록 높고 맨 뒤는 10점 낮다** (S 4명이면 80·77·73·70). 계급 사이 간격 20 > 폭 10 이라 계급도가 항상 우선
   - 티어 점수: IRON IV 10 … DIAMOND I 79, MASTER 85, GRANDMASTER 92, CHALLENGER 100
   - 예) LEGEND + Iron IV = 82, C + Challenger = 36 → 계급도가 티어보다 우선한다
 - **기록 보정(레이팅, 기본 꺼짐)**: `APP_RATING_ENABLED=true` 일 때만 동작. 승패가 기록된 경기를 시간순으로 재생해 선수마다 보정치를 만든다 (`RatingCalculator`). 경기마다 두 팀 실효 전투력 합계 차이로 예상 승률을 구하고(차이 40 = 약 91%), 결과와의 차이 × K(2점)만큼 이긴 팀 전원 +, 진 팀 전원 −. 보정치는 ±8점 안에서만 움직여 계급도가 항상 우선한다. 실효 전투력 = 기본 + 보정이며 자동 배정·TEAM POWER·해설 모두 실효 전투력을 쓴다. `GET /api/rooms/{code}/ratings`

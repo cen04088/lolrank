@@ -39,7 +39,16 @@ import {
 import { CharacterDetailCard } from './CharacterDetailCard'
 import { RankRow } from './RankRow'
 import { TrophyCard } from './TrophyCard'
+import { rankScore } from '@/lib/labels'
 import './hierarchy.css'
+
+/** 선택한 카드가 자기 계급 안에서 몇 번째인지 + 그에 따른 등급 점수 */
+function placementOf(buckets: Record<HierarchyRank, Character[]>, character: Character) {
+  const members = buckets[character.hierarchyRank] ?? []
+  const index = members.findIndex((c) => c.id === character.id)
+  if (index < 0) return undefined
+  return { index, count: members.length, score: rankScore(character.hierarchyRank, index, members.length) }
+}
 
 const collisionDetection: CollisionDetection = (args) => {
   const within = pointerWithin(args)
@@ -169,7 +178,7 @@ export function HierarchyBoard({ code }: HierarchyBoardProps) {
             </div>
           </div>
           <p className="hier__help">
-            카드를 끌어서 계급을 올리거나 내리세요. 클릭하면 오른쪽에 상세 정보가 나타납니다.
+            카드를 끌어서 계급을 올리거나 내리세요. 같은 계급 안에서는 앞(왼쪽)에 있을수록 등급 점수가 높습니다. 클릭하면 오른쪽에 상세 정보가 나타납니다.
             {update.isPending && <span className="hier__saving font-pixel"> SAVING</span>}
           </p>
         </header>
@@ -217,8 +226,8 @@ export function HierarchyBoard({ code }: HierarchyBoardProps) {
                 <div className="tower__banner tower__banner--right font-pixel" aria-hidden>
                   <span>PLAY</span>
                   <span>RANK UP</span>
-                  <span>BE A</span>
-                  <span>LEGEND</span>
+                  <span>REACH</span>
+                  <span>THE TOP</span>
                 </div>
               </div>
               <DragOverlay dropAnimation={null}>
@@ -231,12 +240,13 @@ export function HierarchyBoard({ code }: HierarchyBoardProps) {
             <aside className="hier__side">
               <CharacterDetailCard
                 character={selected}
+                rankPlacement={selected ? placementOf(buckets, selected) : undefined}
                 onChangeRank={(rank) => selected && changeRank(selected, rank)}
                 onEdit={() => selected && setEditing(selected)}
                 onDelete={() => selected && setDeleting(selected)}
               />
               <div className="npc" aria-hidden>
-                <div className="npc__bubble bubble bubble--right font-pixel-ko">언젠가, 너도 전설이 될 수 있어!</div>
+                <div className="npc__bubble bubble bubble--right font-pixel-ko">언젠가, 너도 국가권력급이 될 수 있어!</div>
                 <WalkingSprite assetKey={NPC_ELDER_KEY} direction="down" size={64} paused className="npc__sprite" />
               </div>
             </aside>

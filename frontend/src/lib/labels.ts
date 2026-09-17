@@ -65,7 +65,7 @@ export const POSITION_ICONS: Record<Position, string> = {
 }
 
 export const RANK_LABELS: Record<HierarchyRank, string> = {
-  LEGEND: 'LEGEND',
+  LEGEND: '국가권력급',
   S: 'S RANK',
   A: 'A RANK',
   B: 'B RANK',
@@ -114,4 +114,27 @@ export const GRADE_EMOTES: Record<BalanceGrade, string> = {
   GOOD: 'emote_question',
   WARNING: 'emote_sweat',
   UNBALANCED: 'emote_angry',
+}
+
+/** TEAM POWER 요약처럼 짧게 쓸 때 (예: '평균 S등급') */
+export const RANK_SHORT_LABELS: Record<HierarchyRank, string> = {
+  LEGEND: '국가권력',
+  S: 'S',
+  A: 'A',
+  B: 'B',
+  C: 'C',
+}
+
+/**
+ * 계급 등급 점수. 백엔드 BalanceConfig.RANK_SCORES / RANK_BAND_POINTS 와 같은 값이어야 한다.
+ * 계급 맨 앞은 기준값, 맨 뒤는 기준값 − 10. 계급 사이 간격(20)이 더 커서 계급도가 항상 우선한다.
+ */
+export const RANK_TOP_SCORES: Record<HierarchyRank, number> = { LEGEND: 100, S: 80, A: 60, B: 40, C: 20 }
+export const RANK_BAND_POINTS = 10
+
+export function rankScore(rank: HierarchyRank, indexInRank: number, countInRank: number): number {
+  const top = RANK_TOP_SCORES[rank]
+  if (countInRank <= 1 || indexInRank <= 0) return top
+  const index = Math.min(indexInRank, countInRank - 1)
+  return top - Math.round((RANK_BAND_POINTS * index) / (countInRank - 1))
 }

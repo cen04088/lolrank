@@ -25,7 +25,7 @@ public final class CommentaryPromptBuilder {
             너는 픽셀 아트 RPG 세계의 e스포츠 캐스터 '장로'다. 친구들끼리 하는 리그 오브 레전드 5:5 내전의 경기 전 해설을 한다.
             규칙:
             - 한국어, 3~4문장, 전체 300자 이내. 마크다운·이모지·목록 없이 문장만 쓴다.
-            - 두 팀을 모두 언급하고, 계급(LEGEND > S > A > B > C)과 칭호를 살려 캐릭터처럼 소개한다. 티어는 보조 정보.
+            - 두 팀을 모두 언급하고, 계급(국가권력급 > S > A > B > C)과 칭호를 살려 캐릭터처럼 소개한다. 티어는 보조 정보. 최고 계급의 이름은 반드시 '국가권력급'이라 부른다.
             - 주 챔피언이 있으면 라인 매치업이나 조합(예: 탱커 vs 암살자)을 한 번은 짚어준다.
             - 밸런스 수치가 비슷하면 명승부를 예고하고, 차이가 크면 약한 팀에게 응원과 변수를 짚어준다.
             - 유쾌하고 과장된 캐스터 톤이지만 특정 선수를 비하하지 않는다.
@@ -46,9 +46,9 @@ public final class CommentaryPromptBuilder {
         }
         sb.append("\n밸런스\n");
         sb.append("- BLUE 전투력 합계 ").append(balance.blueScore())
-                .append(" (평균 ").append(balance.blueAverageRank()).append("등급, ").append(balance.blueAverageTier()).append(")\n");
+                .append(" (평균 ").append(rankLabel(com.lolrank.character.HierarchyRank.valueOf(balance.blueAverageRank()))).append(" 등급, ").append(balance.blueAverageTier()).append(")\n");
         sb.append("- RED 전투력 합계 ").append(balance.redScore())
-                .append(" (평균 ").append(balance.redAverageRank()).append("등급, ").append(balance.redAverageTier()).append(")\n");
+                .append(" (평균 ").append(rankLabel(com.lolrank.character.HierarchyRank.valueOf(balance.redAverageRank()))).append(" 등급, ").append(balance.redAverageTier()).append(")\n");
         sb.append("- 차이 ").append(balance.difference()).append(", 판정 ").append(balance.grade().name()).append('\n');
         sb.append("[/DATA]\n\n위 데이터로 경기 전 해설을 해줘.");
         return sb.toString();
@@ -60,7 +60,7 @@ public final class CommentaryPromptBuilder {
         if (c.getTitle() != null && !c.getTitle().isBlank()) {
             sb.append(" (칭호: ").append(clean(c.getTitle())).append(')');
         }
-        sb.append(" | 계급 ").append(c.getHierarchyRank().name());
+        sb.append(" | 계급 ").append(rankLabel(c.getHierarchyRank()));
         sb.append(" | 티어 ").append(c.getTier().name());
         if (c.getDivision() != null) {
             sb.append(' ').append(c.getDivision());
@@ -76,6 +76,11 @@ public final class CommentaryPromptBuilder {
             sb.append(" | 소개 \"").append(clean(c.getDescription())).append('"');
         }
         return sb.toString();
+    }
+
+    /** 화면 표기와 같은 계급 이름 (LEGEND 는 '국가권력급') */
+    static String rankLabel(com.lolrank.character.HierarchyRank rank) {
+        return rank == com.lolrank.character.HierarchyRank.LEGEND ? "국가권력급" : rank.name();
     }
 
     /** 사용자 텍스트에서 줄바꿈과 대괄호를 없애 DATA 블록 구조를 깨지 못하게 한다. */
