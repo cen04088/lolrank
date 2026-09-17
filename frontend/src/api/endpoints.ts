@@ -7,10 +7,13 @@ import type {
   Commentary,
   CreateCharacterRequest,
   HierarchyEntry,
+  MatchRecord,
+  RecordMatchRequest,
   Room,
   SlotRequest,
   TeamBoard,
   UpdateCharacterRequest,
+  UpdateMatchRequest,
 } from './types'
 
 export const roomsApi = {
@@ -40,6 +43,16 @@ export const teamBoardApi = {
   /** 장로의 AI 캐스터 해설 (같은 배치는 서버 캐시) */
   commentary: (inviteCode: string) =>
     api<Commentary>(`/api/rooms/${inviteCode}/team-board/commentary`, { method: 'POST' }),
+}
+
+export const matchesApi = {
+  list: (inviteCode: string) => api<MatchRecord[]>(`/api/rooms/${inviteCode}/matches`),
+  /** 현재 보드를 스냅샷으로 기록 (10자리 모두 필요) */
+  record: (inviteCode: string, body: RecordMatchRequest) =>
+    api<MatchRecord>(`/api/rooms/${inviteCode}/matches`, { method: 'POST', body }),
+  update: (matchId: number, body: UpdateMatchRequest) =>
+    api<MatchRecord>(`/api/matches/${matchId}`, { method: 'PATCH', body }),
+  remove: (matchId: number) => api<void>(`/api/matches/${matchId}`, { method: 'DELETE' }),
 }
 
 export const aiApi = {

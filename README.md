@@ -5,6 +5,7 @@
 - 방에 들어오면 **마을 로비**(하늘·성·잔디)에서 "5 vs 5 팀 배정" / "롤 랭크 계급도" 건물로 입장
 - **주 챔피언**: 캐릭터마다 쉼표로 구분해 자유 입력. 카드·상세 카드에 표시되고 AI 해설의 소재로 쓰임
 - **장로의 AI 캐스터 해설**: 팀 배정이 10자리 모두 채워지면 버튼 한 번으로 DeepSeek 이 경기 전 해설(3~4문장)을 생성. 같은 배치는 서버 캐시에서 재사용. 백엔드에 `DEEPSEEK_API_KEY` 가 없으면 기능·버튼이 모두 숨겨짐
+- **조합(경기) 기록**: 10자리가 찬 보드를 그 순간의 스냅샷(이름·계급·티어·전투력)으로 저장하고 승패·메모를 남김. 캐릭터가 바뀌거나 지워져도 기록은 유지되며, 추후 밸런스 보정(레이팅)의 학습 데이터로 사용 예정
 - **칭호**: 캐릭터마다 선택 입력하는 20자 이하 별칭. 선수 명단·계급도·팀 보드에서 이름 옆에 리본으로 표시
 - **배경음악**: 화면(마을/던전/성)마다 다른 CC0 칩튠이 흐르고, 기본은 꺼짐이며 상단바 BGM 버튼으로 켜고 설정의 볼륨 슬라이더로 조절 (브라우저 정책상 첫 클릭 뒤 재생, 설정은 localStorage)
 - **팀 배정**: 도트 캐릭터를 직접 드래그해서 BLUE / RED 팀의 TOP · JUNGLE · MID · ADC · SUPPORT 슬롯에 배치. 사람이 배치한 자리(MANUAL)는 고정하고 **남은 자리만** 자동 채우기(AUTO)
@@ -120,6 +121,8 @@ cd backend
 | PATCH / DELETE | `/api/characters/{id}` | 캐릭터 수정 / 삭제 |
 | GET / PUT | `/api/rooms/{inviteCode}/team-board` | 팀 보드 조회 / 전체 교체 |
 | PUT | `/api/rooms/{inviteCode}/participants` | 오늘의 참가자 (최대 10명) |
+| GET / POST | `/api/rooms/{inviteCode}/matches` | 경기 기록 목록(최신순, `?limit=`) / 현재 보드 기록 (`winner`: BLUE·RED·null, `note`) |
+| PATCH / DELETE | `/api/matches/{matchId}` | 승패·메모 수정 (`winner` null 이면 미정) / 삭제 |
 | GET | `/api/ai/status` | AI 기능 사용 가능 여부 (`commentary`, `provider`, `model`) |
 | POST | `/api/rooms/{inviteCode}/team-board/commentary` | 현재 보드의 AI 캐스터 해설 (10자리 모두 필요, 같은 배치는 캐시) |
 | POST | `/api/rooms/{inviteCode}/team-board/auto-fill?mode=SKILL_BALANCE` | 남은 자리 자동 채우기 (`SKILL_BALANCE` / `POSITION_BALANCE` / `RANDOM`) |

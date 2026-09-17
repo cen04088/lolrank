@@ -4,6 +4,7 @@ import com.lolrank.changelog.ChangeLogRepository;
 import com.lolrank.character.PlayerCharacterRepository;
 import com.lolrank.common.exception.BadRequestException;
 import com.lolrank.common.exception.NotFoundException;
+import com.lolrank.match.MatchRecordRepository;
 import com.lolrank.team.TeamParticipantRepository;
 import com.lolrank.team.TeamSlotRepository;
 import com.lolrank.room.dto.RoomSummaryResponse;
@@ -24,6 +25,7 @@ public class RoomService {
     private final TeamSlotRepository slotRepository;
     private final TeamParticipantRepository participantRepository;
     private final ChangeLogRepository changeLogRepository;
+    private final MatchRecordRepository matchRecordRepository;
     private final String defaultRoomCode;
     private final String defaultRoomName;
 
@@ -33,6 +35,7 @@ public class RoomService {
                        TeamSlotRepository slotRepository,
                        TeamParticipantRepository participantRepository,
                        ChangeLogRepository changeLogRepository,
+                       MatchRecordRepository matchRecordRepository,
                        @Value("${app.default-room.code}") String defaultRoomCode,
                        @Value("${app.default-room.name}") String defaultRoomName) {
         this.roomRepository = roomRepository;
@@ -41,6 +44,7 @@ public class RoomService {
         this.slotRepository = slotRepository;
         this.participantRepository = participantRepository;
         this.changeLogRepository = changeLogRepository;
+        this.matchRecordRepository = matchRecordRepository;
         this.defaultRoomCode = defaultRoomCode.strip().toUpperCase();
         this.defaultRoomName = defaultRoomName;
     }
@@ -79,6 +83,8 @@ public class RoomService {
         }
         Long roomId = room.getId();
         changeLogRepository.deleteAllByRoomId(roomId);
+        matchRecordRepository.deleteAllSlotsByRoomId(roomId);
+        matchRecordRepository.deleteAllByRoomId(roomId);
         slotRepository.deleteAllByRoomId(roomId);
         participantRepository.deleteAllByRoomId(roomId);
         characterRepository.deleteAllByRoomId(roomId);

@@ -167,3 +167,44 @@ export interface Commentary {
   model: string
   generatedAt: string
 }
+
+/** 경기(조합) 기록 — 기록 당시 스냅샷 */
+export interface MatchSlot {
+  team: Team
+  position: Position
+  characterId: number | null
+  characterName: string
+  title: string | null
+  assetKey: string
+  hierarchyRank: HierarchyRank
+  tier: Tier
+  division: number | null
+  tierLabel: string
+  /** 기록 당시 전투력 (0~100) */
+  strength: number
+}
+
+export interface MatchRecord {
+  id: number
+  playedAt: string
+  /** 승리 팀, 아직 모르면 null */
+  winner: Team | null
+  note: string | null
+  recordedBy: string
+  blueScore: number
+  redScore: number
+  difference: number
+  grade: BalanceGrade
+  slots: MatchSlot[]
+}
+
+export interface RecordMatchRequest {
+  winner: Team | null
+  note: string | null
+}
+
+export interface UpdateMatchRequest {
+  /** null 이면 '미정' 으로 되돌린다 */
+  winner: Team | null
+  note?: string
+}

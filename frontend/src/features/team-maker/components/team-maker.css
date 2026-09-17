@@ -899,3 +899,210 @@
     margin-left: 0;
   }
 }
+
+/* ================= 조합(경기) 기록 ================= */
+.mlog {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(100%, 860px);
+  margin: 0 auto;
+  padding: 12px 14px 14px;
+  background: linear-gradient(180deg, rgba(31, 47, 75, 0.85), rgba(10, 17, 32, 0.95));
+  border: 2px solid #0a1220;
+  box-shadow: 0 6px 0 rgba(2, 7, 18, 0.5), inset 0 0 0 1px rgba(183, 205, 236, 0.16);
+}
+
+.mlog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mlog__label {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--blue-hi);
+}
+
+.mlog__title {
+  margin: 2px 0 0;
+  font-size: 15px;
+  color: #fff;
+}
+
+.mlog__count {
+  margin-left: 6px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.mlog__empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.mlog__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mlog__more {
+  align-self: center;
+  padding: 6px 12px;
+  background: none;
+  border: 1px dashed rgba(183, 205, 236, 0.35);
+  color: var(--muted);
+  font-family: var(--font-pixel-ko);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.mlog__more:hover { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+
+.mrow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(5, 10, 20, 0.45);
+  border: 1px solid rgba(183, 205, 236, 0.14);
+  border-left: 4px solid rgba(183, 205, 236, 0.25);
+}
+
+.mrow--blue { border-left-color: var(--blue-hi); }
+.mrow--red { border-left-color: var(--red-hi, #ff7b7b); }
+
+.mrow__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.mrow__score { color: var(--gold-hi); }
+
+.mrow__note {
+  font-family: var(--font-pixel-ko);
+  font-size: 12px;
+  color: var(--paper, #eee);
+}
+
+.mrow__teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.mrow__team {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.mrow__team--red { text-align: right; align-items: flex-end; }
+
+.mrow__tag {
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.mrow__team--blue .mrow__tag { color: var(--blue-hi); }
+.mrow__team--red .mrow__tag { color: var(--red-hi, #ff7b7b); }
+
+.mrow__team--win .mrow__tag::before {
+  content: '👑 ';
+}
+
+.mrow__team--win .mrow__names { color: #fff; }
+
+.mrow__names {
+  font-family: var(--font-pixel-ko);
+  font-size: 13px;
+  line-height: 1.4;
+  color: #b8c6dc;
+  word-break: keep-all;
+}
+
+.mrow__vs {
+  align-self: center;
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.mrow__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mrow__pending {
+  font-family: var(--font-pixel-ko);
+  font-size: 12px;
+  color: var(--muted);
+  margin-right: 4px;
+}
+
+/* 기록 모달 */
+.mrec {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mrec__desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.mrec__max { font-weight: normal; color: var(--muted); }
+
+.mrec__winner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.mrec__choice {
+  padding: 10px 8px;
+  font-family: var(--font-pixel-ko);
+  font-size: 14px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(183, 205, 236, 0.25);
+  cursor: pointer;
+}
+
+.mrec__choice--on {
+  color: #fff;
+  border-color: var(--gold);
+  background: rgba(229, 185, 79, 0.15);
+}
+
+.mrec__choice--blue.mrec__choice--on { border-color: var(--blue-hi); background: rgba(66, 152, 255, 0.18); }
+.mrec__choice--red.mrec__choice--on { border-color: var(--red-hi, #ff7b7b); background: rgba(255, 88, 104, 0.18); }
+
+@media (max-width: 720px) {
+  .mrow__teams {
+    grid-template-columns: 1fr;
+  }
+
+  .mrow__vs { display: none; }
+  .mrow__team--red { text-align: left; align-items: flex-start; }
+}

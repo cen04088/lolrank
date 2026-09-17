@@ -37,6 +37,7 @@ import { ModeTabs } from './ModeTabs'
 import { ParticipantPicker } from './ParticipantPicker'
 import { Pitch } from './Pitch'
 import { CasterPanel } from './CasterPanel'
+import { MatchLog } from './MatchLog'
 import { PowerBar } from './PowerBar'
 import { TeamColumn } from './TeamColumn'
 import './team-maker.css'
@@ -224,6 +225,8 @@ export function TeamMaker({ code }: TeamMakerProps) {
               boardKey={slots.map((s) => `${s.team}:${s.position}:${s.characterId ?? ''}`).join('|')}
               boardFull={emptySlotCount(slots) === 0}
             />
+
+            <MatchLog code={code} boardFull={emptySlotCount(slots) === 0} />
 
             <div className="tmk__actions">
               <PixelButton

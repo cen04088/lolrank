@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { aiApi, changeLogsApi, charactersApi, roomsApi, teamBoardApi } from './endpoints'
+import { aiApi, changeLogsApi, charactersApi, matchesApi, roomsApi, teamBoardApi } from './endpoints'
 
 export const queryKeys = {
   room: (code: string) => ['room', code] as const,
@@ -7,6 +7,7 @@ export const queryKeys = {
   teamBoard: (code: string) => ['teamBoard', code] as const,
   changeLogs: (code: string) => ['changeLogs', code] as const,
   aiStatus: ['aiStatus'] as const,
+  matches: (code: string) => ['matches', code] as const,
 }
 
 export function useRoom(code: string) {
@@ -47,5 +48,13 @@ export function useAiStatus() {
     queryFn: aiApi.status,
     staleTime: 10 * 60_000,
     retry: 0,
+  })
+}
+
+export function useMatches(code: string) {
+  return useQuery({
+    queryKey: queryKeys.matches(code),
+    queryFn: () => matchesApi.list(code),
+    enabled: Boolean(code),
   })
 }
