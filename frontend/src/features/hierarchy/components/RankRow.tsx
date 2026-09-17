@@ -44,13 +44,11 @@ export function RankRow({ rank, characters, dragging, selectedId, onSelect }: Ra
                   {dragging ? '▼' : '+'}
                 </div>
               ))
-            : characters.map((character, index) => (
+            : characters.map((character) => (
                 <TrophyCard
                   key={character.id}
                   character={character}
                   rank={rank}
-                  indexInRank={index}
-                  countInRank={characters.length}
                   selected={character.id === selectedId}
                   onSelect={() => onSelect(character.id)}
                 />
