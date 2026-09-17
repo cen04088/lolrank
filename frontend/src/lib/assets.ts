@@ -24,6 +24,7 @@ const GOBLIN_COLORS = ['blue', 'red', 'yellow', 'purple'] as const
 const SPECIAL_ASSETS = {
   special_fire_guardian: { file: 'fire_guardian.png', label: '안영동' },
   special_arcane_king: { file: 'arcane_king.png', label: '정재원' },
+  special_jang_jiwon: { file: 'jang_jiwon.png', label: '장지원' },
 } as const
 
 export const KNIGHT_KEYS: readonly string[] = KNIGHT_UNITS.flatMap((unit) =>

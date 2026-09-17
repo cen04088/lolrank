@@ -17,7 +17,7 @@ interface CharacterCardProps {
 /** 선수 명단용 큰 카드: 잔디 무대 위 스프라이트 + 이름/티어/포지션 + 한 줄 소개. */
 export function CharacterCard({ character, onEdit, onDelete }: CharacterCardProps) {
   const style = { '--tier-color': TIER_COLORS[character.tier] } as CSSProperties
-  // 특수 인물 일러스트는 배경이 포함된 정사각형이라 잔디 무대 대신 일러스트와 같은 톤의 무대에 크게 얹는다.
+  // 투명 배경 특수 인물 일러스트는 잔디 무대 대신 전용 무대에 크게 얹는다.
   const special = isSpecialAsset(character.assetKey)
   return (
     <article className={special ? 'ccard ccard--special' : 'ccard'} style={style}>
