@@ -457,7 +457,3 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.ccard__rating {
-  display: flex;
-}

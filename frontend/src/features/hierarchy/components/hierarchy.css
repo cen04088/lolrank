@@ -546,9 +546,3 @@
 .detail__stats .detail__wide {
   grid-column: 1 / -1;
 }
-
-.detail__hint {
-  margin-left: 8px;
-  font-size: 11px;
-  color: var(--muted);
-}

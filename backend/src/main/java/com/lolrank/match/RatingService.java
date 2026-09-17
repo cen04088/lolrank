@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.ToIntFunction;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,17 +23,27 @@ public class RatingService {
     private final MatchRecordRepository matchRepository;
     private final PlayerCharacterRepository characterRepository;
     private final RoomService roomService;
+    /** 꺼져 있으면 보정치는 항상 0 이고 실효 전투력 = 기본 전투력. (APP_RATING_ENABLED) */
+    private final boolean enabled;
 
     public RatingService(MatchRecordRepository matchRepository, PlayerCharacterRepository characterRepository,
-                         RoomService roomService) {
+                         RoomService roomService, @Value("${app.balance.rating-enabled:false}") boolean enabled) {
         this.matchRepository = matchRepository;
         this.characterRepository = characterRepository;
         this.roomService = roomService;
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     /** characterId → 보정치. 승패가 기록된 경기가 없으면 빈 맵. */
     @Transactional(readOnly = true)
     public Map<Long, Rating> ratings(Long roomId) {
+        if (!enabled) {
+            return Map.of();
+        }
         List<RatingCalculator.MatchInput> inputs = matchRepository
                 .findAllByRoomIdAndWinnerIsNotNullOrderByPlayedAtAscIdAsc(roomId).stream()
                 .map(r -> new RatingCalculator.MatchInput(r.getWinner(), r.getSlots().stream()
@@ -45,6 +56,9 @@ public class RatingService {
     /** 밸런싱용: 기본 전투력(계급 80% + 티어 20%) + 기록 보정치. */
     @Transactional(readOnly = true)
     public ToIntFunction<PlayerCharacter> strengthFunction(Long roomId) {
+        if (!enabled) {
+            return StrengthCalculator::strength;
+        }
         Map<Long, Rating> ratings = ratings(roomId);
         return c -> StrengthCalculator.strength(c) + ratings.getOrDefault(c.getId(), Rating.NONE).delta();
     }

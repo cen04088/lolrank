@@ -132,7 +132,7 @@ class MatchApiTest {
     }
 
     @Test
-    void 승패가_기록되면_레이팅이_생기고_보드_전투력에_반영된다() throws Exception {
+    void 레이팅이_꺼져_있으면_승패를_기록해도_보정치는_0이고_보드_전투력이_바뀌지_않는다() throws Exception {
         fillBoard();
         String before = mockMvc.perform(get("/api/rooms/" + code + "/team-board"))
                 .andReturn().getResponse().getContentAsString();
@@ -152,19 +152,16 @@ class MatchApiTest {
 
         String ratings = mockMvc.perform(get("/api/rooms/" + code + "/ratings"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].delta", is(1)))
-                .andExpect(jsonPath("$[0].played", is(1)))
-                .andExpect(jsonPath("$[0].wins", is(1)))
-                .andExpect(jsonPath("$[0].winRate", is(100)))
-                .andExpect(jsonPath("$[9].delta", is(-1)))
-                .andExpect(jsonPath("$[9].losses", is(1)))
+                .andExpect(jsonPath("$[0].delta", is(0)))
+                .andExpect(jsonPath("$[0].played", is(0)))
+                .andExpect(jsonPath("$[9].delta", is(0)))
                 .andReturn().getResponse().getContentAsString();
         org.assertj.core.api.Assertions.assertThat(ratings).contains("\"strength\"");
 
         String after = mockMvc.perform(get("/api/rooms/" + code + "/team-board"))
                 .andReturn().getResponse().getContentAsString();
         int blueAfter = objectMapper.readTree(after).get("balance").get("blueScore").asInt();
-        org.assertj.core.api.Assertions.assertThat(blueAfter).isEqualTo(blueBefore + 5); // 5명 × +1
+        org.assertj.core.api.Assertions.assertThat(blueAfter).isEqualTo(blueBefore);
     }
 
     @Test

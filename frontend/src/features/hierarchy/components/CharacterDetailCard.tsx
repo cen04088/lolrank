@@ -1,22 +1,20 @@
-import { HIERARCHY_RANKS, type Character, type HierarchyRank, type Rating } from '@/api/types'
+import { HIERARCHY_RANKS, type Character, type HierarchyRank } from '@/api/types'
 import { PixelAvatar } from '@/components/PixelAvatar'
 import { PixelButton } from '@/components/PixelButton'
 import { PositionBadge } from '@/components/PositionBadge'
-import { RatingBadge } from '@/components/RatingBadge'
 import { TierBadge } from '@/components/TierBadge'
 import { TitleTag } from '@/components/TitleTag'
 import { RANK_LABELS } from '@/lib/labels'
 
 interface CharacterDetailCardProps {
   character?: Character
-  rating?: Rating
   onChangeRank: (rank: HierarchyRank) => void
   onEdit: () => void
   onDelete: () => void
 }
 
 /** 계급도 우측 상세 카드 (초안의 민준 / Gold IV / 소개 / 버튼 영역). */
-export function CharacterDetailCard({ character, rating, onChangeRank, onEdit, onDelete }: CharacterDetailCardProps) {
+export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete }: CharacterDetailCardProps) {
   if (!character) {
     return (
       <section className="detail detail--empty">
@@ -47,14 +45,6 @@ export function CharacterDetailCard({ character, rating, onChangeRank, onEdit, o
           <dt>계급</dt>
           <dd className="font-pixel text-gold">{RANK_LABELS[character.hierarchyRank]}</dd>
         </div>
-        {rating && rating.played > 0 && (
-          <div className="detail__wide">
-            <dt>기록 보정</dt>
-            <dd>
-              <RatingBadge rating={rating} variant="full" /> <small className="detail__hint">전투력 {rating.baseStrength} → {rating.strength}</small>
-            </dd>
-          </div>
-        )}
         {character.champions && (
           <div className="detail__wide">
             <dt>주 챔피언</dt>

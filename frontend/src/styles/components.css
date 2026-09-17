@@ -703,26 +703,3 @@
   font-size: 0.85em;
   color: #7a5a1c;
 }
-
-/* ================= 기록 보정치 배지 ================= */
-.rbadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 3px 8px;
-  font-size: 9px;
-  letter-spacing: 0.02em;
-  color: var(--muted);
-  background: rgba(5, 10, 20, 0.45);
-  border: 1px solid rgba(183, 205, 236, 0.18);
-}
-
-.rbadge__delta { font-size: 10px; }
-.rbadge--up .rbadge__delta { color: #7be08a; }
-.rbadge--down .rbadge__delta { color: #ff8a8a; }
-.rbadge--flat .rbadge__delta { color: var(--muted); }
-
-.rbadge--full {
-  font-size: 10px;
-  padding: 5px 10px;
-}

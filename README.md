@@ -105,6 +105,7 @@ cd backend
 | `SPRING_DATASOURCE_URL` | JDBC URL 을 직접 지정할 때 (PG* 보다 우선) | `jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}` |
 | `PORT` | HTTP 포트 | 8080 |
 | `APP_CORS_ALLOWED_ORIGINS` | 허용 origin (콤마 구분) | `http://localhost:5173,http://localhost:5174,http://localhost:4173` |
+| `APP_RATING_ENABLED` | (선택) `true` 면 경기 승패 기록을 전투력 보정(레이팅)에 반영. 기본 `false`: 기록만 쌓고 밸런스는 계급·티어만 사용 | `false` |
 | `DEEPSEEK_API_KEY` | (선택) 장로의 AI 캐스터 해설용 DeepSeek API 키. 비우면 AI 기능이 꺼짐. `DEEPSEEK_MODEL`(기본 `deepseek-chat`), `DEEPSEEK_BASE_URL`(기본 `https://api.deepseek.com`) 로 조정 | 없음 |
 | `APP_DEFAULT_ROOM_CODE` / `APP_DEFAULT_ROOM_NAME` | 단일 방 모드의 기본 방 코드/이름. 이름은 기동 시마다 DB 에 반영되므로 변수만 바꾸고 재배포하면 방 이름이 바뀝니다 | `LOLRNK` / `우리들의 내전` |
 
@@ -138,7 +139,7 @@ cd backend
   - 등급 점수: LEGEND 100 / S 80 / A 60 / B 40 / C 20
   - 티어 점수: IRON IV 10 … DIAMOND I 79, MASTER 85, GRANDMASTER 92, CHALLENGER 100
   - 예) LEGEND + Iron IV = 82, C + Challenger = 36 → 계급도가 티어보다 우선한다
-- **기록 보정(레이팅)**: 승패가 기록된 경기를 시간순으로 재생해 선수마다 보정치를 만든다 (`RatingCalculator`). 경기마다 두 팀 실효 전투력 합계 차이로 예상 승률을 구하고(차이 40 = 약 91%), 결과와의 차이 × K(2점)만큼 이긴 팀 전원 +, 진 팀 전원 −. 보정치는 ±8점 안에서만 움직여 계급도가 항상 우선한다. 실효 전투력 = 기본 + 보정이며 자동 배정·TEAM POWER·해설 모두 실효 전투력을 쓴다. `GET /api/rooms/{code}/ratings`
+- **기록 보정(레이팅, 기본 꺼짐)**: `APP_RATING_ENABLED=true` 일 때만 동작. 승패가 기록된 경기를 시간순으로 재생해 선수마다 보정치를 만든다 (`RatingCalculator`). 경기마다 두 팀 실효 전투력 합계 차이로 예상 승률을 구하고(차이 40 = 약 91%), 결과와의 차이 × K(2점)만큼 이긴 팀 전원 +, 진 팀 전원 −. 보정치는 ±8점 안에서만 움직여 계급도가 항상 우선한다. 실효 전투력 = 기본 + 보정이며 자동 배정·TEAM POWER·해설 모두 실효 전투력을 쓴다. `GET /api/rooms/{code}/ratings`
 - 포지션 페널티: 주 0 / 부 8 / 그 외 25 (포지션 균형 모드는 가중치 1, 페널티 0 / 20 / 80). 페널티도 티어와 같은 20% 몫으로 깎인다
 - `totalCost = |blue 전투력 - red 전투력| × 가중치 + Σ 포지션 페널티 × 20%` 가 최소인 조합을 완전 탐색(`AutoFillSolver`). 완전 랜덤 모드는 탐색 없이 무작위 배치
 - 동점: 비선호 포지션 적음 → 주 포지션 많음 → 전투력 차이 작음 → 랜덤

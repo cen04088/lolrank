@@ -16,7 +16,7 @@ import { DND_ANNOUNCEMENTS, DND_SCREEN_READER_INSTRUCTIONS } from '@/lib/dnd'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { errorMessage } from '@/api/client'
 import { charactersApi, hierarchyApi } from '@/api/endpoints'
-import { queryKeys, useCharacters, useRatings } from '@/api/queries'
+import { queryKeys, useCharacters } from '@/api/queries'
 import { HIERARCHY_RANKS, type Character, type HierarchyEntry, type HierarchyRank } from '@/api/types'
 import { EmptyState } from '@/components/EmptyState'
 import { PixelButton } from '@/components/PixelButton'
@@ -52,7 +52,6 @@ interface HierarchyBoardProps {
 
 export function HierarchyBoard({ code }: HierarchyBoardProps) {
   const characters = useCharacters(code)
-  const ratings = useRatings(code)
   const queryClient = useQueryClient()
   const toast = useToast()
 
@@ -232,7 +231,6 @@ export function HierarchyBoard({ code }: HierarchyBoardProps) {
             <aside className="hier__side">
               <CharacterDetailCard
                 character={selected}
-                rating={selected ? ratings.data?.get(selected.id) : undefined}
                 onChangeRank={(rank) => selected && changeRank(selected, rank)}
                 onEdit={() => selected && setEditing(selected)}
                 onDelete={() => selected && setDeleting(selected)}
