@@ -45,6 +45,10 @@ public class PlayerCharacter {
     @Column(length = 20)
     private String title;
 
+    /** 주로 하는 챔피언 (자유 입력, 쉼표 구분, 선택) */
+    @Column(length = 60)
+    private String champions;
+
     @Column(name = "asset_key", nullable = false, length = 40)
     private String assetKey;
 
@@ -139,6 +143,14 @@ public class PlayerCharacter {
 
     public void changeTitle(String title) {
         this.title = title;
+    }
+
+    public String getChampions() {
+        return champions;
+    }
+
+    public void changeChampions(String champions) {
+        this.champions = champions;
     }
 
     public String getAssetKey() {

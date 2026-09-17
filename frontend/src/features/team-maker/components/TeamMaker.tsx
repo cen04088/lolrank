@@ -36,6 +36,7 @@ import { CharacterChip } from './CharacterChip'
 import { ModeTabs } from './ModeTabs'
 import { ParticipantPicker } from './ParticipantPicker'
 import { Pitch } from './Pitch'
+import { CasterPanel } from './CasterPanel'
 import { PowerBar } from './PowerBar'
 import { TeamColumn } from './TeamColumn'
 import './team-maker.css'
@@ -217,6 +218,12 @@ export function TeamMaker({ code }: TeamMakerProps) {
             </div>
 
             <PowerBar balance={board.data.balance} boardEmpty={boardEmpty} syncing={updateBoard.isPending} />
+
+            <CasterPanel
+              code={code}
+              boardKey={slots.map((s) => `${s.team}:${s.position}:${s.characterId ?? ''}`).join('|')}
+              boardFull={emptySlotCount(slots) === 0}
+            />
 
             <div className="tmk__actions">
               <PixelButton

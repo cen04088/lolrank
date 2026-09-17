@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { changeLogsApi, charactersApi, roomsApi, teamBoardApi } from './endpoints'
+import { aiApi, changeLogsApi, charactersApi, roomsApi, teamBoardApi } from './endpoints'
 
 export const queryKeys = {
   room: (code: string) => ['room', code] as const,
   characters: (code: string) => ['characters', code] as const,
   teamBoard: (code: string) => ['teamBoard', code] as const,
   changeLogs: (code: string) => ['changeLogs', code] as const,
+  aiStatus: ['aiStatus'] as const,
 }
 
 export function useRoom(code: string) {
@@ -36,5 +37,15 @@ export function useChangeLogs(code: string, enabled: boolean) {
     queryKey: queryKeys.changeLogs(code),
     queryFn: () => changeLogsApi.list(code),
     enabled,
+  })
+}
+
+/** AI 기능 사용 가능 여부. 서버 설정이라 거의 바뀌지 않으므로 오래 캐시한다. */
+export function useAiStatus() {
+  return useQuery({
+    queryKey: queryKeys.aiStatus,
+    queryFn: aiApi.status,
+    staleTime: 10 * 60_000,
+    retry: 0,
   })
 }

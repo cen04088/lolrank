@@ -45,6 +45,12 @@ export function CharacterDetailCard({ character, onChangeRank, onEdit, onDelete 
           <dt>계급</dt>
           <dd className="font-pixel text-gold">{RANK_LABELS[character.hierarchyRank]}</dd>
         </div>
+        {character.champions && (
+          <div className="detail__wide">
+            <dt>주 챔피언</dt>
+            <dd>{character.champions}</dd>
+          </div>
+        )}
         <div>
           <dt>주 포지션</dt>
           <dd>

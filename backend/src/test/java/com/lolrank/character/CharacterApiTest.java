@@ -111,7 +111,7 @@ class CharacterApiTest {
                         .header(Nicknames.HEADER, nicknameHeader)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {"name":"태현","description":"라인전은 강하지만 한타에서 사라짐","title":"철벽 탑솔",
+                                {"name":"태현","description":"라인전은 강하지만 한타에서 사라짐","title":"철벽 탑솔","champions":"가렌, 오른",
                                  "assetKey":"player_03","tier":"GOLD","division":4,
                                  "mainPosition":"TOP","subPositions":["MID","ADC"]}
                                 """))
@@ -121,6 +121,7 @@ class CharacterApiTest {
                 .andExpect(jsonPath("$.subPositions[1]", is("ADC")))
                 .andExpect(jsonPath("$.hierarchyRank", is("C")))
                 .andExpect(jsonPath("$.title", is("철벽 탑솔")))
+                .andExpect(jsonPath("$.champions", is("가렌, 오른")))
                 .andReturn().getResponse().getContentAsString();
         long id = objectMapper.readTree(created).get("id").asLong();
 

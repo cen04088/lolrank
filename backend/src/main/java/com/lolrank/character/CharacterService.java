@@ -73,6 +73,7 @@ public class CharacterService {
                 order
         );
         character.changeTitle(blankToNull(request.title()));
+        character.changeChampions(blankToNull(request.champions()));
         PlayerCharacter saved = characterRepository.save(character);
 
         CharacterResponse response = CharacterResponse.from(saved);
@@ -96,6 +97,9 @@ public class CharacterService {
 
         if (request.title() != null) {
             character.changeTitle(blankToNull(request.title()));
+        }
+        if (request.champions() != null) {
+            character.changeChampions(blankToNull(request.champions()));
         }
         character.updateProfile(
                 request.name() != null ? request.name().strip() : character.getName(),

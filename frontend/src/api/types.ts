@@ -45,6 +45,8 @@ export interface Character {
   description: string | null
   /** 칭호: 이름 옆에 붙는 짧은 별칭 */
   title: string | null
+  /** 주로 하는 챔피언 (쉼표 구분 자유 입력) */
+  champions: string | null
   assetKey: string
   tier: Tier
   division: number | null
@@ -62,6 +64,7 @@ export interface CreateCharacterRequest {
   name: string
   description: string | null
   title: string | null
+  champions: string | null
   assetKey: string
   tier: Tier
   division: number | null
@@ -74,6 +77,8 @@ export interface UpdateCharacterRequest {
   description?: string
   /** 빈 문자열을 보내면 칭호를 지운다 */
   title?: string
+  /** 빈 문자열을 보내면 주 챔피언을 지운다 */
+  champions?: string
   assetKey?: string
   tier?: Tier
   division?: number
@@ -144,4 +149,21 @@ export interface ChangeLog {
   action: ChangeLogAction
   message: string
   createdAt: string
+}
+
+/** GET /api/ai/status */
+export interface AiStatus {
+  /** 장로의 AI 캐스터 해설 사용 가능 여부 (백엔드에 DEEPSEEK_API_KEY 가 있을 때만 true) */
+  commentary: boolean
+  provider: string | null
+  model: string | null
+}
+
+/** POST /api/rooms/{code}/team-board/commentary */
+export interface Commentary {
+  text: string
+  boardHash: string
+  cached: boolean
+  model: string
+  generatedAt: string
 }

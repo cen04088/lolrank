@@ -33,6 +33,11 @@ export function CharacterCard({ character, onEdit, onDelete }: CharacterCardProp
           </div>
           <TierBadge tier={character.tier} division={character.division} />
         </div>
+        {character.champions && (
+          <p className="ccard__champs" title="주 챔피언">
+            <span aria-hidden>🗡</span> {character.champions}
+          </p>
+        )}
         <div className="ccard__positions">
           <PositionBadge position={character.mainPosition} />
           {character.subPositions.map((position) => (

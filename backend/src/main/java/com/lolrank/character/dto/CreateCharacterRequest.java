@@ -21,6 +21,10 @@ public record CreateCharacterRequest(
         @Size(max = 20, message = "칭호는 20자 이하여야 합니다.")
         String title,
 
+        /** 주로 하는 챔피언 (선택, 쉼표 구분) */
+        @Size(max = 60, message = "주 챔피언은 60자 이하여야 합니다.")
+        String champions,
+
         @NotBlank(message = "캐릭터 이미지를 선택해주세요.")
         @Size(max = 40, message = "assetKey 가 너무 깁니다.")
         String assetKey,

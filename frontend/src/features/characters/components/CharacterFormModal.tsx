@@ -23,6 +23,7 @@ import { POSITION_ICONS, POSITION_LABELS, TIER_NAMES, tierHasDivision, tierLabel
 
 const NAME_MAX = 20
 const TITLE_MAX = 20
+const CHAMPIONS_MAX = 60
 const DESCRIPTION_MAX = 100
 const ROMAN: Record<number, string> = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV' }
 
@@ -37,6 +38,7 @@ const TABS: { key: Tab; icon: string; label: string }[] = [
 interface FormValues {
   name: string
   title: string
+  champions: string
   description: string
   assetKey: string
   tier: Tier
@@ -48,6 +50,7 @@ interface FormValues {
 const DEFAULT_VALUES: FormValues = {
   name: '',
   title: '',
+  champions: '',
   description: '',
   assetKey: PLAYER_ASSET_KEYS[0],
   tier: 'GOLD',
@@ -60,6 +63,7 @@ function fromCharacter(character: Character): FormValues {
   return {
     name: character.name,
     title: character.title ?? '',
+    champions: character.champions ?? '',
     description: character.description ?? '',
     assetKey: character.assetKey,
     tier: character.tier,
@@ -105,6 +109,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
         const body: UpdateCharacterRequest = {
           name: form.name.trim(),
           title: form.title.trim(),
+          champions: form.champions.trim(),
           description: form.description.trim(),
           assetKey: form.assetKey,
           tier: form.tier,
@@ -117,6 +122,7 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
       const body: CreateCharacterRequest = {
         name: form.name.trim(),
         title: form.title.trim() || null,
+        champions: form.champions.trim() || null,
         description: form.description.trim() || null,
         assetKey: form.assetKey,
         tier: form.tier,
@@ -228,6 +234,20 @@ export function CharacterFormModal({ code, open, character, onClose }: Character
                   value={values.title}
                   onChange={(event) => set('title', event.target.value)}
                   placeholder="예: 철벽 탑솔, 한타의 신"
+                />
+              </div>
+
+              <div className="px-field">
+                <label className="px-label" htmlFor="char-champions">
+                  주 챔피언 <span className="cform__max">(선택, 쉼표로 구분 · 최대 {CHAMPIONS_MAX}자)</span>
+                </label>
+                <input
+                  id="char-champions"
+                  className="px-input"
+                  maxLength={CHAMPIONS_MAX}
+                  value={values.champions}
+                  onChange={(event) => set('champions', event.target.value)}
+                  placeholder="예: 가렌, 다리우스, 오른"
                 />
               </div>
 

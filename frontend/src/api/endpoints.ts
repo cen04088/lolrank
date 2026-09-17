@@ -1,8 +1,10 @@
 import { api } from './client'
 import type {
+  AiStatus,
   AutoFillMode,
   ChangeLog,
   Character,
+  Commentary,
   CreateCharacterRequest,
   HierarchyEntry,
   Room,
@@ -35,6 +37,13 @@ export const teamBoardApi = {
     api<TeamBoard>(`/api/rooms/${inviteCode}/team-board`, { method: 'PUT', body: { slots } }),
   autoFill: (inviteCode: string, mode: AutoFillMode) =>
     api<TeamBoard>(`/api/rooms/${inviteCode}/team-board/auto-fill?mode=${mode}`, { method: 'POST' }),
+  /** 장로의 AI 캐스터 해설 (같은 배치는 서버 캐시) */
+  commentary: (inviteCode: string) =>
+    api<Commentary>(`/api/rooms/${inviteCode}/team-board/commentary`, { method: 'POST' }),
+}
+
+export const aiApi = {
+  status: () => api<AiStatus>('/api/ai/status'),
 }
 
 export const hierarchyApi = {

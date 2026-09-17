@@ -56,7 +56,7 @@ class TeamBoardServiceTest {
             Position main = positions[i % positions.length];
             Position sub = positions[(i + 1) % positions.length];
             characters.add(characterService.create(code, new CreateCharacterRequest(
-                    "선수" + (i + 1), null, null, "player_0" + (i % 8 + 1), tiers[i], 4, main, List.of(sub)), NICK));
+                    "선수" + (i + 1), null, null, null, "player_0" + (i % 8 + 1), tiers[i], 4, main, List.of(sub)), NICK));
         }
         teamBoardService.updateParticipants(code, characters.stream().map(CharacterResponse::id).toList(), NICK);
     }
@@ -72,7 +72,7 @@ class TeamBoardServiceTest {
     @Test
     void 참가자는_10명을_넘을_수_없다() {
         CharacterResponse extra = characterService.create(code, new CreateCharacterRequest(
-                "열한번째", null, null, "player_01", Tier.GOLD, 1, Position.TOP, List.of()), NICK);
+                "열한번째", null, null, null, "player_01", Tier.GOLD, 1, Position.TOP, List.of()), NICK);
         List<Long> ids = new ArrayList<>(characters.stream().map(CharacterResponse::id).toList());
         ids.add(extra.id());
 
@@ -83,7 +83,7 @@ class TeamBoardServiceTest {
     @Test
     void 참가자가_아닌_캐릭터는_슬롯에_배치할_수_없다() {
         CharacterResponse outsider = characterService.create(code, new CreateCharacterRequest(
-                "외부인", null, null, "player_01", Tier.GOLD, 1, Position.TOP, List.of()), NICK);
+                "외부인", null, null, null, "player_01", Tier.GOLD, 1, Position.TOP, List.of()), NICK);
 
         UpdateTeamBoardRequest request = new UpdateTeamBoardRequest(List.of(
                 new SlotRequest(Team.BLUE, Position.TOP, outsider.id(), AssignmentSource.MANUAL)));

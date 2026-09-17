@@ -542,3 +542,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.detail__stats .detail__wide {
+  grid-column: 1 / -1;
+}

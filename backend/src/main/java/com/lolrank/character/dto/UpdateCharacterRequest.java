@@ -19,6 +19,10 @@ public record UpdateCharacterRequest(
         @Size(max = 20, message = "칭호는 20자 이하여야 합니다.")
         String title,
 
+        /** 주 챔피언. 빈 문자열을 보내면 지운다 */
+        @Size(max = 60, message = "주 챔피언은 60자 이하여야 합니다.")
+        String champions,
+
         @Size(min = 1, max = 40, message = "assetKey 가 올바르지 않습니다.")
         String assetKey,
 
