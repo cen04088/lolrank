@@ -32,13 +32,16 @@ public class MatchService {
     private final TeamSlotRepository slotRepository;
     private final MatchRecordRepository matchRepository;
     private final ChangeLogService changeLogService;
+    private final RatingService ratingService;
 
     public MatchService(RoomService roomService, TeamSlotRepository slotRepository,
-                        MatchRecordRepository matchRepository, ChangeLogService changeLogService) {
+                        MatchRecordRepository matchRepository, ChangeLogService changeLogService,
+                        RatingService ratingService) {
         this.roomService = roomService;
         this.slotRepository = slotRepository;
         this.matchRepository = matchRepository;
         this.changeLogService = changeLogService;
+        this.ratingService = ratingService;
     }
 
     public MatchResponse record(String inviteCode, RecordMatchRequest request, String nickname) {
@@ -52,7 +55,8 @@ public class MatchService {
 
         List<PlayerCharacter> blue = slots.stream().filter(s -> s.getTeam() == Team.BLUE).map(TeamSlot::getCharacter).toList();
         List<PlayerCharacter> red = slots.stream().filter(s -> s.getTeam() == Team.RED).map(TeamSlot::getCharacter).toList();
-        TeamBalance balance = TeamBalance.of(blue, red);
+        // 화면과 같은 실효 전투력으로 당시 밸런스를 남긴다. 슬롯 스냅샷에는 재생용 기본 전투력을 넣는다.
+        TeamBalance balance = TeamBalance.of(blue, red, ratingService.strengthFunction(room.getId()));
 
         MatchRecord record = new MatchRecord(room, request.winner(), blankToNull(request.note()), nickname,
                 balance.blueScore(), balance.redScore(), balance.difference(), balance.grade());

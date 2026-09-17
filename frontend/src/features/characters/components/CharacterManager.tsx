@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { errorMessage } from '@/api/client'
 import { charactersApi } from '@/api/endpoints'
-import { queryKeys, useCharacters } from '@/api/queries'
+import { queryKeys, useCharacters, useRatings } from '@/api/queries'
 import type { Character } from '@/api/types'
 import { EmptyState } from '@/components/EmptyState'
 import { PixelButton } from '@/components/PixelButton'
@@ -22,6 +22,7 @@ type FormState = { mode: 'closed' } | { mode: 'create' } | { mode: 'edit'; chara
 
 export function CharacterManager({ code }: CharacterManagerProps) {
   const characters = useCharacters(code)
+  const ratings = useRatings(code)
   const queryClient = useQueryClient()
   const toast = useToast()
   const [form, setForm] = useState<FormState>({ mode: 'closed' })
@@ -89,6 +90,7 @@ export function CharacterManager({ code }: CharacterManagerProps) {
             <li key={character.id}>
               <CharacterCard
                 character={character}
+                rating={ratings.data?.get(character.id)}
                 onEdit={() => setForm({ mode: 'edit', character })}
                 onDelete={() => setDeleting(character)}
               />

@@ -8,6 +8,7 @@ import type {
   CreateCharacterRequest,
   HierarchyEntry,
   MatchRecord,
+  Rating,
   RecordMatchRequest,
   Room,
   SlotRequest,
@@ -53,6 +54,7 @@ export const matchesApi = {
   update: (matchId: number, body: UpdateMatchRequest) =>
     api<MatchRecord>(`/api/matches/${matchId}`, { method: 'PATCH', body }),
   remove: (matchId: number) => api<void>(`/api/matches/${matchId}`, { method: 'DELETE' }),
+  ratings: (inviteCode: string) => api<Rating[]>(`/api/rooms/${inviteCode}/ratings`),
 }
 
 export const aiApi = {

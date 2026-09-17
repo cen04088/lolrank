@@ -208,3 +208,18 @@ export interface UpdateMatchRequest {
   winner: Team | null
   note?: string
 }
+
+/** GET /api/rooms/{code}/ratings — 경기 기록으로 계산한 선수별 보정치 */
+export interface Rating {
+  characterId: number
+  characterName: string
+  /** 표시 점수 (예 +3 / -2). 기본 전투력에 더해진다 */
+  delta: number
+  baseStrength: number
+  strength: number
+  played: number
+  wins: number
+  losses: number
+  /** 0~100, 경기가 없으면 null */
+  winRate: number | null
+}

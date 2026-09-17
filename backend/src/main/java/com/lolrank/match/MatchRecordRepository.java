@@ -13,6 +13,9 @@ public interface MatchRecordRepository extends JpaRepository<MatchRecord, Long> 
 
     long countByRoomId(Long roomId);
 
+    /** 승패가 기록된 경기, 오래된 것부터 (레이팅 재생용) */
+    List<MatchRecord> findAllByRoomIdAndWinnerIsNotNullOrderByPlayedAtAscIdAsc(Long roomId);
+
     @Modifying(clearAutomatically = true)
     @Query("delete from MatchRecordSlot s where s.record.id in (select r.id from MatchRecord r where r.room.id = :roomId)")
     void deleteAllSlotsByRoomId(@Param("roomId") Long roomId);

@@ -31,6 +31,9 @@ export function MatchLog({ code, boardFull }: MatchLogProps) {
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: queryKeys.matches(code) })
     queryClient.invalidateQueries({ queryKey: queryKeys.changeLogs(code) })
+    // 승패가 바뀌면 보정치와 TEAM POWER 도 바뀐다
+    queryClient.invalidateQueries({ queryKey: queryKeys.ratings(code) })
+    queryClient.invalidateQueries({ queryKey: queryKeys.teamBoard(code) })
   }
 
   const record = useMutation({

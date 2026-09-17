@@ -2,6 +2,7 @@ package com.lolrank.match;
 
 import com.lolrank.common.web.Nicknames;
 import com.lolrank.match.dto.MatchResponse;
+import com.lolrank.match.dto.RatingResponse;
 import com.lolrank.match.dto.RecordMatchRequest;
 import com.lolrank.match.dto.UpdateMatchRequest;
 import jakarta.validation.Valid;
@@ -24,9 +25,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class MatchController {
 
     private final MatchService matchService;
+    private final RatingService ratingService;
 
-    public MatchController(MatchService matchService) {
+    public MatchController(MatchService matchService, RatingService ratingService) {
         this.matchService = matchService;
+        this.ratingService = ratingService;
+    }
+
+    /** 경기 기록으로 계산한 선수별 보정치 (전투력에 더해지는 값) */
+    @GetMapping("/rooms/{inviteCode}/ratings")
+    public List<RatingResponse> ratings(@PathVariable String inviteCode) {
+        return ratingService.list(inviteCode);
     }
 
     /** 현재 팀 보드를 경기 기록으로 남긴다 (10자리 모두 필요). */

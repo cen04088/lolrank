@@ -122,6 +122,7 @@ cd backend
 | GET / PUT | `/api/rooms/{inviteCode}/team-board` | 팀 보드 조회 / 전체 교체 |
 | PUT | `/api/rooms/{inviteCode}/participants` | 오늘의 참가자 (최대 10명) |
 | GET / POST | `/api/rooms/{inviteCode}/matches` | 경기 기록 목록(최신순, `?limit=`) / 현재 보드 기록 (`winner`: BLUE·RED·null, `note`) |
+| GET | `/api/rooms/{inviteCode}/ratings` | 선수별 기록 보정치 (`delta`, `baseStrength`, `strength`, `played`, `wins`, `losses`, `winRate`) |
 | PATCH / DELETE | `/api/matches/{matchId}` | 승패·메모 수정 (`winner` null 이면 미정) / 삭제 |
 | GET | `/api/ai/status` | AI 기능 사용 가능 여부 (`commentary`, `provider`, `model`) |
 | POST | `/api/rooms/{inviteCode}/team-board/commentary` | 현재 보드의 AI 캐스터 해설 (10자리 모두 필요, 같은 배치는 캐시) |
@@ -137,6 +138,7 @@ cd backend
   - 등급 점수: LEGEND 100 / S 80 / A 60 / B 40 / C 20
   - 티어 점수: IRON IV 10 … DIAMOND I 79, MASTER 85, GRANDMASTER 92, CHALLENGER 100
   - 예) LEGEND + Iron IV = 82, C + Challenger = 36 → 계급도가 티어보다 우선한다
+- **기록 보정(레이팅)**: 승패가 기록된 경기를 시간순으로 재생해 선수마다 보정치를 만든다 (`RatingCalculator`). 경기마다 두 팀 실효 전투력 합계 차이로 예상 승률을 구하고(차이 40 = 약 91%), 결과와의 차이 × K(2점)만큼 이긴 팀 전원 +, 진 팀 전원 −. 보정치는 ±8점 안에서만 움직여 계급도가 항상 우선한다. 실효 전투력 = 기본 + 보정이며 자동 배정·TEAM POWER·해설 모두 실효 전투력을 쓴다. `GET /api/rooms/{code}/ratings`
 - 포지션 페널티: 주 0 / 부 8 / 그 외 25 (포지션 균형 모드는 가중치 1, 페널티 0 / 20 / 80). 페널티도 티어와 같은 20% 몫으로 깎인다
 - `totalCost = |blue 전투력 - red 전투력| × 가중치 + Σ 포지션 페널티 × 20%` 가 최소인 조합을 완전 탐색(`AutoFillSolver`). 완전 랜덤 모드는 탐색 없이 무작위 배치
 - 동점: 비선호 포지션 적음 → 주 포지션 많음 → 전투력 차이 작음 → 랜덤

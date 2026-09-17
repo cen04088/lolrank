@@ -1,8 +1,9 @@
 import type { CSSProperties } from 'react'
-import type { Character } from '@/api/types'
+import type { Character, Rating } from '@/api/types'
 import { PixelAvatar } from '@/components/PixelAvatar'
 import { PixelButton } from '@/components/PixelButton'
 import { PositionBadge } from '@/components/PositionBadge'
+import { RatingBadge } from '@/components/RatingBadge'
 import { TierBadge } from '@/components/TierBadge'
 import { TitleTag } from '@/components/TitleTag'
 import { isSpecialAsset } from '@/lib/assets'
@@ -10,12 +11,14 @@ import { RANK_LABELS, TIER_COLORS } from '@/lib/labels'
 
 interface CharacterCardProps {
   character: Character
+  /** 경기 기록 보정치 (없으면 표시 안 함) */
+  rating?: Rating
   onEdit: () => void
   onDelete: () => void
 }
 
 /** 선수 명단용 큰 카드: 잔디 무대 위 스프라이트 + 이름/티어/포지션 + 한 줄 소개. */
-export function CharacterCard({ character, onEdit, onDelete }: CharacterCardProps) {
+export function CharacterCard({ character, rating, onEdit, onDelete }: CharacterCardProps) {
   const style = { '--tier-color': TIER_COLORS[character.tier] } as CSSProperties
   // 투명 배경 특수 인물 일러스트는 잔디 무대 대신 전용 무대에 크게 얹는다.
   const special = isSpecialAsset(character.assetKey)
@@ -37,6 +40,11 @@ export function CharacterCard({ character, onEdit, onDelete }: CharacterCardProp
           <p className="ccard__champs" title="주 챔피언">
             <span aria-hidden>🗡</span> {character.champions}
           </p>
+        )}
+        {rating && rating.played > 0 && (
+          <div className="ccard__rating">
+            <RatingBadge rating={rating} />
+          </div>
         )}
         <div className="ccard__positions">
           <PositionBadge position={character.mainPosition} />

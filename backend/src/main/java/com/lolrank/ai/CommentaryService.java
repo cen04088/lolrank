@@ -5,6 +5,7 @@ import com.lolrank.ai.dto.CommentaryResponse;
 import com.lolrank.character.PlayerCharacter;
 import com.lolrank.common.exception.ApiException;
 import com.lolrank.common.exception.BadRequestException;
+import com.lolrank.match.RatingService;
 import com.lolrank.room.Room;
 import com.lolrank.room.RoomService;
 import com.lolrank.team.Team;
@@ -36,6 +37,7 @@ public class CommentaryService {
     private final RoomService roomService;
     private final TeamSlotRepository slotRepository;
     private final CommentaryGenerator generator;
+    private final RatingService ratingService;
     private final TransactionTemplate readOnlyTx;
 
     /** key = inviteCode + ":" + boardHash. 접근 순서 LRU. */
@@ -47,10 +49,12 @@ public class CommentaryService {
     };
 
     public CommentaryService(RoomService roomService, TeamSlotRepository slotRepository,
-                             CommentaryGenerator generator, PlatformTransactionManager transactionManager) {
+                             CommentaryGenerator generator, RatingService ratingService,
+                             PlatformTransactionManager transactionManager) {
         this.roomService = roomService;
         this.slotRepository = slotRepository;
         this.generator = generator;
+        this.ratingService = ratingService;
         this.readOnlyTx = new TransactionTemplate(transactionManager);
         this.readOnlyTx.setReadOnly(true);
     }
@@ -92,7 +96,7 @@ public class CommentaryService {
         }
         List<PlayerCharacter> blue = slots.stream().filter(s -> s.getTeam() == Team.BLUE && s.getCharacter() != null).map(TeamSlot::getCharacter).toList();
         List<PlayerCharacter> red = slots.stream().filter(s -> s.getTeam() == Team.RED && s.getCharacter() != null).map(TeamSlot::getCharacter).toList();
-        TeamBalance balance = TeamBalance.of(blue, red);
+        TeamBalance balance = TeamBalance.of(blue, red, ratingService.strengthFunction(room.getId()));
         return new Snapshot(room.getInviteCode(), CommentaryPromptBuilder.boardHash(slots),
                 CommentaryPromptBuilder.userPrompt(room.getName(), slots, balance));
     }

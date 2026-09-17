@@ -2,6 +2,7 @@ package com.lolrank.team.balance;
 
 import com.lolrank.character.PlayerCharacter;
 import java.util.List;
+import java.util.function.ToIntFunction;
 
 /**
  * 현재 보드 기준 두 팀의 전투력 합계와 등급.
@@ -23,9 +24,15 @@ public record TeamBalance(
         int redPower
 ) {
 
+    /** 기본 전투력만으로 (기록 보정 없이) */
     public static TeamBalance of(List<PlayerCharacter> blue, List<PlayerCharacter> red) {
-        int bluePoints = strengthSum(blue);
-        int redPoints = strengthSum(red);
+        return of(blue, red, StrengthCalculator::strength);
+    }
+
+    /** strengthFn 은 ×100 단위 실효 전투력 (기본 + 기록 보정) */
+    public static TeamBalance of(List<PlayerCharacter> blue, List<PlayerCharacter> red, ToIntFunction<PlayerCharacter> strengthFn) {
+        int bluePoints = strengthSum(blue, strengthFn);
+        int redPoints = strengthSum(red, strengthFn);
         int blueScore = StrengthCalculator.toDisplay(bluePoints);
         int redScore = StrengthCalculator.toDisplay(redPoints);
         int difference = Math.abs(blueScore - redScore);
@@ -45,8 +52,8 @@ public record TeamBalance(
         );
     }
 
-    private static int strengthSum(List<PlayerCharacter> characters) {
-        return characters.stream().mapToInt(StrengthCalculator::strength).sum();
+    private static int strengthSum(List<PlayerCharacter> characters, ToIntFunction<PlayerCharacter> strengthFn) {
+        return characters.stream().mapToInt(strengthFn).sum();
     }
 
     /** 팀 평균 전투력 (0~100). UI 의 TEAM POWER. */

@@ -8,6 +8,7 @@ export const queryKeys = {
   changeLogs: (code: string) => ['changeLogs', code] as const,
   aiStatus: ['aiStatus'] as const,
   matches: (code: string) => ['matches', code] as const,
+  ratings: (code: string) => ['ratings', code] as const,
 }
 
 export function useRoom(code: string) {
@@ -55,6 +56,18 @@ export function useMatches(code: string) {
   return useQuery({
     queryKey: queryKeys.matches(code),
     queryFn: () => matchesApi.list(code),
+    enabled: Boolean(code),
+  })
+}
+
+/** 선수별 기록 보정치. characterId → Rating 맵으로 돌려준다. */
+export function useRatings(code: string) {
+  return useQuery({
+    queryKey: queryKeys.ratings(code),
+    queryFn: async () => {
+      const list = await matchesApi.ratings(code)
+      return new Map(list.map((r) => [r.characterId, r]))
+    },
     enabled: Boolean(code),
   })
 }

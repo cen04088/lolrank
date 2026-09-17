@@ -6,11 +6,11 @@ import com.lolrank.character.PlayerCharacter;
 import com.lolrank.character.PlayerCharacterRepository;
 import com.lolrank.character.Position;
 import com.lolrank.common.exception.BadRequestException;
+import com.lolrank.match.RatingService;
 import com.lolrank.room.Room;
 import com.lolrank.room.RoomService;
 import com.lolrank.team.balance.AutoFillMode;
 import com.lolrank.team.balance.AutoFillSolver;
-import com.lolrank.team.balance.StrengthCalculator;
 import com.lolrank.team.balance.TeamBalance;
 import com.lolrank.team.dto.BalanceResponse;
 import com.lolrank.team.dto.SlotRequest;
@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,7 @@ public class TeamBoardService {
             Comparator.comparing(TeamSlot::getTeam).thenComparing(TeamSlot::getPosition);
 
     private final TeamSlotRepository slotRepository;
+    private final RatingService ratingService;
     private final TeamParticipantRepository participantRepository;
     private final PlayerCharacterRepository characterRepository;
     private final RoomService roomService;
@@ -51,19 +53,21 @@ public class TeamBoardService {
                             TeamParticipantRepository participantRepository,
                             PlayerCharacterRepository characterRepository,
                             RoomService roomService,
-                            ChangeLogService changeLogService) {
+                            ChangeLogService changeLogService,
+                            RatingService ratingService) {
         this.slotRepository = slotRepository;
         this.participantRepository = participantRepository;
         this.characterRepository = characterRepository;
         this.roomService = roomService;
         this.changeLogService = changeLogService;
+        this.ratingService = ratingService;
     }
 
     /** 슬롯이 아직 없는 방이면 생성하므로 읽기 전용이 아니다. */
     @Transactional
     public TeamBoardResponse getBoard(String inviteCode) {
         Room room = roomService.getByInviteCode(inviteCode);
-        return toResponse(ensureSlots(room), selectedParticipants(room));
+        return toResponse(room, ensureSlots(room), selectedParticipants(room));
     }
 
     @Transactional
@@ -99,7 +103,7 @@ public class TeamBoardService {
 
         changeLogService.record(room, null, nickname, ChangeLogAction.PARTICIPANTS_UPDATED,
                 null, ids, nickname + "님이 오늘의 참가자를 변경했습니다. (" + ids.size() + "명)");
-        return toResponse(slots, new ArrayList<>(charactersById.values()));
+        return toResponse(room, slots, new ArrayList<>(charactersById.values()));
     }
 
     @Transactional
@@ -129,7 +133,7 @@ public class TeamBoardService {
                 reset ? ChangeLogAction.TEAM_BOARD_RESET : ChangeLogAction.TEAM_BOARD_UPDATED,
                 before, after,
                 reset ? nickname + "님이 팀 보드를 초기화했습니다." : nickname + "님이 팀 구성을 변경했습니다.");
-        return toResponse(slots, participants);
+        return toResponse(room, slots, participants);
     }
 
     /**
@@ -147,6 +151,8 @@ public class TeamBoardService {
 
         slots.stream().filter(TeamSlot::isAuto).forEach(TeamSlot::clear);
 
+        // 기본 전투력 + 경기 기록 보정치
+        ToIntFunction<PlayerCharacter> strengthFn = ratingService.strengthFunction(room.getId());
         Set<Long> placedIds = new HashSet<>();
         int fixedBlue = 0;
         int fixedRed = 0;
@@ -155,7 +161,7 @@ public class TeamBoardService {
                 continue;
             }
             placedIds.add(slot.getCharacterId());
-            int score = StrengthCalculator.strength(slot.getCharacter());
+            int score = strengthFn.applyAsInt(slot.getCharacter());
             if (slot.getTeam() == Team.BLUE) {
                 fixedBlue += score;
             } else {
@@ -169,7 +175,7 @@ public class TeamBoardService {
                 .toList();
         List<AutoFillSolver.Candidate> candidates = participants.stream()
                 .filter(c -> !placedIds.contains(c.getId()))
-                .map(c -> new AutoFillSolver.Candidate(c.getId(), StrengthCalculator.strength(c),
+                .map(c -> new AutoFillSolver.Candidate(c.getId(), strengthFn.applyAsInt(c),
                         c.getMainPosition(), c.getSubPositions()))
                 .toList();
 
@@ -185,7 +191,7 @@ public class TeamBoardService {
                     .assign(participantsById.get(assignment.characterId()), AssignmentSource.AUTO);
         }
 
-        TeamBoardResponse response = toResponse(slots, participants);
+        TeamBoardResponse response = toResponse(room, slots, participants);
         changeLogService.record(room, null, nickname, ChangeLogAction.TEAM_AUTO_FILLED,
                 before, response.slots(),
                 nickname + "님이 남은 자리를 자동으로 채웠습니다. (" + mode + ", 밸런스: " + response.balance().grade() + ")");
@@ -264,7 +270,7 @@ public class TeamBoardService {
         return byKey;
     }
 
-    private static TeamBoardResponse toResponse(List<TeamSlot> slots, List<PlayerCharacter> participants) {
+    private TeamBoardResponse toResponse(Room room, List<TeamSlot> slots, List<PlayerCharacter> participants) {
         List<PlayerCharacter> blue = new ArrayList<>();
         List<PlayerCharacter> red = new ArrayList<>();
         for (TeamSlot slot : slots) {
@@ -276,7 +282,7 @@ public class TeamBoardService {
         return new TeamBoardResponse(
                 participants.stream().map(PlayerCharacter::getId).toList(),
                 slots.stream().map(SlotResponse::from).toList(),
-                BalanceResponse.from(TeamBalance.of(blue, red))
+                BalanceResponse.from(TeamBalance.of(blue, red, ratingService.strengthFunction(room.getId())))
         );
     }
 }

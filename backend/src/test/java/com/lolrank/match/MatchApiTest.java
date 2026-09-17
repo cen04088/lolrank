@@ -132,6 +132,42 @@ class MatchApiTest {
     }
 
     @Test
+    void 승패가_기록되면_레이팅이_생기고_보드_전투력에_반영된다() throws Exception {
+        fillBoard();
+        String before = mockMvc.perform(get("/api/rooms/" + code + "/team-board"))
+                .andReturn().getResponse().getContentAsString();
+        int blueBefore = objectMapper.readTree(before).get("balance").get("blueScore").asInt();
+
+        mockMvc.perform(get("/api/rooms/" + code + "/ratings"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(10)))
+                .andExpect(jsonPath("$[0].played", is(0)))
+                .andExpect(jsonPath("$[0].delta", is(0)));
+
+        mockMvc.perform(post("/api/rooms/" + code + "/matches")
+                        .header(Nicknames.HEADER, nick)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"winner\":\"BLUE\"}"))
+                .andExpect(status().isCreated());
+
+        String ratings = mockMvc.perform(get("/api/rooms/" + code + "/ratings"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].delta", is(1)))
+                .andExpect(jsonPath("$[0].played", is(1)))
+                .andExpect(jsonPath("$[0].wins", is(1)))
+                .andExpect(jsonPath("$[0].winRate", is(100)))
+                .andExpect(jsonPath("$[9].delta", is(-1)))
+                .andExpect(jsonPath("$[9].losses", is(1)))
+                .andReturn().getResponse().getContentAsString();
+        org.assertj.core.api.Assertions.assertThat(ratings).contains("\"strength\"");
+
+        String after = mockMvc.perform(get("/api/rooms/" + code + "/team-board"))
+                .andReturn().getResponse().getContentAsString();
+        int blueAfter = objectMapper.readTree(after).get("balance").get("blueScore").asInt();
+        org.assertj.core.api.Assertions.assertThat(blueAfter).isEqualTo(blueBefore + 5); // 5명 × +1
+    }
+
+    @Test
     void 없는_기록은_404() throws Exception {
         mockMvc.perform(patch("/api/matches/99999")
                         .header(Nicknames.HEADER, nick)
