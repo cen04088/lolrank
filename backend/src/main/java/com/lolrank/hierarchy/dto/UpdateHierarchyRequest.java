@@ -6,7 +6,6 @@ import java.util.List;
 
 public record UpdateHierarchyRequest(
         @NotNull(message = "entries 가 필요합니다.")
-        @Valid
-        List<HierarchyEntry> entries
+        List<@Valid HierarchyEntry> entries
 ) {
 }

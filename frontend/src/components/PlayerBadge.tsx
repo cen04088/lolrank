@@ -10,7 +10,7 @@ interface PlayerBadgeProps {
 }
 
 /** 닉네임으로 항상 같은 스프라이트를 고른다 (닉네임 = 인증이 아니라 표시용). */
-export function avatarForNickname(nickname: string): string {
+function avatarForNickname(nickname: string): string {
   let hash = 0
   for (let i = 0; i < nickname.length; i++) hash = (hash * 31 + nickname.charCodeAt(i)) >>> 0
   return PLAYER_ASSET_KEYS[hash % PLAYER_ASSET_KEYS.length]
