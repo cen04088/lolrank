@@ -42,16 +42,57 @@
   box-shadow: 0 18px 38px rgba(2,7,18,.48), 0 0 0 1px color-mix(in srgb, var(--tier-color) 34%, transparent);
 }
 
+/* 무대: Tiny Swords 잔디 타일(64px) + 가운데 모래 발판 + 양옆 소품 (CC0) */
 .ccard__stage {
   position: relative;
   display: grid;
-  place-items: center;
-  padding: 22px 12px 14px;
-  background:
-    radial-gradient(ellipse at 50% 15%, rgba(255,255,255,.32), transparent 48%),
-    linear-gradient(90deg, transparent 49%, rgba(255,255,255,.2) 49% 51%, transparent 51%),
-    repeating-linear-gradient(0deg, #397548 0 24px, #2a603c 24px 48px);
-  border-bottom: 1px solid rgba(183,205,236,.15);
+  place-items: end center;
+  height: 158px;
+  padding: 0 12px 14px;
+  overflow: hidden;
+  background: url('/assets/tiny/tiles/grass.png') 0 0 / 64px 64px repeat;
+  image-rendering: pixelated;
+  border-bottom: 2px solid #2f5d2b;
+}
+
+/* 위쪽을 살짝 어둡게 해 카드 본문(네이비)과 이어지게 */
+.ccard__stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 17, 32, 0.35), transparent 45%);
+  pointer-events: none;
+}
+
+.ccard__path {
+  /* 발밑 그림자: 모래 타일은 위·아래 가장자리 타일이 없어 네모로 보여서 부드러운 그림자로 대신한다 */
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  width: 120px;
+  height: 22px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(20, 40, 20, 0.45), rgba(20, 40, 20, 0.2) 55%, transparent 72%);
+}
+
+.ccard__deco {
+  position: absolute;
+  bottom: 10px;
+  width: 48px;
+  height: 48px;
+  background-size: 48px 48px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.25));
+}
+
+.ccard__deco--left { left: 10px; }
+.ccard__deco--right { right: 10px; }
+
+.ccard__hero {
+  position: relative;
+  z-index: 1;
 }
 
 .ccard__rank {
@@ -414,16 +455,7 @@
   grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
 }
 
-/* ------------------------------------------------------------ 특수 인물 카드: 무대를 일러스트 배경 톤으로 */
-.ccard--special .ccard__stage {
-  padding: 14px 12px 12px;
-  background:
-    linear-gradient(90deg, transparent 46%, rgba(255, 255, 255, 0.10) 46% 54%, transparent 54%),
-    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0 26px, transparent 26px 52px),
-    linear-gradient(180deg, var(--special-bg-top), var(--special-bg-bottom));
-}
-
-/* 카드 무대 위에서도 틀 없이 그림만 (무대 배경이 톤을 잡아준다) */
+/* 특수 인물 카드: 같은 잔디 무대, 일러스트만 틀 없이 조금 크게 */
 .ccard--special .ccard__stage .pxavatar--special {
   border-radius: 0;
   box-shadow: none;
