@@ -31,11 +31,6 @@ export function SupportModal({ open, onClose }: SupportModalProps) {
     >
       <div className="support">
         <p className="support__title font-pixel-ko">AI 토큰값과 서버비 후원하기</p>
-        <p className="support__desc">
-          장로의 AI 해설(DeepSeek 토큰)과 Railway 서버 유지비에 쓰입니다.
-          <br />
-          카카오페이 앱으로 아래 QR 을 스캔해 주세요. 금액은 자유입니다!
-        </p>
         <img className="support__qr" src={SUPPORT_QR_SRC} alt="카카오페이 후원 QR 코드" width={270} height={325} />
         {KAKAOPAY_URL && (
           <a className="support__link" href={KAKAOPAY_URL} target="_blank" rel="noreferrer noopener">

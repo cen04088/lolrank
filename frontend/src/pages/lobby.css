@@ -527,13 +527,6 @@
   font-size: 18px;
 }
 
-.support__desc {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--paper-muted, #6b5a3e);
-}
-
 .support__qr {
   width: min(100%, 270px);
   height: auto;
