@@ -1106,3 +1106,10 @@
   .mrow__vs { display: none; }
   .mrow__team--red { text-align: left; align-items: flex-start; }
 }
+
+.mlog__headactions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}

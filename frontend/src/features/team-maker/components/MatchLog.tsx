@@ -15,6 +15,23 @@ interface MatchLogProps {
 }
 
 const PREVIEW_COUNT = 5
+const COLLAPSE_KEY = 'lolrank.matchlog.collapsed'
+
+function readCollapsed(): boolean {
+  try {
+    return window.localStorage.getItem(COLLAPSE_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+function saveCollapsed(value: boolean) {
+  try {
+    window.localStorage.setItem(COLLAPSE_KEY, value ? '1' : '0')
+  } catch {
+    // 저장 실패는 무시
+  }
+}
 
 /**
  * 조합(경기) 기록. 현재 보드를 스냅샷으로 저장하고 승패를 남긴다.
@@ -26,6 +43,14 @@ export function MatchLog({ code, boardFull }: MatchLogProps) {
   const matches = useMatches(code)
   const [recordOpen, setRecordOpen] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  /** 기록 목록 자체를 접어 둘 수 있다 (브라우저에 기억) */
+  const [collapsed, setCollapsed] = useState<boolean>(() => readCollapsed())
+  const toggleCollapsed = () => {
+    setCollapsed((v) => {
+      saveCollapsed(!v)
+      return !v
+    })
+  }
   const [deleting, setDeleting] = useState<MatchRecord | null>(null)
 
   const invalidate = () => {
@@ -75,16 +100,25 @@ export function MatchLog({ code, boardFull }: MatchLogProps) {
             조합 기록 <span className="mlog__count font-pixel">{list.length}</span>
           </h3>
         </div>
-        <PixelButton
-          variant="blue"
-          size="sm"
-          onClick={() => setRecordOpen(true)}
-          disabled={!boardFull}
-          title={boardFull ? undefined : '10자리가 모두 채워진 조합만 기록할 수 있습니다.'}
-        >
-          📜 이 조합 기록하기
-        </PixelButton>
+        <div className="mlog__headactions">
+          <PixelButton
+            variant="blue"
+            size="sm"
+            onClick={() => setRecordOpen(true)}
+            disabled={!boardFull}
+            title={boardFull ? undefined : '10자리가 모두 채워진 조합만 기록할 수 있습니다.'}
+          >
+            📜 이 조합 기록하기
+          </PixelButton>
+          {list.length > 0 && (
+            <PixelButton variant="ghost" size="sm" onClick={toggleCollapsed} aria-expanded={!collapsed}>
+              {collapsed ? `기록 펼치기 (${list.length})` : '기록 접기'}
+            </PixelButton>
+          )}
+        </div>
       </header>
+
+      {collapsed && list.length > 0 && <p className="mlog__empty">이전 기록 {list.length}개를 접어 두었습니다.</p>}
 
       {matches.isPending && <p className="mlog__empty">기록을 불러오는 중...</p>}
       {matches.isError && <p className="mlog__empty">기록을 불러오지 못했습니다.</p>}
@@ -92,7 +126,7 @@ export function MatchLog({ code, boardFull }: MatchLogProps) {
         <p className="mlog__empty">아직 기록이 없어요. 팀이 다 짜이면 조합을 남겨두세요. 쌓인 기록은 밸런스 보정에 쓰입니다.</p>
       )}
 
-      {shown.length > 0 && (
+      {!collapsed && shown.length > 0 && (
         <ul className="mlog__list">
           {shown.map((m) => (
             <MatchRow
@@ -106,7 +140,7 @@ export function MatchLog({ code, boardFull }: MatchLogProps) {
         </ul>
       )}
 
-      {list.length > PREVIEW_COUNT && (
+      {!collapsed && list.length > PREVIEW_COUNT && (
         <button type="button" className="mlog__more" onClick={() => setExpanded((v) => !v)}>
           {expanded ? '접기' : `지난 기록 ${list.length - PREVIEW_COUNT}개 더 보기`}
         </button>

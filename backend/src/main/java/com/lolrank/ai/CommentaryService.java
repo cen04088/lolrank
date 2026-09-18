@@ -2,7 +2,9 @@ package com.lolrank.ai;
 
 import com.lolrank.ai.dto.AiStatusResponse;
 import com.lolrank.ai.dto.CommentaryResponse;
+import com.lolrank.character.HierarchyRank;
 import com.lolrank.character.PlayerCharacter;
+import com.lolrank.character.PlayerCharacterRepository;
 import com.lolrank.common.exception.ApiException;
 import com.lolrank.common.exception.BadRequestException;
 import com.lolrank.match.RatingService;
@@ -13,9 +15,13 @@ import com.lolrank.team.TeamSlot;
 import com.lolrank.team.TeamSlotRepository;
 import com.lolrank.team.balance.TeamBalance;
 import java.time.Instant;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.ToIntFunction;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -38,6 +44,7 @@ public class CommentaryService {
     private final TeamSlotRepository slotRepository;
     private final CommentaryGenerator generator;
     private final RatingService ratingService;
+    private final PlayerCharacterRepository characterRepository;
     private final TransactionTemplate readOnlyTx;
 
     /** key = inviteCode + ":" + boardHash. 접근 순서 LRU. */
@@ -50,11 +57,12 @@ public class CommentaryService {
 
     public CommentaryService(RoomService roomService, TeamSlotRepository slotRepository,
                              CommentaryGenerator generator, RatingService ratingService,
-                             PlatformTransactionManager transactionManager) {
+                             PlayerCharacterRepository characterRepository, PlatformTransactionManager transactionManager) {
         this.roomService = roomService;
         this.slotRepository = slotRepository;
         this.generator = generator;
         this.ratingService = ratingService;
+        this.characterRepository = characterRepository;
         this.readOnlyTx = new TransactionTemplate(transactionManager);
         this.readOnlyTx.setReadOnly(true);
     }
@@ -96,9 +104,27 @@ public class CommentaryService {
         }
         List<PlayerCharacter> blue = slots.stream().filter(s -> s.getTeam() == Team.BLUE && s.getCharacter() != null).map(TeamSlot::getCharacter).toList();
         List<PlayerCharacter> red = slots.stream().filter(s -> s.getTeam() == Team.RED && s.getCharacter() != null).map(TeamSlot::getCharacter).toList();
-        TeamBalance balance = TeamBalance.of(blue, red, ratingService.strengthFunction(room.getId()));
+        ToIntFunction<PlayerCharacter> strengthFn = ratingService.strengthFunction(room.getId());
+        TeamBalance balance = TeamBalance.of(blue, red, strengthFn);
         return new Snapshot(room.getInviteCode(), CommentaryPromptBuilder.boardHash(slots),
-                CommentaryPromptBuilder.userPrompt(room.getName(), slots, balance));
+                CommentaryPromptBuilder.userPrompt(room.getName(), slots, balance, strengthFn, placements(room.getId()),
+                        CommentaryPromptBuilder.Variation.random()));
+    }
+
+    /** characterId → "2/3위" (같은 계급 안 순위). 계급도 순서가 해설 재료로도 쓰인다. */
+    private Map<Long, String> placements(Long roomId) {
+        Map<HierarchyRank, List<PlayerCharacter>> byRank = new EnumMap<>(HierarchyRank.class);
+        for (PlayerCharacter c : characterRepository.findAllByRoomIdOrderByIdAsc(roomId)) {
+            byRank.computeIfAbsent(c.getHierarchyRank(), k -> new java.util.ArrayList<>()).add(c);
+        }
+        Map<Long, String> result = new HashMap<>();
+        for (List<PlayerCharacter> members : byRank.values()) {
+            members.sort(Comparator.comparingInt(PlayerCharacter::getHierarchyOrder).thenComparing(PlayerCharacter::getId));
+            for (int i = 0; i < members.size(); i++) {
+                result.put(members.get(i).getId(), (i + 1) + "/" + members.size() + "위");
+            }
+        }
+        return result;
     }
 
     private record Snapshot(String inviteCode, String boardHash, String userPrompt) {

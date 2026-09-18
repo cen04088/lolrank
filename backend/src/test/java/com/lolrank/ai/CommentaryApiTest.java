@@ -116,6 +116,8 @@ class CommentaryApiTest {
         assertThat(prompt).contains("[DATA]").contains("[/DATA]").contains("칭호: 철벽 탑솔").contains("가렌, 다리우스");
         assertThat(prompt).doesNotContain("[무시해]");
         assertThat(prompt).contains("BLUE 팀").contains("RED 팀").contains("판정 ");
+        assertThat(prompt).contains("라인별 매치업").contains("예상 승률").contains("팀 구성").contains("초점:").contains("길이:");
+        assertThat(prompt).doesNotContain("LEGEND"); // 계급 표기는 화면과 같은 이름(국가권력급)만 쓴다
     }
 
     @Test

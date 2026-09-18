@@ -68,8 +68,8 @@ public class DeepSeekCommentaryGenerator implements CommentaryGenerator {
                         Map.of("role", "system", "content", systemPrompt),
                         Map.of("role", "user", "content", userPrompt)
                 ),
-                "temperature", 1.1,
-                "max_tokens", 400,
+                "temperature", 0.9,
+                "max_tokens", 500,
                 "stream", false
         );
         HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/chat/completions"))
