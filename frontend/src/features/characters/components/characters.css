@@ -423,9 +423,11 @@
     linear-gradient(180deg, var(--special-bg-top), var(--special-bg-bottom));
 }
 
+/* 카드 무대 위에서도 틀 없이 그림만 (무대 배경이 톤을 잡아준다) */
 .ccard--special .ccard__stage .pxavatar--special {
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px var(--special-edge), 0 6px 0 rgba(2, 7, 18, 0.35);
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 /* 캐릭터 폼 미리보기 무대도 같은 톤 */

@@ -653,16 +653,19 @@
   --special-edge: rgba(160, 156, 200, 0.45);
 }
 
-.pxavatar--special {
+/* 전신(sprite) 변형: 배경이 투명한 일러스트라 Tiny Swords 스프라이트처럼 틀 없이 그림만 보인다. */
+.pxavatar--special img {
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.45));
+}
+
+/* 얼굴(face) 변형만 다른 초상화처럼 사각 틀 안에 얼굴을 확대해서 담는다. */
+.pxavatar--special.pxavatar--face {
   overflow: hidden;
   border-radius: 4px;
   background: linear-gradient(180deg, var(--special-bg-top), var(--special-bg-bottom));
   box-shadow: inset 0 0 0 2px var(--special-edge), 2px 3px 0 rgba(2, 7, 18, 0.4);
-}
-
-.pxavatar--special img {
-  object-fit: cover;
-  filter: none;
 }
 
 .pxavatar--special.pxavatar--face img {
@@ -670,6 +673,9 @@
   height: 100%;
   border: 0;
   border-radius: 0;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
   transform: scale(1.85);
   transform-origin: 50% 38%;
 }
