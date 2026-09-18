@@ -491,70 +491,66 @@
   image-rendering: auto;
 }
 
-/* ------------------------------------------------------------ 후원 배너 (VITE_KAKAOPAY_URL 이 있을 때만) */
-.donate {
-  width: min(100%, 1000px);
-  margin-top: 34px;
-  margin-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.donate__link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
+/* ================= 후원하기 팻말 ================= */
+.sign--support {
+  cursor: pointer;
+  font: inherit;
+  font-family: var(--font-pixel-ko);
+  font-size: 15px;
   background: linear-gradient(#ffe45c, #f7c515);
-  color: #2b1d0e;
-  border: 2px solid #3a2a12;
-  box-shadow: 3px 4px 0 rgba(31, 25, 17, 0.35), inset 0 0 0 2px rgba(255, 250, 220, 0.55);
-  text-decoration: none;
+  color: var(--paper-ink);
+  text-shadow: none;
+  border-color: #3a2a12;
   transition: transform 0.08s steps(2);
 }
 
-.donate__link:hover,
-.donate__link:focus-visible {
-  transform: translate(-1px, -2px);
-  box-shadow: 4px 6px 0 rgba(31, 25, 17, 0.35), inset 0 0 0 2px rgba(255, 250, 220, 0.55);
+.sign--support:hover,
+.sign--support:focus-visible {
+  transform: rotate(2deg) translateY(-2px);
 }
 
-.donate__link:active {
-  transform: translate(2px, 3px);
-  box-shadow: 1px 1px 0 rgba(31, 25, 17, 0.35);
+.sign--support .sign__sub {
+  color: rgba(43, 29, 14, 0.75);
 }
 
-.donate__text {
+/* 후원 모달 내용 */
+.support {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  line-height: 1.2;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
 }
 
-.donate__text strong { font-size: 15px; }
-
-.donate__sub { font-size: 12px; opacity: 0.8; }
-
-.donate__badge {
-  margin-left: 6px;
-  padding: 5px 8px;
-  font-size: 10px;
-  background: #2b1d0e;
-  color: #ffe45c;
-  letter-spacing: 0.06em;
-}
-
-.donate__note {
+.support__title {
   margin: 0;
-  padding: 4px 10px;
-  font-size: 12px;
-  color: var(--paper);
-  background: rgba(31, 25, 17, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 18px;
 }
 
-@media (max-width: 480px) {
-  .donate__badge { display: none; }
+.support__desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--paper-muted, #6b5a3e);
+}
+
+.support__qr {
+  width: min(100%, 270px);
+  height: auto;
+  border: 2px solid var(--ink);
+  background: #fff;
+  image-rendering: auto;
+}
+
+.support__link {
+  font-family: var(--font-pixel-ko);
+  font-size: 14px;
+  color: #2b1d0e;
+  text-decoration: underline;
+}
+
+.support__thanks {
+  margin: 0;
+  font-size: 12px;
+  color: var(--paper-muted, #6b5a3e);
 }

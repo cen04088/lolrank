@@ -168,7 +168,7 @@ Railway 프로젝트에 **PostgreSQL**, **backend**, **frontend** 세 서비스�
 | 변수 | 값 |
 | --- | --- |
 | `VITE_API_BASE_URL` | 백엔드 공개 URL, 예 `https://lol-rank-backend.up.railway.app` (끝에 `/` 없이) |
-| `VITE_KAKAOPAY_URL` | (선택) 카카오페이 송금 코드 링크 `https://qr.kakaopay.com/...`. 설정하면 로비 하단에 후원 배너가 나타나고, 비우면 숨겨짐 |
+| `VITE_KAKAOPAY_URL` | (선택) 카카오페이 송금 코드 링크. 로비 후원 모달(QR 이미지 `frontend/public/assets/support/kakaopay_qr.png`) 아래에 "앱에서 바로 열기" 버튼을 추가함 |
 
 `VITE_*` 는 빌드 시점에 번들에 들어가므로 값을 바꾸면 **재배포**가 필요합니다.
 

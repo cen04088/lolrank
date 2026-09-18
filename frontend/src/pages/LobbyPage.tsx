@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { DonateBanner } from '@/components/DonateBanner'
+import { SupportModal } from '@/components/SupportModal'
 import { useCharacters } from '@/api/queries'
 import { isSpecialAsset } from '@/lib/assets'
 import { WalkingSprite } from '@/components/WalkingSprite'
@@ -17,6 +18,7 @@ const GREETINGS = ['오늘도 즐거운 한 판!', '좋은 팀은 좋은 친구�
 export function LobbyPage() {
   const code = useRoomCode()
   const { room, nickname, openSettings } = useRoomContext()
+  const [supportOpen, setSupportOpen] = useState(false)
   const characters = useCharacters(code)
 
   // 특수 인물 초상화는 걷는 모션이 없으므로 행진에서 뺀다.
@@ -94,14 +96,14 @@ export function LobbyPage() {
             <span>🎽 선수 등록소</span>
             <span className="sign__sub">캐릭터 만들기 · 수정 →</span>
           </Link>
-          <div className="sign sign--right">
-            <span>PLAY · RANK UP</span>
-            <span>REACH THE TOP</span>
-          </div>
+          <button type="button" className="sign sign--right sign--support" onClick={() => setSupportOpen(true)}>
+            <span>💛 후원하기</span>
+            <span className="sign__sub">AI 토큰 · 서버비</span>
+          </button>
         </div>
-
-        <DonateBanner />
       </main>
+
+      <SupportModal open={supportOpen} onClose={() => setSupportOpen(false)} />
     </Scene>
   )
 }
