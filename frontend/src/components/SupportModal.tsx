@@ -30,7 +30,7 @@ export function SupportModal({ open, onClose }: SupportModalProps) {
       }
     >
       <div className="support">
-        <p className="support__title font-pixel-ko">AI 토큰값과 서버비 후원하기</p>
+        <p className="support__title font-pixel-ko">AI 비용과 서버비 후원하기</p>
         <img className="support__qr" src={SUPPORT_QR_SRC} alt="카카오페이 후원 QR 코드" width={270} height={245} />
         {KAKAOPAY_URL && (
           <a className="support__link" href={KAKAOPAY_URL} target="_blank" rel="noreferrer noopener">
