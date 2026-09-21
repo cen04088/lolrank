@@ -33,7 +33,9 @@ export function CharacterCard({ character, onEdit, onDelete }: CharacterCardProp
         <div className="ccard__title">
           <div className="ccard__namewrap">
             <h3 className="ccard__name font-pixel-ko">{character.name}</h3>
-            <TitleTag title={character.title} />
+            <div className="ccard__tagline">
+              <TitleTag title={character.title} />
+            </div>
           </div>
           <TierBadge tier={character.tier} division={character.division} />
         </div>
