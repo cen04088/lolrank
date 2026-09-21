@@ -684,7 +684,6 @@
 .ttag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   max-width: 100%;
   padding: 2px 8px 3px;
   font-size: 12px;
@@ -702,10 +701,4 @@
 .ttag--sm {
   padding: 1px 5px 2px;
   font-size: 10px;
-  gap: 3px;
-}
-
-.ttag__star {
-  font-size: 0.85em;
-  color: #7a5a1c;
 }

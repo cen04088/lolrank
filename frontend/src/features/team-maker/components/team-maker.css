@@ -317,7 +317,15 @@
   white-space: nowrap;
 }
 
+.chip__meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
 .chip__tier {
+  flex: 0 0 auto;
   font-size: 10px;
   color: var(--tier-color);
 }
@@ -777,8 +785,8 @@
 }
 
 .chip__ttag {
-  margin-right: 6px;
-  max-width: 45%;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 /* ================= 장로의 AI 캐스터 해설 ================= */

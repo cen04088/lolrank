@@ -64,11 +64,11 @@ export function CharacterChip({
     >
       <PixelAvatar assetKey={character.assetKey} size={variant === 'row' ? 44 : 36} alt="" variant="face" />
       <div className="chip__info">
-        <div className="chip__name font-pixel-ko">
+        <div className="chip__name font-pixel-ko">{character.name}</div>
+        <div className="chip__meta">
           <TitleTag title={character.title} size="sm" className="chip__ttag" />
-          {character.name}
+          <div className="chip__tier font-pixel">{character.tierLabel}</div>
         </div>
-        <div className="chip__tier font-pixel">{character.tierLabel}</div>
         {variant !== 'row' && <div className="chip__pos">{positionSummary(character)}</div>}
       </div>
       {variant === 'row' && position && <PositionBadge position={position} className="chip__badge" />}

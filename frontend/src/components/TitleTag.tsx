@@ -9,9 +9,6 @@ export function TitleTag({ title, size = 'md', className = '' }: TitleTagProps) 
   if (!title) return null
   return (
     <span className={`ttag ttag--${size} font-pixel-ko ${className}`.trim()} title={`칭호: ${title}`}>
-      <span className="ttag__star" aria-hidden>
-        ✦
-      </span>
       {title}
     </span>
   )
