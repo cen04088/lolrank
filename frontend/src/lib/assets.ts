@@ -26,6 +26,7 @@ const SPECIAL_ASSETS = {
   special_arcane_king: { file: 'arcane_king.png', label: '정재원' },
   special_jang_jiwon: { file: 'jang_jiwon.png', label: '장지원' },
   special_kim_hoyeon: { file: 'kim_hoyeon.png', label: '김호연' },
+  special_song_taeseop: { file: 'song_taeseop.png', label: '송태섭' },
 } as const
 
 export const KNIGHT_KEYS: readonly string[] = KNIGHT_UNITS.flatMap((unit) =>

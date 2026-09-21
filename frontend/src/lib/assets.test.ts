@@ -11,8 +11,14 @@ import {
 } from './assets'
 
 describe('special character assets', () => {
-  it('네 특수 인물을 캐릭터 선택 목록에 포함한다', () => {
-    expect(SPECIAL_KEYS).toEqual(['special_fire_guardian', 'special_arcane_king', 'special_jang_jiwon', 'special_kim_hoyeon'])
+  it('다섯 특수 인물을 캐릭터 선택 목록에 포함한다', () => {
+    expect(SPECIAL_KEYS).toEqual([
+      'special_fire_guardian',
+      'special_arcane_king',
+      'special_jang_jiwon',
+      'special_kim_hoyeon',
+      'special_song_taeseop',
+    ])
     expect(PLAYER_ASSET_KEYS).toEqual(expect.arrayContaining([...SPECIAL_KEYS]))
     expect(ASSET_GROUPS.at(-1)).toMatchObject({ id: 'special', label: '특수 인물', keys: SPECIAL_KEYS })
   })
@@ -31,5 +37,10 @@ describe('special character assets', () => {
     expect(assetLabel('special_jang_jiwon')).toBe('장지원')
     expect(assetUrl('special_kim_hoyeon')).toBe('/assets/special/kim_hoyeon.png')
     expect(assetLabel('special_kim_hoyeon')).toBe('김호연')
+    expect(isSpecialAsset('special_song_taeseop')).toBe(true)
+    expect(resolveAssetKey('special_song_taeseop')).toBe('special_song_taeseop')
+    expect(assetUrl('special_song_taeseop')).toBe('/assets/special/song_taeseop.png')
+    expect(faceUrl('special_song_taeseop')).toBe('/assets/special/song_taeseop.png')
+    expect(assetLabel('special_song_taeseop')).toBe('송태섭')
   })
 })
