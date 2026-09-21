@@ -152,11 +152,23 @@
 }
 
 .floor__plaque-text {
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.06em;
 }
 
 .floor--legend .floor__plaque-text {
-  font-size: 11px; /* 다른 계급 명판과 같은 크기 */
+  font-size: 15px;
+  letter-spacing: 0.025em;
+}
+
+.floor--s .floor__plaque-text,
+.floor--a .floor__plaque-text,
+.floor--b .floor__plaque-text,
+.floor--c .floor__plaque-text {
+  font-size: 14px;
+  letter-spacing: 0.1em;
 }
 
 .floor__crown {
@@ -487,7 +499,24 @@
 }
 
 .floor__plaque-text {
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.48);
+}
+
+.floor--legend .floor__plaque-text {
+  color: #3a260b;
+  text-shadow: 0 1px 0 rgba(255, 247, 199, 0.72), 1px 2px 0 rgba(106, 66, 10, 0.3);
+}
+
+.floor--s .floor__plaque-text,
+.floor--a .floor__plaque-text {
+  color: #fff;
+  text-shadow: 1px 2px 0 #17315f, 0 0 8px rgba(205, 225, 255, 0.32);
+}
+
+.floor--b .floor__plaque-text,
+.floor--c .floor__plaque-text {
+  color: #fff;
+  text-shadow: 1px 2px 0 #651d28, 0 0 8px rgba(255, 214, 218, 0.24);
 }
 
 /* ================= 타워 층: 회색 돌벽 대신 첫 디자인의 네이비 패널 ================= */
@@ -555,8 +584,13 @@
   color: var(--muted);
 }
 
-/* 한글 계급명(국가권력급)이 들어가므로 한글 픽셀 폰트로 */
+/* 계급 명판은 한글과 영문이 섞여도 획 굵기와 기준선이 일정한 한글 픽셀 폰트로 표시한다. */
 .floor__plaque-text,
 .ccard__rank {
   font-family: var(--font-pixel-ko);
+}
+
+.floor__plaque-text {
+  font-synthesis: none;
+  white-space: nowrap;
 }

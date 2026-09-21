@@ -91,7 +91,6 @@ export function CasterPanel({ code, boardKey, boardFull }: CasterPanelProps) {
           >
             {result ? '🎙 다시 듣기' : '🎙 장로의 해설 듣기'}
           </PixelButton>
-          {status.data.model && <span className="caster__model">{status.data.provider} · {status.data.model}</span>}
         </div>
       </div>
     </section>

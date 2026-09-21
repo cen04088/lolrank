@@ -194,6 +194,24 @@ export function TeamMaker({ code }: TeamMakerProps) {
           >
             <ModeTabs value={mode} onChange={setMode} />
 
+            <div className="tmk__actions">
+              <PixelButton
+                variant="gold"
+                size="lg"
+                icon={<PixelIcon name="big_sword" size={22} />}
+                className="tmk__autofill"
+                onClick={handleAutoFill}
+                loading={autoFill.isPending}
+                disabled={autoFillDisabled}
+                title={autoFillDisabled ? '대기 선수가 있고 빈 자리가 있을 때 사용할 수 있습니다.' : undefined}
+              >
+                남은 자리 균형 맞춰 채우기
+              </PixelButton>
+              <PixelButton variant="ghost" size="lg" onClick={() => setResetOpen(true)} disabled={boardEmpty}>
+                전체 초기화
+              </PixelButton>
+            </div>
+
             <div className="tmk__board">
               <TeamColumn
                 team="BLUE"
@@ -227,24 +245,6 @@ export function TeamMaker({ code }: TeamMakerProps) {
             />
 
             <MatchLog code={code} boardFull={emptySlotCount(slots) === 0} />
-
-            <div className="tmk__actions">
-              <PixelButton
-                variant="gold"
-                size="lg"
-                icon={<PixelIcon name="big_sword" size={22} />}
-                className="tmk__autofill"
-                onClick={handleAutoFill}
-                loading={autoFill.isPending}
-                disabled={autoFillDisabled}
-                title={autoFillDisabled ? '대기 선수가 있고 빈 자리가 있을 때 사용할 수 있습니다.' : undefined}
-              >
-                남은 자리 균형 맞춰 채우기
-              </PixelButton>
-              <PixelButton variant="ghost" size="lg" onClick={() => setResetOpen(true)} disabled={boardEmpty}>
-                전체 초기화
-              </PixelButton>
-            </div>
 
             <DragOverlay dropAnimation={null}>
               {activeCharacter ? <CharacterChip character={activeCharacter} variant="overlay" /> : null}

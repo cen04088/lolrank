@@ -880,11 +880,6 @@
   flex-wrap: wrap;
 }
 
-.caster__model {
-  font-size: 11px;
-  color: var(--muted);
-}
-
 @media (max-width: 720px) {
   .caster {
     grid-template-columns: 1fr;
