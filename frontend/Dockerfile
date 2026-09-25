@@ -13,6 +13,8 @@ RUN npm run build
 
 # ---- serve ----
 FROM nginx:1.27-alpine
+# worker_processes auto 는 호스트 코어 수만큼 워커를 띄워 RAM 을 낭비한다. 정적 파일만 서빙하므로 1개로 충분.
+RUN sed -i 's/^worker_processes .*/worker_processes 1;/' /etc/nginx/nginx.conf
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist /usr/share/nginx/html
 ENV PORT=80

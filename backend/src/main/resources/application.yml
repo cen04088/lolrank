@@ -5,6 +5,10 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5432}/${PGDATABASE:lolrank}}
     username: ${PGUSER:lolrank}
     password: ${PGPASSWORD:lolrank}
+    # 소수 인원이 쓰는 앱이라 커넥션을 적게 유지한다 (기본 10개)
+    hikari:
+      maximum-pool-size: 4
+      minimum-idle: 1
   jpa:
     hibernate:
       ddl-auto: validate
@@ -15,6 +19,11 @@ spring:
 
 server:
   port: ${PORT:8080}
+  # 동시 요청이 많지 않아 기본 200 스레드 대신 작게 둔다
+  tomcat:
+    threads:
+      max: 20
+      min-spare: 2
 
 management:
   endpoints:

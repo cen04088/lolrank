@@ -36,7 +36,7 @@
   box-shadow: 3px 3px 0 rgba(50,39,25,.28), inset 0 0 0 1px #fff9eb;
 }
 
-/* 우측 상단 양피지 공지 (초안의 "좋은 팀은 좋은 친구로부터!") */
+/* 우측 상단 양피지 공지 (방 이름 · 등록 선수 수) */
 .lobby__notice {
   position: absolute;
   top: 112px;
@@ -65,14 +65,6 @@
 .lobby__notice-sub strong {
   color: var(--blue-dim);
   font-size: 10px;
-}
-
-.lobby__notice-text {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 2px dashed var(--paper-3);
-  font-family: var(--font-pixel-ko);
-  font-size: 13px;
 }
 
 /* ================= gates ================= */

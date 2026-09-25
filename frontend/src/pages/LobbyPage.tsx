@@ -12,7 +12,7 @@ import './lobby.css'
 
 const PARADE_MAX = 8
 
-const GREETINGS = ['오늘도 즐거운 한 판!', '좋은 팀은 좋은 친구로부터!', '오늘의 전설은 누구?', 'GG는 마음으로!']
+const GREETINGS = ['오늘도 즐거운 한 판!', '오늘의 전설은 누구?', 'GG는 마음으로!']
 
 /** 방 입장 첫 화면: 마을 광장 로비. */
 export function LobbyPage() {
@@ -42,7 +42,6 @@ export function LobbyPage() {
         <div className="lobby__notice paper">
           <p className="lobby__notice-title">{room.name}</p>
           <p className="lobby__notice-sub">선수 {characters.data?.length ?? 0}명 등록</p>
-          <p className="lobby__notice-text">좋은 팀은 좋은 친구로부터!</p>
         </div>
 
         <div className="lobby__gates">
