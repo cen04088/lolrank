@@ -319,9 +319,14 @@
 
 .chip__meta {
   display: flex;
-  align-items: center;
-  gap: 4px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
   min-width: 0;
+}
+
+.chip--red .chip__meta {
+  align-items: flex-end;
 }
 
 .chip__tier {
@@ -364,11 +369,12 @@
 
 .chip--row .chip__info {
   flex: 0 0 auto;
-  width: 96px;
+  width: 106px;
 }
 
 .chip--row .chip__tier {
   font-size: 9px;
+  white-space: nowrap;
 }
 
 .chip__badge {
@@ -784,9 +790,14 @@
   }
 }
 
-.chip__ttag {
-  flex: 0 1 auto;
+/* 칭호가 한 줄을 통째로 쓰고, 그래도 길면 잘리지 않고 줄바꿈 */
+.chip .chip__ttag {
   min-width: 0;
+  white-space: normal;
+  overflow: visible;
+  line-height: 1.15;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 /* ================= 장로의 AI 캐스터 해설 ================= */
